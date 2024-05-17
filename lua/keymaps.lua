@@ -133,6 +133,14 @@ map(default_modes, '<C-down>', ':horizontal resize -3<CR>', default_opts)
 map(default_modes, '<C-left>', ':vertical resize +3<CR>', default_opts)
 -- Resize vertical --
 map(default_modes, '<C-right>', ':vertical resize -3<CR>', default_opts)
+-- Jump to left split/window
+map(default_modes, '<C-h>', '<C-w>h', default_opts)
+-- Jump to right split/window
+map(default_modes, '<C-l>', '<C-w>l', default_opts)
+-- Jump to below split/window
+map(default_modes, '<C-j>', '<C-w>l', default_opts)
+-- Jump to upper split/window
+map(default_modes, '<C-k>', '<C-w>k', default_opts)
 -- Move line down
 map('v', 'J', ":m '>+1<CR>gv=gv", default_opts)
 -- Move line up
