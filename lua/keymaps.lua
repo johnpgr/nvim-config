@@ -60,12 +60,8 @@ vim.cmd([[
     vmap <C-M-n> <ESC><Plug>(VM-Select-All)
 ]])
 
--- Better comment toggler key
-map('n', '<C-/>', 'gcc', default_opts)
--- Better comment toggler key
-map('v', '<C-/>', 'gc', default_opts)
 -- Advanced fuzzy finder
-map(default_modes, '<leader>/', buffer_fuzzy_find, default_opts)
+-- map(default_modes, '<leader>/', buffer_fuzzy_find, default_opts)
 -- List recent files
 map(default_modes, '<leader>?', require('telescope.builtin').oldfiles, default_opts)
 -- List buffers

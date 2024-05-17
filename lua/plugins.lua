@@ -1,3 +1,5 @@
+---@diagnostic disable: missing-fields
+
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
 if not vim.loop.fs_stat(lazypath) then
     vim.fn.system {
@@ -12,6 +14,7 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
+    'nvim-lua/plenary.nvim',
     'tpope/vim-fugitive',
     'tpope/vim-rhubarb',
     'tpope/vim-sleuth',
@@ -31,27 +34,19 @@ require('lazy').setup({
         event = 'VeryLazy',
         branch = '0.1.x',
         dependencies = {
-            'nvim-lua/plenary.nvim',
-            -- Fuzzy Finder Algorithm which requires local dependencies to be built.
-            -- Only load if `make` is available. Make sure you have the system
-            -- requirements installed.
             {
                 'nvim-telescope/telescope-fzf-native.nvim',
-                -- NOTE: If you are having trouble with this installation,
-                --       refer to the README for telescope-fzf-native for more instructions.
                 build = 'make',
                 cond = function()
                     return vim.fn.executable 'make' == 1
                 end,
             },
-            -- Useful text case converter
             {
                 'johmsalas/text-case.nvim',
                 config = function()
                     require('textcase').setup({})
                 end
             },
-            -- Use telescope for LSP code action popup
             { 'nvim-telescope/telescope-ui-select.nvim' },
         },
         config = function()
@@ -60,7 +55,6 @@ require('lazy').setup({
                     mappings = {
                         i = {
                             ['<C-u>'] = false,
-                            ['<C-h>'] = 'which_key',
                         },
                     },
                 },
@@ -81,26 +75,13 @@ require('lazy').setup({
     {
         'hrsh7th/nvim-cmp',
         dependencies = {
-            -- Snippet Engine & its associated nvim-cmp source
             'L3MON4D3/LuaSnip',
             'saadparwaiz1/cmp_luasnip',
-
-            -- Adds LSP completion capabilities
             'hrsh7th/cmp-nvim-lsp',
-
-            -- Adds a number of user-friendly snippets
             'rafamadriz/friendly-snippets',
-
-            -- Adds a number of useful sources
             'hrsh7th/cmp-cmdline',
             'hrsh7th/cmp-buffer',
             'hrsh7th/cmp-path',
-
-            -- Auto close html tags
-            -- 'windwp/nvim-ts-autotag',
-
-            -- Auto pairs
-            -- 'windwp/nvim-autopairs',
         },
         config = function()
             local cmp = require('cmp')
@@ -148,9 +129,9 @@ require('lazy').setup({
                     },
                     format = lspkind.cmp_format({
                         preset = 'codicons',
-                        mode = 'symbol',       -- show only symbol annotations
-                        maxwidth = 50,         -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
-                        ellipsis_char = '...', -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
+                        mode = 'symbol',
+                        maxwidth = 50,
+                        ellipsis_char = '...',
                     })
                 },
                 snippet = {
@@ -352,7 +333,7 @@ require('lazy').setup({
                 end
 
                 if (current_mark_index == -1) then
-                    return string.format('󱝴 %s/%d', '—', total_marks)
+                    return string.format('󱝴 %s/%d', '-', total_marks)
                 end
 
                 return string.format('󱝴 %d/%d', current_mark_index, total_marks)
@@ -363,6 +344,7 @@ require('lazy').setup({
                     'oil',
                     'toggleterm',
                     'alpha',
+                    'harpoon',
                 }
 
                 if vim.tbl_contains(ignore, current_filetype) then
@@ -419,11 +401,6 @@ require('lazy').setup({
                     theme = 'auto',
                     globalstatus = true,
                     icons_enabled = true,
-                    disabled_filetypes = {
-                        TelescopePrompt = {},
-                        alpha = {},
-                        lua = {},
-                    },
                     component_separators = {
                         left = "",
                         right = "",
@@ -438,7 +415,7 @@ require('lazy').setup({
                     lualine_b = { 'branch', 'diff', 'diagnostics' },
                     lualine_c = {
                         harpoon_component,
-                        { 'filename', path = 1 },
+                        filename,
                     },
                     lualine_x = {
                         'filetype'
@@ -613,7 +590,36 @@ require('lazy').setup({
         },
     },
     {
-        "ThePrimeagen/harpoon",
-        branch = "harpoon2",
+        'ThePrimeagen/harpoon',
+        branch = 'harpoon2',
+    },
+    {
+        'stevearc/oil.nvim',
+        config = function()
+            require('oil').setup({
+                skip_confirm_for_simple_edits = true,
+                keymaps = {
+                    ['g?'] = 'actions.show_help',
+                    ['<CR>'] = 'actions.select',
+                    ['<C-s>'] = 'actions.select_vsplit',
+                    ['<C-h>'] = 'actions.select_split',
+                    ['<C-t>'] = 'actions.select_tab',
+                    ['<C-c>'] = 'actions.close',
+                    ['<C-l>'] = 'actions.refresh',
+                    ['<Backspace>'] = 'actions.parent',
+                    ['_'] = 'actions.open_cwd',
+                    ['`'] = 'actions.cd',
+                    ['~'] = 'actions.tcd',
+                    ['gs'] = 'actions.change_sort',
+                    ['gx'] = 'actions.open_external',
+                    ['g.'] = 'actions.toggle_hidden',
+                    ['g\\'] = 'actions.toggle_trash',
+                },
+                use_default_keymaps = false,
+                view_options = {
+                    show_hidden = true,
+                }
+            })
+        end
     },
 })
