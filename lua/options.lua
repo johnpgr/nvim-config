@@ -49,6 +49,9 @@ vim.o.smartcase = true
 -- Keep signcolumn on by default
 vim.wo.signcolumn = 'yes'
 
+-- Disable mode display
+vim.o.showmode = false
+
 -- Decrease update time
 vim.o.updatetime = 250
 vim.o.timeoutlen = 300
