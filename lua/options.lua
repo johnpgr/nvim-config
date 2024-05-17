@@ -6,7 +6,7 @@ vim.g.maplocalleader = ' '
 -- Enable mouse mode
 vim.o.mouse = 'a'
 
--- Sync clipboard between OS and Neovim.
+-- Sync clipboard between OS and Neovim
 vim.o.clipboard = 'unnamedplus'
 
 -- Set indentation to 4 spaces
@@ -55,7 +55,7 @@ vim.o.showmode = false
 
 -- Decrease update time
 vim.o.updatetime = 250
-vim.o.timeoutlen = 300
+vim.o.timeoutlen = 500
 
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect'
@@ -63,10 +63,6 @@ vim.o.completeopt = 'menuone,noselect'
 -- Set spell checking
 vim.opt.spell = true
 vim.opt.spelllang = { 'en_us', 'pt_br' }
-
--- Set listchars
--- vim.cmd("set list")
--- vim.cmd("set listchars=tab:··,space:·,trail:·,extends:→,precedes:←,nbsp:␣")
 
 -- Better splits
 vim.opt.splitbelow = true

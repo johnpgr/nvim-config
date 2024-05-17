@@ -6,51 +6,70 @@ local togglers = require('utils.toggle')
 local harpoon = require('harpoon')
 
 local function buffer_fuzzy_find()
-	require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown())
+    require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown())
 end
 
 local function list_nvim_config_files()
-	require('utils.pretty-telescope').pretty_files_picker({
-		picker = "find_files",
-		options = {
-			cwd = vim.fn.stdpath("config"),
-			hidden = false,
-		}
-	})
+    require('utils.pretty-telescope').pretty_files_picker({
+        picker = "find_files",
+        options = {
+            cwd = vim.fn.stdpath("config"),
+            hidden = false,
+        }
+    })
 end
 
 local function list_spell_suggestions_under_cursor()
-	require("telescope.builtin").spell_suggest(require("telescope.themes").get_cursor({}))
+    require("telescope.builtin").spell_suggest(require("telescope.themes").get_cursor({}))
 end
 
 local function grep_string_under_cursor()
-	require("utils.pretty-telescope").pretty_grep_picker({ picker = "grep_string" })
+    require("utils.pretty-telescope").pretty_grep_picker({ picker = "grep_string" })
 end
 
+local telescope_dropdown_picker = {
+    previewer = false,
+    border = true,
+    borderchars = {
+        prompt = { "─", "│", " ", "│", "╭", "╮", "│", "│" },
+        results = { "─", "│", "─", "│", "├", "┤", "╯", "╰" },
+        preview = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
+    },
+    layout_strategy = 'center',
+    results_title = false,
+    sorting_strategy = 'ascending',
+}
+
 local function list_recent_files()
-	require("utils.pretty-telescope").pretty_files_picker({ picker = "oldfiles", options = { only_cwd = true } })
+    require("utils.pretty-telescope").pretty_files_picker({
+        picker = "oldfiles",
+        options = vim.tbl_extend('force', telescope_dropdown_picker, { only_cwd = true })
+    })
 end
 
 local function list_files_cwd()
-	require('utils.pretty-telescope').pretty_files_picker({ picker = "find_files" })
+    require('utils.pretty-telescope').pretty_files_picker({
+        picker = "find_files",
+        options = telescope_dropdown_picker,
+    })
 end
 
 local function live_grep()
-	require("utils.pretty-telescope").pretty_grep_picker({ picker = "live_grep" })
+    require("utils.pretty-telescope").pretty_grep_picker({ picker = "live_grep" })
 end
 
 -- don't override the built-in and fugitive keymaps
 -- Jump to next hunk
 map(default_modes, ']h', function()
-	if vim.wo.diff then return ']h' end
-	vim.schedule(function() gs.next_hunk() end)
-	return '<Ignore>'
+    if vim.wo.diff then return ']h' end
+    vim.schedule(function() gs.next_hunk() end)
+    return '<Ignore>'
 end, { expr = true, noremap = true, silent = true })
 -- Jump to previous hunk
 map(default_modes, '[h', function()
-	if vim.wo.diff then return '[h' end
-	vim.schedule(function() gs.prev_hunk() end)
-	return '<Ignore>'
+    if vim.wo.diff then return '[h' end
+    vim.schedule(function() gs.prev_hunk() end)
+    return '<Ignore>'
 end, { expr = true, noremap = true, silent = true })
 
 -- (Ctrl+Alt+n) Select all occurrences of word under cursor
@@ -61,7 +80,7 @@ vim.cmd([[
 ]])
 
 -- Advanced fuzzy finder
--- map(default_modes, '<leader>/', buffer_fuzzy_find, default_opts)
+map(default_modes, '<leader>/', buffer_fuzzy_find, default_opts)
 -- List recent files
 map(default_modes, '<leader>?', require('telescope.builtin').oldfiles, default_opts)
 -- List buffers

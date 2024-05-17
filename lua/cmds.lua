@@ -18,5 +18,5 @@ require('nvim-web-devicons').set_icon({
 })
 
 vim.cmd([[
-	hi! DiffDelete guibg=#ff4733
+	hi! DiffDelete guibg=#ff5e4d
 ]])

@@ -25,6 +25,7 @@ require('lazy').setup({
     'folke/trouble.nvim',
     'nvim-tree/nvim-web-devicons',
     'mbbill/undotree',
+    'lewis6991/gitsigns.nvim',
     {
         'folke/todo-comments.nvim',
         event = 'BufRead',
@@ -539,12 +540,6 @@ require('lazy').setup({
 
             vim.diagnostic.config({})
         end,
-    },
-    {
-        'lewis6991/gitsigns.nvim',
-        opts = {
-            current_line_blame = true,
-        },
     },
     {
         'zbirenbaum/copilot-cmp',
