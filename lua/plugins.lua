@@ -207,7 +207,7 @@ require('lazy').setup({
                 ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'v' },
                 auto_install = true,
                 highlight = { enable = true },
-                indent = { enable = true },
+                -- indent = { enable = true },
                 incremental_selection = {
                     enable = true,
                     keymaps = {
@@ -317,7 +317,27 @@ require('lazy').setup({
                 return string.find(str, substr, 1, true) ~= nil
             end
 
+            local function ignored_filetypes(current_filetype)
+                local ignore = {
+                    'oil',
+                    'toggleterm',
+                    'alpha',
+                    'harpoon',
+                    'TelescopePrompt',
+                }
+
+                if vim.tbl_contains(ignore, current_filetype) then
+                    return true
+                end
+
+                return false
+            end
+
             local function harpoon_component()
+                if ignored_filetypes(vim.bo.filetype) then
+                    return ''
+                end
+
                 local total_marks = harpoon:list():length()
                 if total_marks == 0 then
                     return ''
@@ -337,21 +357,6 @@ require('lazy').setup({
                 end
 
                 return string.format('󱝴 %d/%d', current_mark_index, total_marks)
-            end
-
-            local function ignored_filetypes(current_filetype)
-                local ignore = {
-                    'oil',
-                    'toggleterm',
-                    'alpha',
-                    'harpoon',
-                }
-
-                if vim.tbl_contains(ignore, current_filetype) then
-                    return true
-                end
-
-                return false
             end
 
             local function filename()
@@ -619,6 +624,17 @@ require('lazy').setup({
                 view_options = {
                     show_hidden = true,
                 }
+            })
+        end
+    },
+    {
+        'johnfrankmorgan/whitespace.nvim',
+        config = function()
+            require('whitespace-nvim').setup({
+                highlight = 'DiffDelete',
+                ignored_filetypes = { 'TelescopePrompt', 'TelescopeResults', 'TelescopePreview', 'Trouble', 'help', 'mason', 'oil', 'lazy' },
+                ignore_terminal = true,
+                return_cursor = true,
             })
         end
     },

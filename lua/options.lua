@@ -14,9 +14,9 @@ vim.o.tabstop = 4
 vim.o.shiftwidth = 4
 
 -- Line numbers
--- vim.opt.relativenumber = true
--- vim.wo.number = true
--- vim.wo.numberwidth = 2
+vim.opt.relativenumber = true
+vim.wo.number = true
+vim.wo.numberwidth = 2
 
 -- Cursor line highlighting
 vim.opt.cursorline = true
@@ -38,6 +38,7 @@ vim.o.breakindent = true
 
 -- Enable smart indent
 vim.o.smartindent = true
+vim.o.autoindent = true
 
 -- Save undo history
 vim.o.undofile = true

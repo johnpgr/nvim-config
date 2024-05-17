@@ -81,7 +81,7 @@ map(default_modes, '<leader>ti', togglers.toggle_tabs_and_spaces, default_opts)
 -- Toggle Git Blame
 map(default_modes, '<leader>tb', require('gitsigns').toggle_current_line_blame, default_opts)
 -- Text case converter
-map(default_modes, '<leader>tc', '<cmd>TextCaseOpenTelescope<cr>', default_opts)
+map(default_modes, '<leader>cc', '<cmd>TextCaseOpenTelescope<cr>', default_opts)
 -- List spell suggestions for current word under cursor
 map(default_modes, '<leader>ss', list_spell_suggestions_under_cursor, default_opts)
 -- List Git files
