@@ -106,7 +106,7 @@ function M.toggle_telescope(harpoon_files)
             end)
             -- Delete entries in insert mode from harpoon list with <C-d>
             -- Change the keybinding to your liking
-            map({ 'n', 'i' }, '<C-d>', function(prompt_bufnr)
+            map({ 'n', 'i' }, '<S-d>', function(prompt_bufnr)
                 local curr_picker = action_state.get_current_picker(prompt_bufnr)
                 curr_picker:delete_selection(function(selection)
                     local mark_idx = list_indexOf(harpoon_files.items, function(v)
@@ -117,18 +117,18 @@ function M.toggle_telescope(harpoon_files)
                         return
                     end
 
-                    harpoon:list():removeAt(mark_idx)
+                    harpoon:list():remove_at(mark_idx)
                 end)
             end)
             -- Move entries up and down with <C-j> and <C-k>
             map({ 'n', 'i' },
-                '<C-j>',
+                '<S-j>',
                 function(prompt_bufnr)
                     move_mark_down(prompt_bufnr, harpoon_files)
                 end
             )
             map({ 'n', 'i' },
-                '<C-k>',
+                '<S-k>',
                 function(prompt_bufnr)
                     move_mark_up(prompt_bufnr, harpoon_files)
                 end

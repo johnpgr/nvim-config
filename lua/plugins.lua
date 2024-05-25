@@ -420,11 +420,20 @@ require('lazy').setup({
                     lualine_a = { 'mode' },
                     lualine_b = { 'branch', 'diff', 'diagnostics' },
                     lualine_c = {
-                        harpoon_component,
-                        filename,
+                        {
+                            harpoon_component,
+                            color = { fg = '#14161b' }
+                        },
+                        {
+                            filename,
+                            color = { fg = '#14161b' }
+                        },
                     },
                     lualine_x = {
-                        'filetype'
+                        {
+                            'filetype',
+                            color = { fg = '#14161b' }
+                        }
                     },
                     lualine_y = { 'encoding', fileformat, current_indentation },
                     lualine_z = { 'location' }
@@ -549,7 +558,7 @@ require('lazy').setup({
             require('copilot').setup({
                 suggestion = {
                     enabled = true,
-                    auto_trigger = true,
+                    auto_trigger = false,
                     debounce = 50,
                 },
                 filetypes = {
@@ -627,10 +636,33 @@ require('lazy').setup({
         config = function()
             require('whitespace-nvim').setup({
                 highlight = 'DiffDelete',
-                ignored_filetypes = { 'TelescopePrompt', 'TelescopeResults', 'TelescopePreview', 'Trouble', 'help', 'mason', 'oil', 'lazy' },
+                ignored_filetypes = { 'TelescopePrompt', 'TelescopeResults', 'TelescopePreview', 'Trouble', 'help', 'mason', 'oil', 'lazy', 'lspinfo', },
                 ignore_terminal = true,
                 return_cursor = true,
             })
         end
+    },
+    {
+        "JoosepAlviste/nvim-ts-context-commentstring",
+        lazy = true,
+        opts = {
+            enable_autocmd = false,
+        },
+    },
+    {
+        "echasnovski/mini.comment",
+        event = "VeryLazy",
+        opts = {
+            options = {
+                custom_commentstring = function()
+                    return require("ts_context_commentstring.internal").calculate_commentstring() or vim.bo
+                        .commentstring
+                end,
+            },
+            mappings = {
+                comment_line = '<C-_>',
+                comment_visual = '<C-_>'
+            }
+        },
     },
 })

@@ -28,7 +28,7 @@ vim.opt.wrap = false
 vim.opt.showcmd = false
 
 -- Set cursor to block on insert mode
-vim.opt.guicursor = 'n-v-c-i:block'
+-- vim.opt.guicursor = 'n-v-c-i:block'
 
 -- Disable search results highlighting
 vim.o.hlsearch = true

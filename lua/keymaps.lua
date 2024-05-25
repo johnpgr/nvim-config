@@ -79,12 +79,10 @@ vim.cmd([[
     vmap <C-M-n> <ESC><Plug>(VM-Select-All)
 ]])
 
--- Advanced fuzzy finder
+-- Advanced current buffer fuzzy finder
 map(default_modes, '<leader>/', buffer_fuzzy_find, default_opts)
 -- List recent files
 map(default_modes, '<leader>?', require('telescope.builtin').oldfiles, default_opts)
--- List buffers
-map(default_modes, '<leader><Space>', require('telescope.builtin').buffers, default_opts)
 -- List nvim cfg files
 map(default_modes, '<leader>C', list_nvim_config_files, default_opts)
 -- Spectre
@@ -109,6 +107,8 @@ map(default_modes, '<leader>sg', require('telescope.builtin').git_files, default
 map(default_modes, '<leader>sw', grep_string_under_cursor, default_opts)
 -- List recently opened files
 map(default_modes, '<leader>sr', list_recent_files, default_opts)
+-- List open buffers
+map(default_modes, '<leader>sb', require('telescope.builtin').buffers, default_opts)
 -- Open floating diagnostic message
 map(default_modes, '<leader>df', vim.diagnostic.open_float, default_opts)
 -- List diagnostic messages
@@ -138,7 +138,7 @@ map(default_modes, '<C-h>', '<C-w>h', default_opts)
 -- Jump to right split/window
 map(default_modes, '<C-l>', '<C-w>l', default_opts)
 -- Jump to below split/window
-map(default_modes, '<C-j>', '<C-w>l', default_opts)
+map(default_modes, '<C-j>', '<C-w>j', default_opts)
 -- Jump to upper split/window
 map(default_modes, '<C-k>', '<C-w>k', default_opts)
 -- Move line down
@@ -155,6 +155,10 @@ map(default_modes, '<C-g>', '<cmd>LazyGit<cr>', default_opts)
 map('v', '<', '<gv', default_opts)
 -- Keep selection when indenting multiple lines
 map('v', '>', '>gv', default_opts)
+-- Better comment toggle NORMAL mode
+-- map('n', '<C-_>', 'gcc', { remap = true })
+-- Better comment toggle VISUAL mode
+-- map('v', '<C-_>', 'gc', { remap = true })
 -- Better scroll down
 map(default_modes, '<C-d>', '<C-d>zz', default_opts)
 -- Better scroll up
@@ -176,7 +180,8 @@ map(default_modes, 'gr', require('telescope.builtin').lsp_references, default_op
 -- Add file to Harpoon list
 map(default_modes, '<leader>a', function() harpoon:list():add() end, default_opts)
 -- Toggle Harpoon list
-map(default_modes, '<leader><space>', function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, default_opts)
+-- map(default_modes, '<leader><space>', function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, default_opts)
+map(default_modes, '<leader><space>', function() require('utils.harpoon').toggle_telescope(harpoon:list()) end)
 -- Select Harpoon mark 1
 map(default_modes, '<leader>1', function() harpoon:list():select(1) end, default_opts)
 -- Select Harpoon mark 2
