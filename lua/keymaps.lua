@@ -15,6 +15,7 @@ local function list_nvim_config_files()
         options = {
             cwd = vim.fn.stdpath("config"),
             hidden = false,
+            disable_devicons = true,
         }
     })
 end
@@ -24,7 +25,7 @@ local function list_spell_suggestions_under_cursor()
 end
 
 local function grep_string_under_cursor()
-    require("utils.pretty-telescope").pretty_grep_picker({ picker = "grep_string" })
+    require("utils.pretty-telescope").pretty_grep_picker({ picker = "grep_string", options = { disable_devicons = true } })
 end
 
 local telescope_dropdown_picker = {
