@@ -114,6 +114,9 @@ require("lazy").setup({
 			})
 
 			cmp.setup({
+				completion = {
+					autocomplete = false,
+				},
 				formatting = {
 					expandable_indicator = true,
 					fields = {
@@ -213,8 +216,8 @@ require("lazy").setup({
 					"v",
 				},
 				auto_install = true,
-				highlight = { enable = true },
-				-- indent = { enable = true },
+				highlight = { enable = false },
+				indent = { enable = false },
 				incremental_selection = {
 					enable = true,
 					keymaps = {
