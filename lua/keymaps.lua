@@ -168,9 +168,9 @@ map("v", "<", "<gv", default_opts)
 -- Keep selection when indenting multiple lines
 map("v", ">", ">gv", default_opts)
 -- Better comment toggle NORMAL mode
-map("n", "<C-_>", "gcc", { remap = true })
+map("n", "<C-/>", "gcc", { remap = true })
 -- Better comment toggle VISUAL mode
-map("v", "<C-_>", "gc", { remap = true })
+map("v", "<C-/>", "gc", { remap = true })
 -- Better scroll down
 map(default_modes, "<C-d>", "<C-d>zz", default_opts)
 -- Better scroll up
