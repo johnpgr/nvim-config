@@ -1,13 +1,13 @@
 -- Set <space> as the leader key
 --  NOTE: Must happen before plugins are required (otherwise wrong leader will be used)
-vim.g.mapleader = ' '
-vim.g.maplocalleader = ' '
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
 
 -- Enable mouse mode
-vim.o.mouse = 'a'
+vim.o.mouse = "a"
 
 -- Sync clipboard between OS and Neovim
-vim.o.clipboard = 'unnamedplus'
+vim.o.clipboard = "unnamedplus"
 
 -- Set indentation to 4 spaces
 vim.o.tabstop = 4
@@ -48,7 +48,7 @@ vim.o.ignorecase = true
 vim.o.smartcase = true
 
 -- Keep signcolumn on by default
-vim.wo.signcolumn = 'yes'
+vim.wo.signcolumn = "yes"
 
 -- Disable mode display
 vim.o.showmode = false
@@ -58,11 +58,11 @@ vim.o.updatetime = 250
 vim.o.timeoutlen = 500
 
 -- Set completeopt to have a better completion experience
-vim.o.completeopt = 'menuone,noselect'
+vim.o.completeopt = "menuone,noselect"
 
 -- Set spell checking
 vim.opt.spell = true
-vim.opt.spelllang = { 'en_us', 'pt_br' }
+vim.opt.spelllang = { "en_us", "pt_br" }
 
 -- Better splits
 vim.opt.splitbelow = true
