@@ -13,9 +13,20 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+local lsp = require "lsp"
+local completions = require "completions"
+local treesitter = require "treesitter"
+
 require("lazy").setup {
     "morhetz/gruvbox",
-    "catppuccin/nvim",
+    {
+        "catppuccin/nvim",
+        config = function()
+            require("catppuccin").setup {
+                no_italic = true,
+            }
+        end,
+    },
     "nvim-lua/plenary.nvim",
     "tpope/vim-fugitive",
     "tpope/vim-rhubarb",
@@ -28,6 +39,9 @@ require("lazy").setup {
     "mbbill/undotree",
     "lewis6991/gitsigns.nvim",
     "nvim-tree/nvim-web-devicons",
+    lsp,
+    completions,
+    treesitter,
     {
         "folke/todo-comments.nvim",
         event = "BufRead",
@@ -69,227 +83,6 @@ require("lazy").setup {
             t.load_extension "fzf"
             t.load_extension "textcase"
             t.load_extension "ui-select"
-        end,
-    },
-    {
-        "hrsh7th/nvim-cmp",
-        dependencies = {
-            "L3MON4D3/LuaSnip",
-            "saadparwaiz1/cmp_luasnip",
-            "hrsh7th/cmp-nvim-lsp",
-            "rafamadriz/friendly-snippets",
-            "hrsh7th/cmp-cmdline",
-            "hrsh7th/cmp-buffer",
-            "hrsh7th/cmp-path",
-            "hrsh7th/cmp-nvim-lsp-signature-help",
-        },
-        config = function()
-            local cmp = require "cmp"
-            local luasnip = require "luasnip"
-            local lspkind = require "lspkind"
-
-            require("luasnip.loaders.from_vscode").lazy_load()
-            luasnip.config.setup {}
-
-            cmp.setup.cmdline("/", {
-                mapping = cmp.mapping.preset.cmdline(),
-                sources = {
-                    { name = "buffer" },
-                },
-            })
-
-            cmp.setup.cmdline(":", {
-                mapping = cmp.mapping.preset.cmdline(),
-                sources = cmp.config.sources({
-                    { name = "path" },
-                }, {
-                    {
-                        name = "cmdline",
-                        option = {
-                            ignore_cmds = { "Man", "!" },
-                        },
-                    },
-                }),
-            })
-
-            cmp.setup {
-                window = {
-                    completion = cmp.config.window.bordered {
-                        scrollbar = true,
-                    },
-                    documentation = cmp.config.window.bordered {},
-                },
-                formatting = {
-                    expandable_indicator = true,
-                    fields = {
-                        "kind",
-                        "abbr",
-                        "menu",
-                    },
-                    format = lspkind.cmp_format {
-                        preset = "codicons",
-                        mode = "symbol",
-                        maxwidth = 50,
-                        ellipsis_char = "...",
-                    },
-                },
-                snippet = {
-                    expand = function(args) luasnip.lsp_expand(args.body) end,
-                },
-                mapping = cmp.mapping.preset.insert {
-                    ["<C-p>"] = cmp.mapping.select_prev_item(),
-                    ["<C-d>"] = cmp.mapping.scroll_docs(-4),
-                    ["<C-f>"] = cmp.mapping.scroll_docs(4),
-                    ["<C-Space>"] = cmp.mapping(function(_)
-                        if cmp.visible() then
-                            cmp.close()
-                        else
-                            cmp.complete()
-                        end
-                    end, {
-                        "i",
-                        "s",
-                    }),
-                    ["<CR>"] = cmp.mapping.confirm {
-                        behavior = cmp.ConfirmBehavior.Replace,
-                        select = true,
-                    },
-                    ["<Tab>"] = cmp.mapping(function(fallback)
-                        local copilot_suggestions = require "copilot.suggestion"
-
-                        if cmp.visible() then
-                            cmp.select_next_item()
-                        elseif copilot_suggestions.is_visible() then
-                            copilot_suggestions.accept()
-                        elseif luasnip.expand_or_jumpable() then
-                            luasnip.expand_or_jump()
-                        else
-                            fallback()
-                        end
-                    end, {
-                        "i",
-                        "s",
-                    }),
-
-                    ["<S-Tab>"] = cmp.mapping(function(fallback)
-                        if cmp.visible() then
-                            cmp.select_prev_item()
-                        elseif luasnip.locally_jumpable(-1) then
-                            luasnip.jump(-1)
-                        else
-                            fallback()
-                        end
-                    end, { "i", "s" }),
-                },
-                sources = {
-                    { name = "nvim_lsp" },
-                    { name = "nvim_lsp_signature_help" },
-                    { name = "luasnip", keyword_length = 2 },
-                    { name = "buffer", keyword_length = 3 },
-                    { name = "path" },
-                },
-            }
-        end,
-    },
-    {
-        "nvim-treesitter/nvim-treesitter",
-        dependencies = {
-            "nvim-treesitter/nvim-treesitter-textobjects",
-        },
-        build = ":TSUpdate",
-        config = function()
-            require("nvim-treesitter.configs").setup {
-                autotag = {
-                    enable = true,
-                },
-                ensure_installed = {
-                    "c",
-                    "cpp",
-                    "go",
-                    "lua",
-                    "python",
-                    "rust",
-                    "tsx",
-                    "javascript",
-                    "typescript",
-                    "vimdoc",
-                    "vim",
-                    "v",
-                },
-                auto_install = true,
-                highlight = { enable = true },
-                indent = { enable = false },
-                incremental_selection = {
-                    enable = true,
-                    keymaps = {
-                        init_selection = "<c-space>",
-                        node_incremental = "<c-space>",
-                        scope_incremental = "<c-s>",
-                        node_decremental = "<M-space>",
-                    },
-                },
-                textobjects = {
-                    select = {
-                        enable = true,
-                        lookahead = true,
-                        keymaps = {
-                            ["a="] = { query = "@assignment.outer", desc = "Select outer part of an assignment" },
-                            ["i="] = { query = "@assignment.inner", desc = "Select inner part of an assignment" },
-                            ["l="] = { query = "@assignment.lhs", desc = "Select left hand side of an assignment" },
-                            ["r="] = { query = "@assignment.rhs", desc = "Select right hand side of an assignment" },
-                            ["a:"] = { query = "@property.outer", desc = "Select outer part of an object property" },
-                            ["i:"] = { query = "@property.inner", desc = "Select inner part of an object property" },
-                            ["l:"] = { query = "@property.lhs", desc = "Select left part of an object property" },
-                            ["r:"] = { query = "@property.rhs", desc = "Select right part of an object property" },
-                            ["aa"] = { query = "@parameter.outer", desc = "Select outer part of a parameter/argument" },
-                            ["ia"] = { query = "@parameter.inner", desc = "Select inner part of a parameter/argument" },
-                            ["ai"] = { query = "@conditional.outer", desc = "Select outer part of a conditional" },
-                            ["ii"] = { query = "@conditional.inner", desc = "Select inner part of a conditional" },
-                            ["al"] = { query = "@loop.outer", desc = "Select outer part of a loop" },
-                            ["il"] = { query = "@loop.inner", desc = "Select inner part of a loop" },
-                            ["af"] = {
-                                query = "@function.outer",
-                                desc = "Select outer part of a method/function definition",
-                            },
-                            ["if"] = {
-                                query = "@function.inner",
-                                desc = "Select inner part of a method/function definition",
-                            },
-                            ["ac"] = { query = "@class.outer", desc = "Select outer part of a class" },
-                            ["ic"] = { query = "@class.inner", desc = "Select inner part of a class" },
-                        },
-                    },
-                    move = {
-                        enable = true,
-                        set_jumps = true,
-                        goto_next_start = {
-                            ["]f"] = "@function.outer",
-                            ["]c"] = "@class.outer",
-                        },
-                        goto_next_end = {
-                            ["]F"] = "@function.outer",
-                            ["]C"] = "@class.outer",
-                        },
-                        goto_previous_start = {
-                            ["[f"] = "@function.outer",
-                            ["[c"] = "@class.outer",
-                        },
-                        goto_previous_end = {
-                            ["[F"] = "@function.outer",
-                            ["[C"] = "@class.outer",
-                        },
-                    },
-                    swap = {
-                        enable = true,
-                        swap_next = {
-                            ["<leader>sn"] = "@parameter.inner",
-                        },
-                        swap_previous = {
-                            ["<leader>sp"] = "@parameter.inner",
-                        },
-                    },
-                },
-            }
         end,
     },
     {
@@ -426,131 +219,6 @@ require("lazy").setup {
         end,
     },
     {
-        "neovim/nvim-lspconfig",
-        event = { "BufReadPost" },
-        dependencies = {
-            "williamboman/mason.nvim",
-            "williamboman/mason-lspconfig.nvim",
-            "folke/neodev.nvim",
-        },
-        config = function()
-            require("neodev").setup()
-            require("mason").setup {}
-
-            local on_attach = function()
-                local map = function(keys, func)
-                    vim.keymap.set({ "n", "v" }, keys, func, { noremap = true, silent = true })
-                end
-
-                map("R", "<cmd>LspRestart<cr>")
-                map("<leader>ls", vim.lsp.buf.signature_help)
-                map("<leader>lr", vim.lsp.buf.rename)
-                map("<leader>la", vim.lsp.buf.code_action)
-                map("<leader>lf", function() require("conform").format { async = true, lsp_fallback = true } end)
-                map("<leader>wa", vim.lsp.buf.add_workspace_folder)
-                map("<leader>wr", vim.lsp.buf.remove_workspace_folder)
-                map("<leader>ws", require("telescope.builtin").lsp_dynamic_workspace_symbols)
-            end
-
-            local servers = {
-                gopls = {},
-                pyright = {},
-                rust_analyzer = {},
-                v_analyzer = { filetypes = { "vlang", "vsh" } },
-                tailwindcss = {},
-                prismals = {},
-                sqlls = {
-                    filetypes = { "sql", "mysql" },
-                    cmd = { "sql-language-server", "up", "--method", "stdio" },
-                    root_dir = function() return vim.loop.cwd() end,
-                },
-                html = { filetypes = { "html", "twig", "hbs" } },
-                jsonls = {},
-                lua_ls = {
-                    cmd = { "lua-language-server --silent" },
-                    Lua = {
-                        workspace = { checkThirdParty = false },
-                        telemetry = { enable = false },
-                    },
-                },
-            }
-
-            local capabilities = vim.lsp.protocol.make_client_capabilities()
-            capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
-
-            local mason_lspconfig = require "mason-lspconfig"
-            mason_lspconfig.setup {
-                ensure_installed = vim.tbl_keys(servers),
-            }
-
-            local border = {
-                { "╭", "FloatBorder" },
-                { "─", "FloatBorder" },
-                { "╮", "FloatBorder" },
-                { "│", "FloatBorder" },
-                { "╯", "FloatBorder" },
-                { "─", "FloatBorder" },
-                { "╰", "FloatBorder" },
-                { "│", "FloatBorder" },
-            }
-
-            -- LSP settings (for overriding per client)
-            local handlers = {
-                ["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = border }),
-                ["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = border }),
-            }
-
-            mason_lspconfig.setup_handlers {
-                function(server_name)
-                    require("lspconfig")[server_name].setup {
-                        capabilities = capabilities,
-                        on_attach = on_attach,
-                        settings = servers[server_name],
-                        filetypes = (servers[server_name] or {}).filetypes,
-                        handlers = handlers,
-                    }
-                end,
-            }
-
-            vim.filetype.add {
-                extension = {
-                    v = "vlang",
-                    vsh = "vlang",
-                },
-            }
-
-            vim.diagnostic.config {}
-        end,
-    },
-    {
-        "zbirenbaum/copilot-cmp",
-        event = "InsertEnter",
-        dependencies = { "zbirenbaum/copilot.lua" },
-        config = function()
-            require("copilot").setup {
-                suggestion = {
-                    enabled = true,
-                    auto_trigger = false,
-                    debounce = 50,
-                },
-                filetypes = {
-                    yaml = true,
-                    markdown = true,
-                    help = false,
-                    gitcommit = false,
-                    gitrebase = false,
-                    hgcommit = false,
-                    svn = false,
-                    cvs = false,
-                    ["."] = false,
-                },
-                copilot_node_command = "node",
-                server_opts_overrides = {},
-            }
-            require("copilot_cmp").setup()
-        end,
-    },
-    {
         "stevearc/conform.nvim",
         lazy = false,
         opts = {
@@ -604,15 +272,17 @@ require("lazy").setup {
         end,
     },
     {
-        "JoosepAlviste/nvim-ts-context-commentstring",
-        lazy = true,
-        opts = {
-            enable_autocmd = false,
-        },
-    },
-    {
         "echasnovski/mini.comment",
         event = "VeryLazy",
+        dependencies = {
+            {
+                "JoosepAlviste/nvim-ts-context-commentstring",
+                lazy = true,
+                opts = {
+                    enable_autocmd = false,
+                },
+            },
+        },
         opts = {
             options = {
                 custom_commentstring = function()
@@ -752,68 +422,10 @@ require("lazy").setup {
         "folke/trouble.nvim",
         opts = {}, -- for default options, refer to the configuration section for custom setup.
         cmd = "Trouble",
-        keys = {
-            {
-                "<leader>xx",
-                "<cmd>Trouble diagnostics toggle<cr>",
-                desc = "Diagnostics (Trouble)",
-            },
-            {
-                "<leader>xX",
-                "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
-                desc = "Buffer Diagnostics (Trouble)",
-            },
-            {
-                "<leader>cs",
-                "<cmd>Trouble symbols toggle focus=false<cr>",
-                desc = "Symbols (Trouble)",
-            },
-            {
-                "<leader>cl",
-                "<cmd>Trouble lsp toggle focus=false win.position=right<cr>",
-                desc = "LSP Definitions / references / ... (Trouble)",
-            },
-            {
-                "<leader>xL",
-                "<cmd>Trouble loclist toggle<cr>",
-                desc = "Location List (Trouble)",
-            },
-            {
-                "<leader>xQ",
-                "<cmd>Trouble qflist toggle<cr>",
-                desc = "Quickfix List (Trouble)",
-            },
-        },
     },
     {
         "dmmulroy/ts-error-translator.nvim",
         config = function() require("ts-error-translator").setup() end,
-    },
-    {
-        "pmizio/typescript-tools.nvim",
-        ft = { "typescript", "typescriptreact", "javascript", "javascriptreact" },
-        keys = {
-            { "<leader>li", "<Cmd>TSToolsAddMissingImports<CR>", desc = "add missing imports" },
-            { "<leader>lx", "<Cmd>TSToolsRemoveUnusedImports<CR>", desc = "remove unused missing imports" },
-        },
-        opts = {
-            settings = {
-                tsserver_file_preferences = {
-                    includeInlayParameterNameHints = "literal",
-                    includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-                    includeInlayVariableTypeHintsWhenTypeMatchesName = false,
-                    includeInlayFunctionParameterTypeHints = true,
-                    includeInlayVariableTypeHints = true,
-                    includeInlayFunctionLikeReturnTypeHints = false,
-                    includeInlayPropertyDeclarationTypeHints = true,
-                    includeInlayEnumMemberValueHints = true,
-                },
-            },
-        },
-        dependencies = {
-            "nvim-lua/plenary.nvim",
-            "neovim/nvim-lspconfig",
-        },
     },
     {
         "razak17/twoslash-queries.nvim",
@@ -860,15 +472,6 @@ require("lazy").setup {
                 callback = replace_quickfix_with_trouble,
             })
         end,
-    },
-    {
-        "luckasRanarison/tailwind-tools.nvim",
-        dependencies = { "nvim-treesitter/nvim-treesitter" },
-        opts = {
-            conceal = {
-                enabled = true,
-            },
-        },
     },
     {
         "lukas-reineke/indent-blankline.nvim",

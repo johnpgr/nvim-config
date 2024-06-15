@@ -119,6 +119,8 @@ map(default_modes, "<leader>e", "<cmd>Oil<cr>", default_opts)
 map("i", "<C-d>", require("copilot.suggestion").dismiss, default_opts)
 -- Dismiss search highlights
 map("n", "<Esc>", "<cmd>noh<cr>", default_opts)
+-- Hover Documentation
+map("n", "K", vim.lsp.buf.hover, default_opts)
 -- Goto definition
 map(default_modes, "gd", function() require("trouble").toggle "lsp_definitions" end, default_opts)
 -- Goto type definition
