@@ -61,7 +61,7 @@ vim.o.timeoutlen = 500
 vim.o.completeopt = "menuone,noselect"
 
 -- Set spell checking
-vim.opt.spell = true
+vim.opt.spell = false
 vim.opt.spelllang = { "en_us", "pt_br" }
 
 -- Better splits
@@ -73,3 +73,10 @@ vim.opt.scrolloff = 8
 
 -- No friendly swap files
 vim.opt.swapfile = false
+
+-- UFO folding
+vim.o.foldcolumn = "1" -- '0' is not bad
+vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
+vim.o.foldlevelstart = 99
+vim.o.foldenable = true
+vim.o.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]

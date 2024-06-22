@@ -1,19 +1,3 @@
-local border = {
-    { "╭", "FloatBorder" },
-    { "─", "FloatBorder" },
-    { "╮", "FloatBorder" },
-    { "│", "FloatBorder" },
-    { "╯", "FloatBorder" },
-    { "─", "FloatBorder" },
-    { "╰", "FloatBorder" },
-    { "│", "FloatBorder" },
-}
-
-local handlers = {
-    ["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = border }),
-    ["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = border }),
-}
-
 return {
     {
         "neovim/nvim-lspconfig",
@@ -80,7 +64,7 @@ return {
                         on_attach = on_attach,
                         settings = servers[server_name],
                         filetypes = (servers[server_name] or {}).filetypes,
-                        handlers = handlers,
+                        -- handlers = handlers,
                     }
                 end,
             }
@@ -103,7 +87,7 @@ return {
             { "<leader>lx", "<Cmd>TSToolsRemoveUnusedImports<CR>", desc = "remove unused missing imports" },
         },
         opts = {
-            handlers = handlers,
+            -- handlers = handlers,
             settings = {
                 tsserver_file_preferences = {
                     includeInlayParameterNameHints = "literal",

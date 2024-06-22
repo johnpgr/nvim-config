@@ -9,7 +9,7 @@ return {
             "hrsh7th/cmp-cmdline",
             "hrsh7th/cmp-buffer",
             "hrsh7th/cmp-path",
-            "hrsh7th/cmp-nvim-lsp-signature-help",
+            -- "hrsh7th/cmp-nvim-lsp-signature-help",
         },
         config = function()
             local cmp = require "cmp"
@@ -41,12 +41,12 @@ return {
             })
 
             cmp.setup {
-                window = {
-                    completion = cmp.config.window.bordered {
-                        scrollbar = true,
-                    },
-                    documentation = cmp.config.window.bordered {},
-                },
+                -- window = {
+                --     completion = cmp.config.window.bordered {
+                --         scrollbar = true,
+                --     },
+                --     documentation = cmp.config.window.bordered {},
+                -- },
                 formatting = {
                     expandable_indicator = true,
                     fields = {
@@ -111,7 +111,7 @@ return {
                 },
                 sources = {
                     { name = "nvim_lsp" },
-                    { name = "nvim_lsp_signature_help" },
+                    -- { name = "nvim_lsp_signature_help" },
                     { name = "luasnip", keyword_length = 2 },
                     { name = "buffer", keyword_length = 3 },
                     { name = "path" },

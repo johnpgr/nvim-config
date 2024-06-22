@@ -1,24 +1,9 @@
 local map = vim.keymap.set
 local default_modes = { "n", "v" }
 local default_opts = { noremap = true, silent = true }
-local gs = package.loaded.gitsigns
 local togglers = require "utils.toggle"
 local pickers = require "utils.telescope-pickers"
 local harpoon = require "harpoon"
-
--- don't override the built-in and fugitive keymaps
--- Jump to next hunk
-map(default_modes, "]h", function()
-    if vim.wo.diff then return "]h" end
-    vim.schedule(function() gs.next_hunk() end)
-    return "<Ignore>"
-end, { expr = true, noremap = true, silent = true })
--- Jump to previous hunk
-map(default_modes, "[h", function()
-    if vim.wo.diff then return "[h" end
-    vim.schedule(function() gs.prev_hunk() end)
-    return "<Ignore>"
-end, { expr = true, noremap = true, silent = true })
 
 -- (Ctrl+Alt+n) Select all occurrences of word under cursor
 vim.cmd [[
@@ -31,6 +16,12 @@ vim.cmd [[
 map(default_modes, "<leader>/", pickers.buffer_fuzzy_find, default_opts)
 -- List recent files
 map(default_modes, "<leader>?", require("telescope.builtin").oldfiles, default_opts)
+map(
+    default_modes,
+    "<leader>sc",
+    function() require("telescope.builtin").colorscheme { enable_preview = true } end,
+    default_opts
+)
 -- List nvim cfg files
 map(default_modes, "<leader>C", pickers.list_nvim_config_files, default_opts)
 -- Spectre
@@ -47,6 +38,10 @@ map(default_modes, "<leader>ts", togglers.toggle_spaces_width, default_opts)
 map(default_modes, "<leader>ti", togglers.toggle_tabs_and_spaces, default_opts)
 -- Toggle Git Blame
 map(default_modes, "<leader>tb", require("gitsigns").toggle_current_line_blame, default_opts)
+-- Open new tab
+map("n", "<leader>tn", "<cmd>tabnew<cr>", default_opts)
+-- Open new terminal in new tab
+map("n", "<leader>tt", "<cmd>tabnew<cr><cmd>terminal<cr>", default_opts)
 -- Text case converter
 map(default_modes, "<leader>cc", "<cmd>TextCaseOpenTelescope<cr>", default_opts)
 -- List spell suggestions for current word under cursor
@@ -106,9 +101,9 @@ map("v", "<", "<gv", default_opts)
 -- Keep selection when indenting multiple lines
 map("v", ">", ">gv", default_opts)
 -- Better comment toggle NORMAL mode
-map("n", "<C-/>", "gcc", { remap = true })
+-- map("n", "<C-/>", "gcc", { remap = true })
 -- Better comment toggle VISUAL mode
-map("v", "<C-/>", "gc", { remap = true })
+-- map("v", "<C-/>", "gc", { remap = true })
 -- Better scroll down
 map(default_modes, "<C-d>", "<C-d>zz", default_opts)
 -- Better scroll up
@@ -141,3 +136,8 @@ map(default_modes, "<leader>2", function() harpoon:list():select(2) end, default
 map(default_modes, "<leader>3", function() harpoon:list():select(3) end, default_opts)
 -- Select Harpoon mark 4
 map(default_modes, "<leader>4", function() harpoon:list():select(4) end, default_opts)
+-- Terminal mode easy exit
+map("t", "<Esc>", "<C-\\><C-n>", default_opts)
+-- Tab niceties
+map(default_modes, "<M-]>", "<cmd>tabnext<cr>", default_opts)
+map(default_modes, "<M-[>", "<cmd>tabprevious<cr>", default_opts)
