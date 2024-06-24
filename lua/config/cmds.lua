@@ -16,15 +16,15 @@ require("nvim-web-devicons").set_icon {
 }
 
 vim.cmd [[
-    colorscheme seoulbones
+    colorscheme forestbones
 ]]
 
-vim.cmd [[
-    highlight Normal guibg=none
-    highlight NonText guibg=none
-    highlight Normal ctermbg=none
-    highlight NonText ctermbg=none
-]]
+-- vim.cmd [[
+--     highlight Normal guibg=none
+--     highlight NonText guibg=none
+--     highlight Normal ctermbg=none
+--     highlight NonText ctermbg=none
+-- ]]
 
 local ts_overrides = {
     on_attach = function(client, bufnr)

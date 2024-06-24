@@ -141,3 +141,10 @@ map("t", "<Esc>", "<C-\\><C-n>", default_opts)
 -- Tab niceties
 map(default_modes, "<M-]>", "<cmd>tabnext<cr>", default_opts)
 map(default_modes, "<M-[>", "<cmd>tabprevious<cr>", default_opts)
+-- Create new session
+map(
+    default_modes,
+    "<C-s>",
+    "<cmd>mksession<cr> <cmd>lua print('New session: ' .. vim.fn.getcwd() .. '/Session.vim')<cr>",
+    default_opts
+)

@@ -54,7 +54,7 @@ return {
         }
 
         dashboard.section.buttons.val = {
-            dashboard.button("r", "󰁯  Restore session", "<Cmd>SessionLoad<CR>"),
+            dashboard.button("r", "󰁯  Restore session", "<Cmd>lua MiniSessions.read()<CR>"),
             dashboard.button("n", "  New file", ":ene | startinsert<CR>"),
             dashboard.button(
                 "f",
