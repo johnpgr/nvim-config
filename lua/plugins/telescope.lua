@@ -15,6 +15,11 @@ return {
         { "nvim-telescope/telescope-ui-select.nvim" },
     },
     config = function()
+        local actions = require "telescope.actions"
+        local buffer_previewer = require "utils.telescope-buffer-previewer"
+        local image = require "utils.image-previewer"
+        buffer_previewer.teardown = image.teardown
+
         require("telescope").setup {
             defaults = {
                 mappings = {
@@ -22,10 +27,19 @@ return {
                         ["<C-u>"] = false,
                     },
                 },
+                buffer_previewer_maker = image.buffer_previewer_maker,
+                file_previewer = buffer_previewer.cat.new,
             },
+            extensions = { file_browser = { hijack_netrw = true } },
             pickers = {
                 buffers = {
+                    initial_mode = "normal",
                     theme = "dropdown",
+                    mappings = {
+                        n = {
+                            ["<C-d>"] = actions.delete_buffer,
+                        },
+                    },
                 },
             },
         }

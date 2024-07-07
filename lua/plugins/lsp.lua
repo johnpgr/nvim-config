@@ -76,6 +76,8 @@ return {
                 },
             }
 
+            require("lspconfig").mojo.setup {}
+
             vim.diagnostic.config {}
         end,
     },

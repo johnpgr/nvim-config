@@ -3,7 +3,7 @@ local default_modes = { "n", "v" }
 local default_opts = { noremap = true, silent = true }
 local togglers = require "utils.toggle"
 local pickers = require "utils.telescope-pickers"
-local harpoon = require "harpoon"
+-- local harpoon = require "harpoon"
 
 -- (Ctrl+Alt+n) Select all occurrences of word under cursor
 vim.cmd [[
@@ -53,7 +53,7 @@ map(default_modes, "<leader>sw", pickers.grep_string_under_cursor, default_opts)
 -- List recently opened files
 map(default_modes, "<leader>sr", pickers.list_recent_files, default_opts)
 -- List open buffers
-map(default_modes, "<leader>sb", require("telescope.builtin").buffers, default_opts)
+map(default_modes, "<leader><space>", require("telescope.builtin").buffers, default_opts)
 -- Open floating diagnostic message
 map(default_modes, "<leader>df", vim.diagnostic.open_float, default_opts)
 -- List diagnostic messages
@@ -121,21 +121,20 @@ map(default_modes, "gd", function() require("trouble").toggle "lsp_definitions" 
 -- Goto type definition
 map(default_modes, "gD", function() require("trouble").toggle "lsp_type_definitions" end, default_opts)
 -- Goto references
--- map(default_modes, "gr", require("telescope.builtin").lsp_references, default_opts)
 map(default_modes, "gr", function() require("trouble").toggle "lsp_references" end, default_opts)
 -- Add file to Harpoon list
-map(default_modes, "<leader>a", function() harpoon:list():add() end, default_opts)
+-- map(default_modes, "<leader>a", function() harpoon:list():add() end, default_opts)
 -- Toggle Harpoon list
 -- map(default_modes, '<leader><space>', function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, default_opts)
-map(default_modes, "<leader><space>", function() require("utils.harpoon").toggle_telescope(harpoon:list()) end)
+-- map(default_modes, "<leader><space>", function() require("utils.harpoon").toggle_telescope(harpoon:list()) end)
 -- Select Harpoon mark 1
-map(default_modes, "<leader>1", function() harpoon:list():select(1) end, default_opts)
--- Select Harpoon mark 2
-map(default_modes, "<leader>2", function() harpoon:list():select(2) end, default_opts)
--- Select Harpoon mark 3
-map(default_modes, "<leader>3", function() harpoon:list():select(3) end, default_opts)
--- Select Harpoon mark 4
-map(default_modes, "<leader>4", function() harpoon:list():select(4) end, default_opts)
+-- map(default_modes, "<leader>1", function() harpoon:list():select(1) end, default_opts)
+-- -- Select Harpoon mark 2
+-- map(default_modes, "<leader>2", function() harpoon:list():select(2) end, default_opts)
+-- -- Select Harpoon mark 3
+-- map(default_modes, "<leader>3", function() harpoon:list():select(3) end, default_opts)
+-- -- Select Harpoon mark 4
+-- map(default_modes, "<leader>4", function() harpoon:list():select(4) end, default_opts)
 -- Terminal mode easy exit
 map("t", "<Esc>", "<C-\\><C-n>", default_opts)
 -- Tab niceties

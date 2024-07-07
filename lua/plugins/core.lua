@@ -3,13 +3,17 @@ return {
     "tpope/vim-fugitive",
     "tpope/vim-rhubarb",
     "tpope/vim-sleuth",
-    "tpope/vim-surround",
     "mg979/vim-visual-multi",
     "kdheepak/lazygit.nvim",
     "onsails/lspkind.nvim",
     "folke/trouble.nvim",
     "mbbill/undotree",
     "nvim-tree/nvim-web-devicons",
+    {
+        "echasnovski/mini.surround",
+        version = false,
+        config = function() require("mini.surround").setup() end,
+    },
     {
         "lewis6991/gitsigns.nvim",
         config = function() require("gitsigns").setup() end,
@@ -68,10 +72,10 @@ return {
             },
         },
     },
-    {
-        "ThePrimeagen/harpoon",
-        branch = "harpoon2",
-    },
+    -- {
+    --     "ThePrimeagen/harpoon",
+    --     branch = "harpoon2",
+    -- },
     {
         "stevearc/oil.nvim",
         config = function()
@@ -80,11 +84,11 @@ return {
                 keymaps = {
                     ["g?"] = "actions.show_help",
                     ["<CR>"] = "actions.select",
-                    ["<C-s>"] = "actions.select_vsplit",
-                    ["<C-h>"] = "actions.select_split",
+                    ["<leader>v"] = "actions.select_vsplit",
+                    ["<leader>h"] = "actions.select_split",
                     ["<C-t>"] = "actions.select_tab",
                     ["<C-c>"] = "actions.close",
-                    ["<C-l>"] = "actions.refresh",
+                    ["<F5>"] = "actions.refresh",
                     ["<Backspace>"] = "actions.parent",
                     ["_"] = "actions.open_cwd",
                     ["`"] = "actions.cd",
@@ -197,6 +201,9 @@ return {
                         ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
                         ["vim.lsp.util.stylize_markdown"] = true,
                         ["cmp.entry.get_documentation"] = true, -- requires hrsh7th/nvim-cmp
+                    },
+                    hover = {
+                        silent = true,
                     },
                 },
                 -- you can enable a preset for easier configuration

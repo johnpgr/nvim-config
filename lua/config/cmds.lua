@@ -16,7 +16,7 @@ require("nvim-web-devicons").set_icon {
 }
 
 vim.cmd [[
-    colorscheme forestbones
+    colorscheme gruvbox
 ]]
 
 -- vim.cmd [[
@@ -25,6 +25,11 @@ vim.cmd [[
 --     highlight Normal ctermbg=none
 --     highlight NonText ctermbg=none
 -- ]]
+
+vim.cmd [[
+    highlight NormalFloat guibg=#504945
+    highlight FoldColumn guibg=#1D2021
+]]
 
 local ts_overrides = {
     on_attach = function(client, bufnr)

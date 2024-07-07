@@ -3,7 +3,7 @@ return {
     "nvim-lualine/lualine.nvim",
     config = function()
         local path_utils = require "utils.file-path"
-        local harpoon = require "harpoon"
+        -- local harpoon = require "harpoon"
 
         local function string_includes(str, substr) return string.find(str, substr, 1, true) ~= nil end
 
@@ -21,23 +21,23 @@ return {
             return false
         end
 
-        local function harpoon_component()
-            if ignored_filetypes(vim.bo.filetype) then return "" end
-
-            local total_marks = harpoon:list():length()
-            if total_marks == 0 then return "" end
-
-            local current_mark_name = path_utils.current_file_path_in_cwd()
-            local current_mark_index = -1
-
-            for index, mark in ipairs(harpoon:list().items) do
-                if string_includes(current_mark_name, mark.value) then current_mark_index = index end
-            end
-
-            if current_mark_index == -1 then return string.format("%s/%d", "-", total_marks) end
-
-            return string.format("%d/%d", current_mark_index, total_marks)
-        end
+        -- local function harpoon_component()
+        --     if ignored_filetypes(vim.bo.filetype) then return "" end
+        --
+        --     local total_marks = harpoon:list():length()
+        --     if total_marks == 0 then return "" end
+        --
+        --     local current_mark_name = path_utils.current_file_path_in_cwd()
+        --     local current_mark_index = -1
+        --
+        --     for index, mark in ipairs(harpoon:list().items) do
+        --         if string_includes(current_mark_name, mark.value) then current_mark_index = index end
+        --     end
+        --
+        --     if current_mark_index == -1 then return string.format("󱝴 %s/%d", "-", total_marks) end
+        --
+        --     return string.format("󱝴 %d/%d", current_mark_index, total_marks)
+        -- end
 
         local function current_indentation()
             if ignored_filetypes(vim.bo.filetype) then return "" end
@@ -89,7 +89,7 @@ return {
                 },
                 lualine_b = { "branch", "diff", "diagnostics" },
                 lualine_c = {
-                    harpoon_component,
+                    -- harpoon_component,
                     {
                         "filename",
                         path = 1,

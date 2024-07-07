@@ -8,34 +8,34 @@ return {
         local dashboard = require "alpha.themes.dashboard"
         local fortune = require "alpha.fortune"
 
-        local header = {
-            [[                                                                   ]],
-            [[      ████ ██████           █████      ██                    ]],
-            [[     ███████████             █████                            ]],
-            [[     █████████ ███████████████████ ███   ███████████  ]],
-            [[    █████████  ███    █████████████ █████ ██████████████  ]],
-            [[   █████████ ██████████ █████████ █████ █████ ████ █████  ]],
-            [[ ███████████ ███    ███ █████████ █████ █████ ████ █████ ]],
-            [[██████  █████████████████████ ████ █████ █████ ████ ██████]],
-        }
+        -- local header = {
+        --     [[                                                                   ]],
+        --     [[      ████ ██████           █████      ██                    ]],
+        --     [[     ███████████             █████                            ]],
+        --     [[     █████████ ███████████████████ ███   ███████████  ]],
+        --     [[    █████████  ███    █████████████ █████ ██████████████  ]],
+        --     [[   █████████ ██████████ █████████ █████ █████ ████ █████  ]],
+        --     [[ ███████████ ███    ███ █████████ █████ █████ ████ █████ ]],
+        --     [[██████  █████████████████████ ████ █████ █████ ████ ██████]],
+        -- }
 
-        local function neovim_header()
-            return vim.iter(ipairs(header))
-                :map(
-                    function(i, chars)
-                        return {
-                            type = "text",
-                            val = chars,
-                            opts = {
-                                hl = "StartLogo" .. i,
-                                shrink_margin = false,
-                                position = "center",
-                            },
-                        }
-                    end
-                )
-                :totable()
-        end
+        -- local function neovim_header()
+        --     return vim.iter(ipairs(header))
+        --         :map(
+        --             function(i, chars)
+        --                 return {
+        --                     type = "text",
+        --                     val = chars,
+        --                     opts = {
+        --                         hl = "StartLogo" .. i,
+        --                         shrink_margin = false,
+        --                         position = "center",
+        --                     },
+        --                 }
+        --             end
+        --         )
+        --         :totable()
+        -- end
 
         local stats = require("lazy").stats()
         local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
@@ -73,7 +73,7 @@ return {
         alpha.setup {
             layout = {
                 { type = "padding", val = 4 },
-                { type = "group", val = neovim_header() },
+                -- { type = "group", val = neovim_header() },
                 { type = "padding", val = 1 },
                 installed_plugins,
                 { type = "padding", val = 2 },
