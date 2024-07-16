@@ -147,3 +147,4 @@ map(
     "<cmd>mksession<cr> <cmd>lua print('New session: ' .. vim.fn.getcwd() .. '/Session.vim')<cr>",
     default_opts
 )
+map(default_modes, "<F1>", ":F !", default_opts)

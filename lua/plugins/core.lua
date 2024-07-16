@@ -14,6 +14,7 @@ return {
         version = false,
         config = function() require("mini.surround").setup() end,
     },
+    { "echasnovski/mini.pairs", version = false, config = function() require("mini.pairs").setup() end },
     {
         "lewis6991/gitsigns.nvim",
         config = function() require("gitsigns").setup() end,
@@ -72,10 +73,6 @@ return {
             },
         },
     },
-    -- {
-    --     "ThePrimeagen/harpoon",
-    --     branch = "harpoon2",
-    -- },
     {
         "stevearc/oil.nvim",
         config = function()
@@ -206,6 +203,11 @@ return {
                         silent = true,
                     },
                 },
+                cmdline = {
+                    format = {
+                        CMD = { pattern = "^:F !", icon = "", lang = "bash" },
+                    },
+                },
                 -- you can enable a preset for easier configuration
                 presets = {
                     command_palette = true, -- position the cmdline and popupmenu together
@@ -213,5 +215,11 @@ return {
                 },
             }
         end,
+    },
+    {
+        "nanozuki/tabby.nvim",
+        opts = {
+            preset = "tab_only",
+        },
     },
 }

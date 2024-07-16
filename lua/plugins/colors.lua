@@ -4,7 +4,7 @@ return {
         config = function()
             vim.cmd [[
                 let g:gruvbox_invert_selection=0
-                let g:gruvbox_contrast_dark="hard"
+                let g:gruvbox_contrast_dark="medium"
                 let g:gruvbox_sign_column="bg0"
             ]]
         end,
@@ -37,7 +37,17 @@ return {
         },
     },
     {
-        "zenbones-theme/zenbones.nvim",
-        dependencies = { "rktjmp/lush.nvim" },
+        "RRethy/base16-nvim",
+        config = function()
+            require("base16-colorscheme").with_config {
+                telescope = true,
+                indentblankline = true,
+                notify = true,
+                ts_rainbow = true,
+                cmp = true,
+                illuminate = true,
+                dapui = true,
+            }
+        end,
     },
 }

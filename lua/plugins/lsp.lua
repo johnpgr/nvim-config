@@ -76,7 +76,9 @@ return {
                 },
             }
 
-            require("lspconfig").mojo.setup {}
+            local lspconfig = require "lspconfig"
+            lspconfig.mojo.setup {}
+            lspconfig.htmx.setup {}
 
             vim.diagnostic.config {}
         end,

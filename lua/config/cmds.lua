@@ -6,6 +6,17 @@ vim.api.nvim_create_autocmd("TextYankPost", {
     pattern = "*",
 })
 
+-- Forward a command output to a temp buffer
+vim.api.nvim_create_user_command("F", function(ctx)
+    local lines = vim.split(vim.api.nvim_exec(ctx.args, true), "\n", { plain = true })
+    table.remove(lines, 1)
+    table.remove(lines, 1)
+
+    vim.cmd "new"
+    vim.api.nvim_buf_set_lines(0, 0, -1, false, lines)
+    vim.opt_local.modified = false
+end, { nargs = "+", complete = "command" })
+
 require("nvim-web-devicons").set_icon {
     v = {
         icon = "",
@@ -16,9 +27,10 @@ require("nvim-web-devicons").set_icon {
 }
 
 vim.cmd [[
-    colorscheme gruvbox
+    colorscheme base16-black-metal-bathory
 ]]
 
+-- Disable bg
 -- vim.cmd [[
 --     highlight Normal guibg=none
 --     highlight NonText guibg=none
@@ -27,15 +39,13 @@ vim.cmd [[
 -- ]]
 
 vim.cmd [[
-    highlight NormalFloat guibg=#504945
-    highlight FoldColumn guibg=#1D2021
+    highlight NormalFloat guibg=#121212
+    " highlight FoldColumn guibg=#282828
 ]]
 
 local ts_overrides = {
     on_attach = function(client, bufnr)
         require("twoslash-queries").attach(client, bufnr)
-        -- this is important, otherwise tsserver will format ts/js
-        -- files which we *really* don't want.
         client.server_capabilities.documentFormattingProvider = false
         client.server_capabilities.documentRangeFormattingProvider = false
     end,
