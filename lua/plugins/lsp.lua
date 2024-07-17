@@ -34,18 +34,19 @@ return {
             require("mason").setup {}
 
             local on_attach = function()
-                local map = function(keys, func)
-                    vim.keymap.set({ "n", "v" }, keys, func, { noremap = true, silent = true })
+                ---@param keys string
+                ---@param func function | string
+                ---@param desc string
+                local map = function(keys, func, desc)
+                    vim.keymap.set({ "n", "v" }, keys, func, { noremap = true, silent = true, desc = desc })
                 end
 
-                map("R", "<cmd>LspRestart<cr>")
-                map("<leader>ls", vim.lsp.buf.signature_help)
-                map("<leader>lr", vim.lsp.buf.rename)
-                map("<leader>la", vim.lsp.buf.code_action)
-                map("<leader>lf", function() require("conform").format { async = true, lsp_fallback = true } end)
-                map("<leader>wa", vim.lsp.buf.add_workspace_folder)
-                map("<leader>wr", vim.lsp.buf.remove_workspace_folder)
-                map("<leader>ws", require("telescope.builtin").lsp_dynamic_workspace_symbols)
+                map("R", "<cmd>LspRestart<cr>", "LSP: Restart language server")
+                map("<leader>ls", vim.lsp.buf.signature_help, "LSP: Show Signature help")
+                map("<leader>lr", vim.lsp.buf.rename, "LSP: Rename variable")
+                map("<leader>la", vim.lsp.buf.code_action, "LSP: Show Code actions")
+                map("<leader>lf", function() require("conform").format { async = true, lsp_fallback = true } end,
+                    "LSP: Format buffer")
             end
 
             local servers = {
@@ -109,8 +110,9 @@ return {
         "pmizio/typescript-tools.nvim",
         ft = { "typescript", "typescriptreact", "javascript", "javascriptreact" },
         keys = {
-            { "<leader>li", "<Cmd>TSToolsAddMissingImports<CR>",   desc = "add missing imports" },
-            { "<leader>lx", "<Cmd>TSToolsRemoveUnusedImports<CR>", desc = "remove unused missing imports" },
+            { "<leader>li", "<Cmd>TSToolsAddMissingImports<cr>",    desc = "Add missing imports" },
+            { "<leader>lx", "<Cmd>TSToolsRemoveUnusedImports<cr>",  desc = "Remove unused missing imports" },
+            { "<leader>gd", "<cmd>TSToolsGoToSourceDefinition<cr>", desc = "Goto source definition (typescript bundled)" }
         },
         opts = {
             -- handlers = handlers,
