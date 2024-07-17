@@ -41,4 +41,28 @@ end
 
 function M.live_grep() require("utils.telescope-pretty-pickers").pretty_grep_picker { picker = "live_grep" } end
 
+function M.colorscheme()
+    require("telescope.builtin").colorscheme({
+        enable_preview = true,
+        mappings = {
+            i = {
+                ['<CR>'] = function(bufnr)
+                    local actions = require("telescope.actions")
+                    local action_state = require("telescope.actions.state")
+                    local selection = action_state.get_selected_entry()
+                    local new = selection.value
+                    local file = io.open(vim.fn.stdpath('config') .. '/lua/config/colorscheme.lua', 'w')
+
+                    actions.close(bufnr)
+                    vim.cmd.colorscheme(new)
+                    if file then
+                        file:write('vim.cmd.colorscheme("' .. new .. '")')
+                        file:close()
+                    end
+                end
+            }
+        }
+    })
+end
+
 return M

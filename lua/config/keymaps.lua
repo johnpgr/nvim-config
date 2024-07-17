@@ -16,12 +16,7 @@ vim.cmd [[
 map(default_modes, "<leader>/", pickers.buffer_fuzzy_find, default_opts)
 -- List recent files
 map(default_modes, "<leader>?", require("telescope.builtin").oldfiles, default_opts)
-map(
-    default_modes,
-    "<leader>sc",
-    function() require("telescope.builtin").colorscheme { enable_preview = true } end,
-    default_opts
-)
+map(default_modes, "<leader>sc", require("telescope.builtin").colorscheme, default_opts)
 -- List nvim cfg files
 map(default_modes, "<leader>C", pickers.list_nvim_config_files, default_opts)
 -- Spectre
@@ -147,4 +142,4 @@ map(
     "<cmd>mksession<cr> <cmd>lua print('New session: ' .. vim.fn.getcwd() .. '/Session.vim')<cr>",
     default_opts
 )
-map(default_modes, "<F1>", ":F !", default_opts)
+map(default_modes, "<F1>", ":SplitrunNew ", default_opts)

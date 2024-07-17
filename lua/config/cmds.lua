@@ -27,19 +27,7 @@ require("nvim-web-devicons").set_icon {
 }
 
 vim.cmd [[
-    colorscheme base16-black-metal-bathory
-]]
-
--- Disable bg
--- vim.cmd [[
---     highlight Normal guibg=none
---     highlight NonText guibg=none
---     highlight Normal ctermbg=none
---     highlight NonText ctermbg=none
--- ]]
-
-vim.cmd [[
-    highlight NormalFloat guibg=#121212
+    " highlight NormalFloat guibg=#121212
     " highlight FoldColumn guibg=#282828
 ]]
 
@@ -68,7 +56,7 @@ vim.api.nvim_create_autocmd({ "LspAttach" }, {
 })
 
 -- Terminal mode
-vim.cmd [[ 
+vim.cmd [[
     autocmd TermOpen * startinsert
     autocmd TermOpen * setlocal nonumber norelativenumber
     autocmd TermEnter * setlocal signcolumn=no

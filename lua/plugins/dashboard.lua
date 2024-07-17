@@ -7,36 +7,6 @@ return {
         local alpha = require "alpha"
         local dashboard = require "alpha.themes.dashboard"
         local fortune = require "alpha.fortune"
-
-        -- local header = {
-        --     [[                                                                   ]],
-        --     [[      ████ ██████           █████      ██                    ]],
-        --     [[     ███████████             █████                            ]],
-        --     [[     █████████ ███████████████████ ███   ███████████  ]],
-        --     [[    █████████  ███    █████████████ █████ ██████████████  ]],
-        --     [[   █████████ ██████████ █████████ █████ █████ ████ █████  ]],
-        --     [[ ███████████ ███    ███ █████████ █████ █████ ████ █████ ]],
-        --     [[██████  █████████████████████ ████ █████ █████ ████ ██████]],
-        -- }
-
-        -- local function neovim_header()
-        --     return vim.iter(ipairs(header))
-        --         :map(
-        --             function(i, chars)
-        --                 return {
-        --                     type = "text",
-        --                     val = chars,
-        --                     opts = {
-        --                         hl = "StartLogo" .. i,
-        --                         shrink_margin = false,
-        --                         position = "center",
-        --                     },
-        --                 }
-        --             end
-        --         )
-        --         :totable()
-        -- end
-
         local stats = require("lazy").stats()
         local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
 

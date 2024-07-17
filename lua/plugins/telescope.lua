@@ -16,6 +16,7 @@ return {
     },
     config = function()
         local actions = require "telescope.actions"
+        local action_state = require("telescope.actions.state")
         local buffer_previewer = require "utils.telescope-buffer-previewer"
         local image = require "utils.image-previewer"
         buffer_previewer.teardown = image.teardown
@@ -41,6 +42,25 @@ return {
                         },
                     },
                 },
+                colorscheme = {
+                    enable_preview = true,
+                    mappings = {
+                        i = {
+                            ['<CR>'] = function(bufnr)
+                                local selection = action_state.get_selected_entry()
+                                local new = selection.value
+                                local file = io.open(vim.fn.stdpath('config') .. '/lua/config/colorscheme.lua', 'w')
+
+                                actions.close(bufnr)
+                                vim.cmd.colorscheme(new)
+                                if file then
+                                    file:write('vim.cmd.colorscheme("' .. new .. '")')
+                                    file:close()
+                                end
+                            end
+                        }
+                    },
+                }
             },
         }
     end,

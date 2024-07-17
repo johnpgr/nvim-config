@@ -1,5 +1,27 @@
 return {
     {
+        "stevearc/conform.nvim",
+        lazy = false,
+        opts = {
+            notify_on_error = false,
+            format_on_save = function(bufnr)
+                local disable_filetypes = { c = true, cpp = true }
+                local format_args = {
+                    timeout_ms = 500,
+                    lsp_fallback = not disable_filetypes[vim.bo[bufnr].filetype],
+                }
+                return format_args
+            end,
+            formatters_by_ft = {
+                lua = { "stylua" },
+                javascript = { { "prettierd", "prettier" } },
+                javascriptreact = { { "prettierd", "prettier" } },
+                typescript = { { "prettierd", "prettier" } },
+                typescriptreact = { { "prettierd", "prettier" } },
+            },
+        },
+    },
+    {
         "neovim/nvim-lspconfig",
         event = { "BufReadPost" },
         dependencies = {
@@ -87,22 +109,26 @@ return {
         "pmizio/typescript-tools.nvim",
         ft = { "typescript", "typescriptreact", "javascript", "javascriptreact" },
         keys = {
-            { "<leader>li", "<Cmd>TSToolsAddMissingImports<CR>", desc = "add missing imports" },
+            { "<leader>li", "<Cmd>TSToolsAddMissingImports<CR>",   desc = "add missing imports" },
             { "<leader>lx", "<Cmd>TSToolsRemoveUnusedImports<CR>", desc = "remove unused missing imports" },
         },
         opts = {
             -- handlers = handlers,
             settings = {
                 tsserver_file_preferences = {
-                    includeInlayParameterNameHints = "literal",
-                    includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-                    includeInlayVariableTypeHintsWhenTypeMatchesName = false,
+                    includeInlayParameterNameHints = "all",
+                    includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+                    includeInlayVariableTypeHintsWhenTypeMatchesName = true,
                     includeInlayFunctionParameterTypeHints = true,
                     includeInlayVariableTypeHints = true,
-                    includeInlayFunctionLikeReturnTypeHints = false,
+                    includeInlayFunctionLikeReturnTypeHints = true,
                     includeInlayPropertyDeclarationTypeHints = true,
                     includeInlayEnumMemberValueHints = true,
                 },
+                jsx_close_tag = {
+                    enable = true,
+                    filetypes = { "javascriptreact", "typescriptreact" },
+                }
             },
         },
     },
