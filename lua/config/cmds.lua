@@ -27,7 +27,8 @@ require("nvim-web-devicons").set_icon {
 }
 
 vim.cmd [[
-    " highlight NormalFloat guibg=#121212
+    highlight NormalFloat guibg=#2A2827
+    highlight CursorLine guibg=#2A2827
     " highlight FoldColumn guibg=#282828
 ]]
 

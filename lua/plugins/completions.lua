@@ -113,7 +113,7 @@ return {
                     { name = "nvim_lsp" },
                     -- { name = "nvim_lsp_signature_help" },
                     { name = "luasnip", keyword_length = 2 },
-                    { name = "buffer", keyword_length = 3 },
+                    { name = "buffer",  keyword_length = 3 },
                     { name = "path" },
                 },
             }
@@ -127,7 +127,7 @@ return {
             require("copilot").setup {
                 suggestion = {
                     enabled = true,
-                    auto_trigger = false,
+                    auto_trigger = true,
                     debounce = 50,
                 },
                 filetypes = {

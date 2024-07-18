@@ -109,8 +109,8 @@ return {
                 end,
             },
             mappings = {
-                comment_line = "<C-/>",
-                comment_visual = "<C-/>",
+                comment_line = "<leader>c",
+                comment_visual = "<leader>c",
             },
         },
     },
