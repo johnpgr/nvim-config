@@ -1,24 +1,21 @@
+local util = require("util")
+local keymap = util.keymap
+
 return {
     {
         "stevearc/conform.nvim",
-        lazy = false,
+        event = { "BufWritePre" },
+        cmd = { "ConformInfo" },
         opts = {
             notify_on_error = false,
-            format_on_save = function(bufnr)
-                local disable_filetypes = { c = true, cpp = true }
-                local format_args = {
-                    timeout_ms = 500,
-                    lsp_fallback = not disable_filetypes[vim.bo[bufnr].filetype],
-                }
-                return format_args
-            end,
+            format_on_save = false,
             formatters_by_ft = {
                 lua = { "stylua" },
                 javascript = { { "prettierd", "prettier" } },
                 javascriptreact = { { "prettierd", "prettier" } },
                 typescript = { { "prettierd", "prettier" } },
                 typescriptreact = { { "prettierd", "prettier" } },
-                zig = { { "zig" } },
+                zig = { { "zig fmt" } },
             },
         },
     },
@@ -28,95 +25,97 @@ return {
         dependencies = {
             "williamboman/mason.nvim",
             "williamboman/mason-lspconfig.nvim",
-            "folke/neodev.nvim",
+            "WhoIsSethDaniel/mason-tool-installer.nvim",
+            {
+                "folke/lazydev.nvim",
+                ft = "lua",
+                opts = {},
+            },
         },
         config = function()
-            require("neodev").setup()
-            require("mason").setup {}
-
-            local on_attach = function()
-                ---@param keys string
-                ---@param func function | string
-                ---@param desc string
-                local map = function(keys, func, desc)
-                    vim.keymap.set({ "n", "v" }, keys, func, { noremap = true, silent = true, desc = desc })
-                end
-
-                map("R", "<cmd>LspRestart<cr>", "LSP: Restart language server")
-                map("<leader>ls", vim.lsp.buf.signature_help, "LSP: Show Signature help")
-                map("<leader>lr", vim.lsp.buf.rename, "LSP: Rename variable")
-                map("<leader>la", vim.lsp.buf.code_action, "LSP: Show Code actions")
-                map("<leader>lf", function() require("conform").format { async = true, lsp_fallback = true } end,
-                    "LSP: Format buffer")
-            end
+            vim.api.nvim_create_autocmd("LspAttach", {
+                group = vim.api.nvim_create_augroup("lsp-attach-group", { clear = true }),
+                callback = function(event)
+                    local client = vim.lsp.get_client_by_id(event.data.client_id)
+                    if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
+                        keymap("<leader>lh", function()
+                            vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = event.buf }))
+                        end, "LSP: Inlay hints toggle")
+                    end
+                end,
+            })
 
             local servers = {
+                -- tsserver = {},
+                tailwindcss = {},
+                biome = {},
                 gopls = {},
                 pyright = {},
                 rust_analyzer = {},
                 v_analyzer = { filetypes = { "vlang", "vsh" } },
-                tailwindcss = {},
                 prismals = {},
                 sqlls = {
                     filetypes = { "sql", "mysql" },
                     cmd = { "sql-language-server", "up", "--method", "stdio" },
-                    root_dir = function() return vim.loop.cwd() end,
                 },
-                html = { filetypes = { "html", "twig", "hbs" } },
+                html = {},
+                htmx = {},
                 jsonls = {},
                 lua_ls = {
-                    cmd = { "lua-language-server --silent" },
-                    Lua = {
-                        workspace = { checkThirdParty = false },
-                        telemetry = { enable = false },
+                    settings = {
+                        Lua = {
+                            completion = {
+                                callSnippet = "Replace",
+                            },
+                            workspace = { checkThirdParty = false },
+                            telemetry = { enable = false },
+                            diagnostics = { disable = { "missing-fields" } },
+                        },
                     },
                 },
+                zls = {},
             }
 
+            require("mason").setup()
+            local ensure_installed = vim.tbl_keys(servers or {})
+            vim.list_extend(ensure_installed, {
+                "stylua",
+            })
+            require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
             local capabilities = vim.lsp.protocol.make_client_capabilities()
-            capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
+            capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
+            require("mason-lspconfig").setup({
+                handlers = {
+                    function(server_name)
+                        local server = servers[server_name] or {}
+                        server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
+                        require("lspconfig")[server_name].setup(server)
+                    end,
+                },
+            })
 
-            local mason_lspconfig = require "mason-lspconfig"
-            mason_lspconfig.setup {
-                ensure_installed = vim.tbl_keys(servers),
-            }
-
-            mason_lspconfig.setup_handlers {
-                function(server_name)
-                    require("lspconfig")[server_name].setup {
-                        capabilities = capabilities,
-                        on_attach = on_attach,
-                        settings = servers[server_name],
-                        filetypes = (servers[server_name] or {}).filetypes,
-                        -- handlers = handlers,
-                    }
-                end,
-            }
-
-            vim.filetype.add {
+            vim.filetype.add({
                 extension = {
                     v = "vlang",
                     vsh = "vlang",
                 },
-            }
-
-            local lspconfig = require "lspconfig"
-            lspconfig.mojo.setup {}
-            lspconfig.htmx.setup {}
-
-            vim.diagnostic.config {}
+            })
         end,
     },
     {
         "pmizio/typescript-tools.nvim",
+        dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
         ft = { "typescript", "typescriptreact", "javascript", "javascriptreact" },
         keys = {
-            { "<leader>li", "<Cmd>TSToolsAddMissingImports<cr>",    desc = "Add missing imports" },
-            { "<leader>lx", "<Cmd>TSToolsRemoveUnusedImports<cr>",  desc = "Remove unused missing imports" },
-            { "<leader>gd", "<cmd>TSToolsGoToSourceDefinition<cr>", desc = "Goto source definition (typescript bundled)" }
+            { "<leader>li", "<Cmd>TSToolsAddMissingImports<cr>", desc = "Add missing imports" },
+            { "<leader>lx", "<Cmd>TSToolsRemoveUnusedImports<cr>", desc = "Remove unused missing imports" },
+            {
+                "<leader>gd",
+                "<cmd>TSToolsGoToSourceDefinition<cr>",
+                desc = "Goto source definition (typescript bundled)",
+            },
         },
         opts = {
-            -- handlers = handlers,
             settings = {
                 tsserver_file_preferences = {
                     includeInlayParameterNameHints = "all",
@@ -131,7 +130,7 @@ return {
                 jsx_close_tag = {
                     enable = true,
                     filetypes = { "javascriptreact", "typescriptreact" },
-                }
+                },
             },
         },
     },
@@ -141,6 +140,15 @@ return {
             conceal = {
                 enabled = true,
             },
+        },
+    },
+    {
+        "dmmulroy/tsc.nvim",
+        cmd = "TSC",
+        ft = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
+        opts = {
+            enable_progress_notifications = true,
+            auto_open_qflist = true,
         },
     },
 }

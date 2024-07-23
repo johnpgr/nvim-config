@@ -1,5 +1,6 @@
-require "config.options"
-require "config.lazy"
-require "config.keymaps"
-require "config.colorscheme"
-require "config.cmds"
+require("core.options")
+require("core.lazy")
+require("core.statusline")
+require("core.snippet")
+require("core.keymaps")
+require("core.cmds")
