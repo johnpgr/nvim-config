@@ -48,6 +48,3 @@ vim.opt.swapfile = false
 vim.g.markdown_recommended_style = 0
 vim.opt.showcmd = true
 vim.opt.scrolloff = 15
-vim.cmd [[
-    let g:gruvbox_contrast_dark="hard"
-]]

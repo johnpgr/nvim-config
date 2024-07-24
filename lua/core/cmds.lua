@@ -9,13 +9,16 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 })
 
 vim.cmd [[
-    colorscheme gruvbox
     autocmd TermOpen * startinsert
     autocmd TermOpen * setlocal nonumber norelativenumber
     autocmd TermEnter * setlocal signcolumn=no
+]]
+
+vim.cmd [[
+    colorscheme gruvbox
     highlight NormalFloat guibg=#504945
-    highlight FoldColumn guibg=none
-    highlight SignColumn guibg=none
+    "highlight FoldColumn guibg=none
+    "highlight SignColumn guibg=none
     "highlight Normal guibg=none
     "highlight NonText guibg=none
     "highlight Normal ctermbg=none
