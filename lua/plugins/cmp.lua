@@ -8,22 +8,16 @@ return {
             "hrsh7th/cmp-cmdline",
             "hrsh7th/cmp-buffer",
             "hrsh7th/cmp-path",
-            -- Snippet Engine & its associated nvim-cmp source
+            "onsails/lspkind.nvim",
             {
                 "L3MON4D3/LuaSnip",
                 build = (function()
-                    -- Build Step is needed for regex support in snippets.
-                    -- This step is not supported in many windows environments.
-                    -- Remove the below condition to re-enable on windows.
                     if vim.fn.has("win32") == 1 or vim.fn.executable("make") == 0 then
                         return
                     end
                     return "make install_jsregexp"
                 end)(),
                 dependencies = {
-                    -- `friendly-snippets` contains a variety of premade snippets.
-                    --    See the README about individual language/framework/plugin snippets:
-                    --    https://github.com/rafamadriz/friendly-snippets
                     {
                         "rafamadriz/friendly-snippets",
                         config = function()
@@ -34,9 +28,9 @@ return {
             },
         },
         config = function()
-            -- See `:help cmp`
             local cmp = require("cmp")
             local luasnip = require("luasnip")
+            local lspkind = require("lspkind")
             luasnip.config.setup({})
             cmp.setup.cmdline("/", {
                 mapping = cmp.mapping.preset.cmdline(),
@@ -58,6 +52,20 @@ return {
                 }),
             })
             cmp.setup({
+                formatting = {
+                    expandable_indicator = true,
+                    fields = {
+                        "kind",
+                        "abbr",
+                        "menu",
+                    },
+                    format = lspkind.cmp_format {
+                        preset = "codicons",
+                        mode = "symbol",
+                        maxwidth = 50,
+                        ellipsis_char = "...",
+                    },
+                },
                 snippet = {
                     expand = function(args)
                         luasnip.lsp_expand(args.body)
@@ -82,7 +90,6 @@ return {
                     ["<CR>"] = cmp.mapping.confirm({ select = true }),
                     ["<Tab>"] = cmp.mapping(function(fallback)
                         local copilot_suggestions = require("copilot.suggestion")
-
                         if cmp.visible() then
                             cmp.select_next_item()
                         elseif copilot_suggestions.is_visible() then

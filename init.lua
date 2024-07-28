@@ -1,6 +1,4 @@
 require("core.options")
 require("core.lazy")
-require("core.statusline")
-require("core.snippet")
 require("core.keymaps")
 require("core.cmds")
