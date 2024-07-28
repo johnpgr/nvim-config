@@ -15,10 +15,6 @@ return {
     },
     "farmergreg/vim-lastplace",
     {
-        "Hubro/nvim-splitrun",
-        opts = {},
-    },
-    {
         "echasnovski/mini.surround",
         version = false,
         opts = {},

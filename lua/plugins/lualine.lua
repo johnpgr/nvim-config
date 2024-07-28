@@ -1,3 +1,17 @@
+local function lsp_status()
+    local attached_clients = vim.lsp.get_clients({ bufnr = 0 })
+    if #attached_clients == 0 then
+        return ""
+    end
+    local it = vim.iter(attached_clients)
+    it:map(function(client)
+        local name = client.name:gsub("language.server", "ls")
+        return name
+    end)
+    local names = it:totable()
+    return table.concat(names, "  ")
+end
+
 return {
     "nvim-lualine/lualine.nvim",
     dependencies = { "nvim-tree/nvim-web-devicons" },
@@ -23,9 +37,9 @@ return {
             },
             sections = {
                 lualine_a = { "mode" },
-                lualine_b = { "branch", "diff", "diagnostics" },
+                lualine_b = { "branch" },
                 lualine_c = { "filename" },
-                lualine_x = { "encoding", "fileformat", "filetype" },
+                lualine_x = { lsp_status, "encoding", { "fileformat", icons_enabled = false } },
                 lualine_y = { "progress" },
                 lualine_z = { "location" },
             },

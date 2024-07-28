@@ -20,6 +20,9 @@ vim.cmd([[
     colorscheme xcodedark
     highlight NormalFloat guibg=#393B44
     highlight WinSeparator guifg=#393B44
+    highlight link NeoTreeIndentMarker WinSeparator
+    highlight NeoTreeFloatBorder guifg=#393B44
+    highlight NeoTreeFloatTitle guibg=#393B44
 ]])
 
 local function transparent()
@@ -55,6 +58,6 @@ vim.api.nvim_create_autocmd("VimEnter", {
         vim.defer_fn(function()
             vim.cmd("Neotree toggle")
             feedkeys("<C-w>l")
-        end, 10)
+        end, 1)
     end,
 })
