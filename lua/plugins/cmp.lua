@@ -162,6 +162,7 @@ return {
     },
     {
         "zbirenbaum/copilot-cmp",
+        enabled = false,
         event = "InsertEnter",
         dependencies = { "zbirenbaum/copilot.lua" },
         config = function()

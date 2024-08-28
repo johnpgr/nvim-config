@@ -26,9 +26,10 @@ return {
         dashboard.section.buttons.val = {
             dashboard.button("n", "  New file", ":ene | startinsert<CR>"),
             dashboard.button("q", "  Quit", "<cmd>qa<cr>"),
-            dashboard.button("<C-p>", "󰈞  Find file"),
-            dashboard.button("<C-f>", "󱎸  Find text"),
-            dashboard.button("<C-g>", "  Git"),
+            dashboard.button("SPC o", "󰙰  Oldfiles"),
+            dashboard.button("CTRL p", "󰈞  Find file"),
+            dashboard.button("CTRL f", "󱎸  Find text"),
+            dashboard.button("CTRL g", "  Git"),
         }
 
         dashboard.section.footer.val = fortune()

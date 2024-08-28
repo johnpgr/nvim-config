@@ -69,7 +69,9 @@ return {
                     cmd = { "sql-language-server", "up", "--method", "stdio" },
                 },
                 html = {},
-                htmx = {},
+                htmx = {
+                    filetypes = { "html", "typescriptreact", "javascriptreact" },
+                },
                 jsonls = {},
                 lua_ls = {
                     settings = {

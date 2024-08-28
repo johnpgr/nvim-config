@@ -3,8 +3,11 @@
 package.path = package.path .. ";" .. vim.fn.expand "$HOME" .. "/.luarocks/share/lua/5.1/?/init.lua"
 package.path = package.path .. ";" .. vim.fn.expand "$HOME" .. "/.luarocks/share/lua/5.1/?.lua"
 
+local is_neovide = vim.g.neovide ~= nil
+
 return {
     "3rd/image.nvim",
+    enabled = not is_neovide,
     config = function()
         -- default config
         require("image").setup {

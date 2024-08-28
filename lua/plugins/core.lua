@@ -2,6 +2,12 @@ return {
     "tpope/vim-fugitive",
     "kdheepak/lazygit.nvim",
     {
+        "lewis6991/gitsigns.nvim",
+        config = function()
+            require("gitsigns").setup()
+        end,
+    },
+    {
         "mg979/vim-visual-multi",
         config = function()
             vim.cmd([[

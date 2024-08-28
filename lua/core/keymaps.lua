@@ -8,6 +8,9 @@ keymap("<leader>e", "<cmd>Neotree toggle<cr>", "Explorer")
 keymap("<C-p>", function()
     require("fzf-lua").files({ fzf_opts = { ["--layout"] = "reverse-list" } })
 end, "Fzf Files Finder")
+keymap("<leader>o", function()
+    require("fzf-lua").oldfiles({ cwd_only = true, fzf_opts = { ["--layout"] = "reverse-list" } })
+end, "Fzf Oldfiles")
 keymap("<C-f>", function()
     require("fzf-lua").live_grep({ winopts = { width = 1.0 }, fzf_opts = { ["--layout"] = "reverse-list" } })
 end, "Fzf Live Grep")
@@ -57,8 +60,10 @@ keymap("<F1>", function()
 end, "Splitrun")
 keymap("<leader>tt", function()
     local bufname = vim.fn.bufname(vim.fn.winbufnr(0))
-    if bufname:match("zsh$") then return end
-    feedkeys "<cmd>tabnew<cr>"
+    if bufname:match("zsh$") then
+        return
+    end
+    feedkeys("<cmd>tabnew<cr>")
     vim.defer_fn(function()
         if not utils.select_zsh_buffer() then
             feedkeys("<cmd>terminal<cr><cmd>keepalt file zsh<cr>")
@@ -67,7 +72,9 @@ keymap("<leader>tt", function()
 end, "Open terminal in a new tab")
 keymap("<leader>th", function()
     local bufname = vim.fn.bufname(vim.fn.winbufnr(0))
-    if bufname:match("zsh$") then return end
+    if bufname:match("zsh$") then
+        return
+    end
 
     feedkeys("<C-w>s<C-w>j")
     feedkeys("10<C-w>-")
@@ -79,7 +86,9 @@ keymap("<leader>th", function()
 end, "Open terminal in a horizontal split", "n")
 keymap("<leader>tv", function()
     local bufname = vim.fn.bufname(vim.fn.winbufnr(0))
-    if bufname:match("zsh$") then return end
+    if bufname:match("zsh$") then
+        return
+    end
     feedkeys("<C-w>v<C-w>l")
     feedkeys("20<C-w><")
     vim.defer_fn(function()
@@ -96,6 +105,7 @@ keymap("<C-g>", "<cmd>LazyGit<cr>", "Lazygit")
 keymap("<leader>w", [[yiw/<C-r>"<CR><C-o>]], "Search buffer with word under cursor", "n")
 keymap("<leader>r", "<cmd>QueryReplace<cr>", "Query replace")
 keymap("<leader>S", "<cmd>Spectre<cr>", "Project search & replace")
+keymap("<leader>T", "<cmd>FzfLua awesome_colorschemes<cr>", "Theme selector")
 keymap("R", "<cmd>LspRestart<cr>", "LSP: Restart language server")
 keymap("<leader>lf", function()
     require("conform").format({ async = true, lsp_fallback = true })
@@ -103,3 +113,5 @@ end, "LSP: Format buffer")
 keymap("yig", ":%y<CR>", "Yank buffer", "n")
 keymap("vig", "ggVG", "Visual select buffer", "n")
 keymap("cig", ":%d<CR>i", "Change buffer", "n")
+keymap("zR", require("ufo").openAllFolds, "Open all folds","n")
+keymap("zM", require("ufo").closeAllFolds, "Close all folds","n")

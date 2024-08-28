@@ -17,13 +17,22 @@ vim.cmd([[
 ]])
 
 vim.cmd([[
-    colorscheme xcodedark
-    highlight NormalFloat guibg=#393B44
-    highlight WinSeparator guifg=#393B44
-    highlight link NeoTreeIndentMarker WinSeparator
-    highlight NeoTreeFloatBorder guifg=#393B44
-    highlight NeoTreeFloatTitle guibg=#393B44
+    colorscheme melange
 ]])
+
+-- vim.cmd([[
+--     colorscheme gruvbox
+--     highlight NormalFloat guibg=#504945
+-- ]])
+
+-- vim.cmd([[
+--     colorscheme xcodedark
+--     highlight NormalFloat guibg=#393B44
+--     highlight WinSeparator guifg=#393B44
+--     highlight link NeoTreeIndentMarker WinSeparator
+--     highlight NeoTreeFloatBorder guifg=#393B44
+--     highlight NeoTreeFloatTitle guibg=#393B44
+-- ]])
 
 local function transparent()
     vim.cmd([[
@@ -52,12 +61,3 @@ vim.api.nvim_create_user_command("QueryReplace", function()
         feedkeys(":%s/" .. query .. "/" .. replace .. "/g")
     end, 1)
 end, {})
-
-vim.api.nvim_create_autocmd("VimEnter", {
-    callback = function()
-        vim.defer_fn(function()
-            vim.cmd("Neotree toggle")
-            feedkeys("<C-w>l")
-        end, 1)
-    end,
-})
