@@ -89,11 +89,11 @@ return {
                     ["<C-y>"] = cmp.mapping.confirm({ select = true }),
                     ["<CR>"] = cmp.mapping.confirm({ select = true }),
                     ["<Tab>"] = cmp.mapping(function(fallback)
-                        local copilot_suggestions = require("copilot.suggestion")
+                        -- local copilot_suggestions = require("copilot.suggestion")
                         if cmp.visible() then
                             cmp.select_next_item()
-                        elseif copilot_suggestions.is_visible() then
-                            copilot_suggestions.accept()
+                        -- elseif copilot_suggestions.is_visible() then
+                        --     copilot_suggestions.accept()
                         elseif luasnip.expand_or_jumpable() then
                             luasnip.expand_or_jump()
                         else
@@ -160,33 +160,33 @@ return {
             })
         end,
     },
-    {
-        "zbirenbaum/copilot-cmp",
-        enabled = false,
-        event = "InsertEnter",
-        dependencies = { "zbirenbaum/copilot.lua" },
-        config = function()
-            require("copilot").setup({
-                suggestion = {
-                    enabled = true,
-                    auto_trigger = true,
-                    debounce = 50,
-                },
-                filetypes = {
-                    yaml = true,
-                    markdown = true,
-                    help = false,
-                    gitcommit = false,
-                    gitrebase = false,
-                    hgcommit = false,
-                    svn = false,
-                    cvs = false,
-                    ["."] = false,
-                },
-                copilot_node_command = "node",
-                server_opts_overrides = {},
-            })
-            require("copilot_cmp").setup()
-        end,
-    },
+    -- {
+    --     "zbirenbaum/copilot-cmp",
+    --     enabled = false,
+    --     event = "InsertEnter",
+    --     dependencies = { "zbirenbaum/copilot.lua" },
+    --     config = function()
+    --         require("copilot").setup({
+    --             suggestion = {
+    --                 enabled = true,
+    --                 auto_trigger = true,
+    --                 debounce = 50,
+    --             },
+    --             filetypes = {
+    --                 yaml = true,
+    --                 markdown = true,
+    --                 help = false,
+    --                 gitcommit = false,
+    --                 gitrebase = false,
+    --                 hgcommit = false,
+    --                 svn = false,
+    --                 cvs = false,
+    --                 ["."] = false,
+    --             },
+    --             copilot_node_command = "node",
+    --             server_opts_overrides = {},
+    --         })
+    --         require("copilot_cmp").setup()
+    --     end,
+    -- },
 }

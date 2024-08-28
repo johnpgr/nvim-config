@@ -17,7 +17,7 @@ vim.cmd([[
 ]])
 
 vim.cmd([[
-    colorscheme melange
+    colorscheme github_dark_tritanopia
 ]])
 
 -- vim.cmd([[
