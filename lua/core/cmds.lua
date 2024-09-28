@@ -17,7 +17,9 @@ vim.cmd([[
 ]])
 
 vim.cmd([[
-    colorscheme github_dark_tritanopia
+    set background=light
+    highlight Normal guibg=none
+    "colorscheme github_dark
 ]])
 
 -- vim.cmd([[
@@ -33,31 +35,3 @@ vim.cmd([[
 --     highlight NeoTreeFloatBorder guifg=#393B44
 --     highlight NeoTreeFloatTitle guibg=#393B44
 -- ]])
-
-local function transparent()
-    vim.cmd([[
-        highlight LineNr guibg=none
-        highlight FoldColumn guibg=none
-        highlight SignColumn guibg=none
-        highlight Normal guibg=none
-        highlight NonText guibg=none
-        highlight Normal ctermbg=none
-        highlight NonText ctermbg=none
-        set nocursorline
-    ]])
-end
-
-vim.api.nvim_create_user_command("Transparent", transparent, {})
-
-vim.api.nvim_create_user_command("QueryReplace", function()
-    local query = vim.fn.input("Query replace:")
-    feedkeys("/" .. query .. "<CR><C-o>")
-    vim.defer_fn(function()
-        local canceledprompt = "AAAAAA"
-        local replace = vim.fn.input({ prompt = "Replace " .. query .. " with:", cancelreturn = canceledprompt })
-        if replace == canceledprompt then
-            return
-        end
-        feedkeys(":%s/" .. query .. "/" .. replace .. "/g")
-    end, 1)
-end, {})

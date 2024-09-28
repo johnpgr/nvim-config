@@ -162,14 +162,13 @@ return {
     },
     -- {
     --     "zbirenbaum/copilot-cmp",
-    --     enabled = false,
     --     event = "InsertEnter",
     --     dependencies = { "zbirenbaum/copilot.lua" },
     --     config = function()
     --         require("copilot").setup({
     --             suggestion = {
     --                 enabled = true,
-    --                 auto_trigger = true,
+    --                 auto_trigger = false,
     --                 debounce = 50,
     --             },
     --             filetypes = {

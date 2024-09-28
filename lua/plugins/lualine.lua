@@ -19,7 +19,7 @@ return {
         require("lualine").setup({
             options = {
                 icons_enabled = true,
-                theme = "auto",
+                theme = "ayu_light",
                 component_separators = { left = "", right = "" },
                 section_separators = { left = "", right = "" },
                 disabled_filetypes = {
@@ -38,8 +38,8 @@ return {
             sections = {
                 lualine_a = { "mode" },
                 lualine_b = { "branch" },
-                lualine_c = { "filename" },
-                lualine_x = { lsp_status, "encoding", { "fileformat", icons_enabled = false } },
+                lualine_c = { {"filename", path = 1 } },
+                lualine_x = { lsp_status, },
                 lualine_y = { "progress" },
                 lualine_z = { "location" },
             },

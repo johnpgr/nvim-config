@@ -58,7 +58,7 @@ return {
                         "postcss.config.cjs"
                     ),
                 },
-                biome = {},
+                eslint = {},
                 gopls = {},
                 pyright = {},
                 rust_analyzer = {},
@@ -70,7 +70,7 @@ return {
                 },
                 html = {},
                 htmx = {
-                    filetypes = { "html", "typescriptreact", "javascriptreact" },
+                    filetypes = { "html" },
                 },
                 jsonls = {},
                 lua_ls = {
@@ -143,14 +143,6 @@ return {
                     enable = true,
                     filetypes = { "javascriptreact", "typescriptreact" },
                 },
-            },
-        },
-    },
-    {
-        "luckasRanarison/tailwind-tools.nvim",
-        opts = {
-            conceal = {
-                enabled = true,
             },
         },
     },

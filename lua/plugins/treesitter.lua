@@ -12,8 +12,6 @@ return {
                     enable = true,
                 },
                 ensure_installed = {
-                    "c",
-                    "cpp",
                     "go",
                     "lua",
                     "python",
@@ -24,6 +22,7 @@ return {
                     "vimdoc",
                     "vim",
                     "v",
+                    "markdown",
                 },
                 auto_install = true,
                 highlight = { enable = true },
