@@ -17,10 +17,10 @@ vim.cmd([[
 ]])
 
 vim.cmd([[
-    set background=light
-    highlight Normal guibg=none
-    "colorscheme github_dark
+    colorscheme gruvbox
+    highlight NormalFloat guibg=#504945
 ]])
+
 
 -- vim.cmd([[
 --     colorscheme gruvbox

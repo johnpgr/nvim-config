@@ -6,17 +6,29 @@ keymap("<C-/>", "gcc", { remap = true, silent = true, desc = "Comment toggle" },
 keymap("<C-/>", "gc", { remap = true, silent = true, desc = "Comment toggle" }, "v")
 keymap("<leader>e", "<cmd>Oil<cr>", "Explorer")
 keymap("<C-p>", function()
-    require("fzf-lua").files({ fzf_opts = { ["--layout"] = "reverse-list" }, formatter = "path.filename_first" })
+    require("fzf-lua").files({
+        winopts = { width = 0.5, preview = { hidden = "hidden" } },
+        fzf_opts = { ["--layout"] = "reverse-list" },
+        formatter = "path.filename_first",
+    })
 end, "Fzf Files Finder")
 keymap("<leader>o", function()
-    require("fzf-lua").oldfiles({ cwd_only = true, fzf_opts = { ["--layout"] = "reverse-list" } })
+    require("fzf-lua").oldfiles({
+        winopts = { width = 0.5, preview = { hidden = "hidden" } },
+        cwd_only = true,
+        fzf_opts = { ["--layout"] = "reverse-list" },
+    })
 end, "Fzf Oldfiles")
 keymap("<C-f>", function()
-    require("fzf-lua").live_grep({ winopts = { width = 1.0 }, fzf_opts = { ["--layout"] = "reverse-list" } })
+    require("fzf-lua").live_grep({ fzf_opts = { ["--layout"] = "reverse-list" } })
 end, "Fzf Live Grep")
 keymap("<leader><space>", function()
-    require("fzf-lua").buffers({ fzf_opts = { ["--layout"] = "reverse-list" } })
+    require("fzf-lua").buffers({
+        winopts = { width = 0.5, preview = { hidden = "hidden" } },
+        fzf_opts = { ["--layout"] = "reverse-list" },
+    })
 end, "Fzf buffers")
+keymap("<leader>H", "<cmd>FzfLua helptags<cr>", "Fzf Helptags")
 keymap("<C-k>", "<C-w>k", "Focus up split")
 keymap("<C-l>", "<C-w>l", "Focus left split")
 keymap("<C-j>", "<C-w>j", "Focus down split")
@@ -58,45 +70,7 @@ keymap("<leader>dl", vim.diagnostic.setqflist, "LSP: List diagnostics", "n")
 keymap("<F1>", function()
     feedkeys(":SplitrunNew ")
 end, "Splitrun")
-keymap("<leader>tt", function()
-    local bufname = vim.fn.bufname(vim.fn.winbufnr(0))
-    if bufname:match("zsh$") then
-        return
-    end
-    feedkeys("<cmd>tabnew<cr>")
-    vim.defer_fn(function()
-        if not utils.select_zsh_buffer() then
-            feedkeys("<cmd>terminal<cr><cmd>keepalt file zsh<cr>")
-        end
-    end, 1)
-end, "Open terminal in a new tab")
-keymap("<leader>th", function()
-    local bufname = vim.fn.bufname(vim.fn.winbufnr(0))
-    if bufname:match("zsh$") then
-        return
-    end
-
-    feedkeys("<C-w>s<C-w>j")
-    feedkeys("10<C-w>-")
-    vim.defer_fn(function()
-        if not utils.select_zsh_buffer() then
-            feedkeys("<cmd>terminal<cr><cmd>keepalt file zsh<cr>")
-        end
-    end, 1)
-end, "Open terminal in a horizontal split", "n")
-keymap("<leader>tv", function()
-    local bufname = vim.fn.bufname(vim.fn.winbufnr(0))
-    if bufname:match("zsh$") then
-        return
-    end
-    feedkeys("<C-w>v<C-w>l")
-    feedkeys("20<C-w><")
-    vim.defer_fn(function()
-        if not utils.select_zsh_buffer() then
-            feedkeys("<cmd>terminal<cr><cmd>keepalt file zsh<cr>")
-        end
-    end, 1)
-end, "Open terminal in a vertical split", "n")
+keymap("<leader>tt", "<cmd>tabnew<cr><cmd>term<cr>", "Open terminal in a new tab")
 keymap("<leader>tn", "<cmd>tabnew<cr>", "Open new tab")
 keymap("<Esc>", "<C-\\><C-n>", "Terminal mode easy exit", "t")
 keymap("]t", "<cmd>tabnext<cr>", "Tab next")
@@ -104,13 +78,15 @@ keymap("[t", "<cmd>tabprevious<cr>", "Tab previous")
 keymap("<C-g>", "<cmd>LazyGit<cr>", "Lazygit")
 keymap("<leader>w", [[yiw/<C-r>"<CR><C-o>]], "Search buffer with word under cursor", "n")
 keymap("<leader>S", "<cmd>Spectre<cr>", "Project search & replace")
-keymap("<leader>H", "<cmd>FzfLua helptags<cr>", "Fzf Helptags")
 keymap("<leader>T", "<cmd>FzfLua awesome_colorschemes<cr>", "Fzf Themes")
 keymap("<leader>cs", "<cmd>FzfLua colorschemes<cr>", "Colorscheme selector")
 keymap("R", "<cmd>LspRestart<cr>", "LSP: Restart language server")
 keymap("<leader>lf", function()
     require("conform").format({ async = true, lsp_fallback = true })
 end, "LSP: Format buffer")
+keymap("<leader>gh", "<cmd>Gitsigns preview_hunk<cr>", "Git hunk")
+keymap("<leader>gb", "<cmd>Gitsigns blame<cr>", "Git blame")
+keymap("<leader>gd", "<cmd>Gitsigns diffthis<cr>", "Git diff")
 keymap("yig", ":%y<CR>", "Yank buffer", "n")
 keymap("vig", "ggVG", "Visual select buffer", "n")
 keymap("cig", ":%d<CR>i", "Change buffer", "n")

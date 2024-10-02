@@ -68,6 +68,7 @@ return {
                     filetypes = { "sql", "mysql" },
                     cmd = { "sql-language-server", "up", "--method", "stdio" },
                 },
+                kotlin_language_server = {},
                 html = {},
                 htmx = {
                     filetypes = { "html" },
@@ -88,15 +89,18 @@ return {
                 zls = {},
             }
 
+            local tools = {
+                stylua = {},
+                ktlint = {},
+            }
+
             require("mason").setup()
             local ensure_installed = vim.tbl_keys(servers or {})
-            vim.list_extend(ensure_installed, {
-                "stylua",
-            })
-            require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
+            local ensure_installed_tools = vim.tbl_keys(tools or {})
             local capabilities = vim.lsp.protocol.make_client_capabilities()
             capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
             require("mason-lspconfig").setup({
+                ensure_installed = ensure_installed,
                 handlers = {
                     function(server_name)
                         local server = servers[server_name] or {}
@@ -105,6 +109,7 @@ return {
                     end,
                 },
             })
+            require("mason-tool-installer").setup({ ensure_installed = ensure_installed_tools })
 
             vim.filetype.add({
                 extension = {
@@ -121,11 +126,6 @@ return {
         keys = {
             { "<leader>li", "<Cmd>TSToolsAddMissingImports<cr>", desc = "Add missing imports" },
             { "<leader>lx", "<Cmd>TSToolsRemoveUnusedImports<cr>", desc = "Remove unused missing imports" },
-            {
-                "<leader>gd",
-                "<cmd>TSToolsGoToSourceDefinition<cr>",
-                desc = "Goto source definition (typescript bundled)",
-            },
         },
         opts = {
             settings = {

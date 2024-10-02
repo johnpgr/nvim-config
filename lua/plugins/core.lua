@@ -1,15 +1,14 @@
 return {
     "tpope/vim-fugitive",
     "kdheepak/lazygit.nvim",
+    "xiyaowong/transparent.nvim",
+    "farmergreg/vim-lastplace",
     {
-        "xiyaowong/transparent.nvim",
+        "johmsalas/text-case.nvim",
         config = function()
-            require("transparent").setup({
-                extra_groups = {
-                    "NeoTreeNormal",
-                    "NeoTreeNormalNC",
-                    "NormalFloat",
-                },
+            require("textcase").setup({
+                prefix = "tc",
+                substitude_command_name = "S",
             })
         end,
     },
@@ -31,11 +30,44 @@ return {
         ]])
         end,
     },
-    "farmergreg/vim-lastplace",
+    {
+        "echasnovski/mini.comment",
+        event = "VeryLazy",
+        dependencies = {
+            {
+                "JoosepAlviste/nvim-ts-context-commentstring",
+                lazy = true,
+                opts = {
+                    enable_autocmd = false,
+                },
+            },
+        },
+        opts = {
+            options = {
+                custom_commentstring = function()
+                    return require("ts_context_commentstring.internal").calculate_commentstring()
+                        or vim.bo.commentstring
+                end,
+            },
+            mappings = {
+                comment_line = "gcc",
+                comment_visual = "gc",
+            },
+        },
+    },
     {
         "echasnovski/mini.surround",
         version = false,
-        opts = {},
+        config = function()
+            require("mini.surround").setup()
+        end,
+    },
+    {
+        "echasnovski/mini.align",
+        version = false,
+        config = function()
+            require("mini.align").setup()
+        end,
     },
     {
         "nvim-pack/nvim-spectre",
@@ -68,7 +100,6 @@ return {
         config = function()
             -- calling `setup` is optional for customization
             require("fzf-lua").setup({
-                fzf_colors = true,
                 winopts = {
                     backdrop = 100,
                 },
@@ -76,61 +107,24 @@ return {
         end,
     },
     {
-        "echasnovski/mini.align",
-        version = false,
-        config = function()
-            require("mini.align").setup()
-        end,
-    },
-    {
-        "stevearc/oil.nvim",
-        opts = {
-            columns = {
-                "icon",
-                "size",
-                "mtime",
-            },
-            skip_confirm_for_simple_edits = true,
-            keymaps = {
-                ["?"] = "actions.show_help",
-                ["<CR>"] = "actions.select",
-                ["<leader>v"] = {
-                    "actions.select",
-                    opts = { vertical = true },
-                    desc = "Open the entry in a vertical split",
-                },
-                ["<leader>h"] = {
-                    "actions.select",
-                    opts = { horizontal = true },
-                    desc = "Open the entry in a horizontal split",
-                },
-                ["<leader>tn"] = { "actions.select", opts = { tab = true }, desc = "Open the entry in new tab" },
-                ["<leader>p"] = "actions.preview",
-                ["<leader>q"] = "actions.close",
-                ["<leader>r"] = "actions.refresh",
-                ["<backspace>"] = "actions.parent",
-                ["_"] = "actions.open_cwd",
-                ["`"] = "actions.cd",
-                ["~"] = { "actions.cd", opts = { scope = "tab" }, desc = ":tcd to the current oil directory" },
-                ["gs"] = "actions.change_sort",
-                ["<leader>x"] = "actions.open_external",
-                ["H"] = "actions.toggle_hidden",
-                ["g\\"] = "actions.toggle_trash",
-            },
-            use_default_keymaps = false,
-            watch_for_changes = true,
-        },
-    },
-    {
         "nanozuki/tabby.nvim",
-        event = 'VimEnter',
+        event = "VimEnter",
         config = function()
             require("tabby").setup({
                 preset = "tab_only",
                 option = {
-                    lualine_theme = "ayu_light"
-                }
+                    lualine_theme = "gruvbox",
+                },
             })
         end,
+    },
+    {
+        "iamcco/markdown-preview.nvim",
+        cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+        build = "cd app && npm install",
+        init = function()
+            vim.g.mkdp_filetypes = { "markdown" }
+        end,
+        ft = { "markdown" },
     },
 }

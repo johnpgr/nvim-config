@@ -12,10 +12,12 @@ return {
     "savq/melange-nvim",
     "folke/tokyonight.nvim",
     "rose-pine/neovim",
-    {"navarasu/onedark.nvim", config = function ()
-        require('onedark').setup({
-            style = "warm"
-
-        })
-    end}
+    {
+        "navarasu/onedark.nvim",
+        config = function()
+            require("onedark").setup({
+                style = "warm",
+            })
+        end,
+    },
 }
