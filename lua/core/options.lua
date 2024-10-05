@@ -18,6 +18,7 @@ vim.o.list = true
 vim.opt.listchars = {
   trail = "·",
 }
+vim.o.splitbelow = true
 vim.o.mouse = "nv"
 vim.o.pumheight = 10
 vim.o.number = true

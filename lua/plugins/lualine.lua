@@ -39,7 +39,7 @@ return {
         lualine_a = { "mode" },
         lualine_b = { "branch" },
         lualine_c = { { "filename", path = 1 } },
-        lualine_x = { lsp_status },
+        lualine_x = { lsp_status, "encoding", "filetype" },
         lualine_y = { "progress" },
         lualine_z = { "location" },
       },

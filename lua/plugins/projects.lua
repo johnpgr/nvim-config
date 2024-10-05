@@ -1,5 +1,8 @@
+local is_neovide = vim.g.neovide ~= nil
+
 return {
   "Rics-Dev/project-explorer.nvim",
+  enabled = is_neovide,
   dependencies = {
     "nvim-telescope/telescope.nvim",
   },
