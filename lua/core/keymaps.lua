@@ -1,34 +1,32 @@
-local utils = require("util")
+local utils = require("utils")
+local telescope = require("telescope-utils")
 local keymap = utils.keymap
 local feedkeys = utils.feedkeys
+local is_neovide = vim.g.neovide ~= nil
 
+--Telescope
+keymap("<C-p>", telescope.list_files_cwd, "List files")
+keymap("<C-f>", telescope.live_grep, "Live grep")
+keymap("<leader>cs", require("telescope.builtin").colorscheme, "Change colorscheme")
+keymap("<leader>sc", telescope.list_nvim_config_files, "Search neovim config files")
+keymap("<leader>tc", "<cmd>TextCaseOpenTelescope<cr>", "Text case converter")
+keymap(
+  "<leader>ss",
+  telescope.list_spell_suggestions_under_cursor,
+  "List spell suggestions for current word under cursor"
+)
+keymap("<leader>sg", require("telescope.builtin").git_files, "List Git files")
+keymap("<leader>sw", telescope.grep_string_under_cursor, "List occurrences of word under cursor")
+keymap("<leader>o", telescope.list_recent_files, "List recently opened files")
+keymap("<leader><space>", require("telescope.builtin").buffers, "List open buffers")
+keymap("<leader>dl", require("telescope.builtin").diagnostics, "List diagnostic messages")
+keymap("<leader>sh", require("telescope.builtin").help_tags, "Search help tags")
+--
+keymap("<leader>ts", utils.toggle_spaces_width, "Toggle shift width")
+keymap("<leader>ti", utils.toggle_indent_mode, "Toggle indentation mode")
 keymap("<C-/>", "gcc", { remap = true, silent = true, desc = "Comment toggle" }, "n")
 keymap("<C-/>", "gc", { remap = true, silent = true, desc = "Comment toggle" }, "v")
 keymap("<leader>e", "<cmd>Oil<cr>", "Explorer")
-keymap("<C-p>", function()
-    require("fzf-lua").files({
-        winopts = { width = 0.5, preview = { hidden = "hidden" } },
-        fzf_opts = { ["--layout"] = "reverse-list" },
-        formatter = "path.filename_first",
-    })
-end, "Fzf Files Finder")
-keymap("<leader>o", function()
-    require("fzf-lua").oldfiles({
-        winopts = { width = 0.5, preview = { hidden = "hidden" } },
-        cwd_only = true,
-        fzf_opts = { ["--layout"] = "reverse-list" },
-    })
-end, "Fzf Oldfiles")
-keymap("<C-f>", function()
-    require("fzf-lua").live_grep({ fzf_opts = { ["--layout"] = "reverse-list" } })
-end, "Fzf Live Grep")
-keymap("<leader><space>", function()
-    require("fzf-lua").buffers({
-        winopts = { width = 0.5, preview = { hidden = "hidden" } },
-        fzf_opts = { ["--layout"] = "reverse-list" },
-    })
-end, "Fzf buffers")
-keymap("<leader>H", "<cmd>FzfLua helptags<cr>", "Fzf Helptags")
 keymap("<C-k>", "<C-w>k", "Focus up split")
 keymap("<C-l>", "<C-w>l", "Focus left split")
 keymap("<C-j>", "<C-w>j", "Focus down split")
@@ -45,12 +43,12 @@ keymap("<C-d>", "<C-d>zz", "Better scroll down")
 keymap("<C-u>", "<C-u>zz", "Better scroll up")
 keymap("n", "nzz", "Better jump next", "n")
 keymap("]d", function()
-    vim.diagnostic.goto_next()
-    feedkeys("zz")
+  vim.diagnostic.goto_next()
+  feedkeys("zz")
 end, { desc = "Better jump next diagnostic", remap = true }, "n")
 keymap("[d", function()
-    vim.diagnostic.goto_prev()
-    feedkeys("zz")
+  vim.diagnostic.goto_prev()
+  feedkeys("zz")
 end, { desc = "Better jump prev diagnostic", remap = true }, "n")
 keymap("J", ":m '>+1<CR>gv=gv", "Move line down", "v")
 keymap("K", ":m '<-2<CR>gv=gv", "Move line up", "v")
@@ -66,9 +64,8 @@ keymap("<leader>ls", vim.lsp.buf.signature_help, "LSP: Signature help")
 keymap("<C-s>", vim.lsp.buf.signature_help, "LSP: Signature help", "i")
 keymap("K", vim.lsp.buf.hover, "LSP: Show hover message", "n")
 keymap("<leader>df", vim.diagnostic.open_float, "LSP: Show diagnostic message", "n")
-keymap("<leader>dl", vim.diagnostic.setqflist, "LSP: List diagnostics", "n")
 keymap("<F1>", function()
-    feedkeys(":SplitrunNew ")
+  feedkeys(":SplitrunNew ")
 end, "Splitrun")
 keymap("<leader>tt", "<cmd>tabnew<cr><cmd>term<cr>", "Open terminal in a new tab")
 keymap("<leader>tn", "<cmd>tabnew<cr>", "Open new tab")
@@ -78,11 +75,9 @@ keymap("[t", "<cmd>tabprevious<cr>", "Tab previous")
 keymap("<C-g>", "<cmd>LazyGit<cr>", "Lazygit")
 keymap("<leader>w", [[yiw/<C-r>"<CR><C-o>]], "Search buffer with word under cursor", "n")
 keymap("<leader>S", "<cmd>Spectre<cr>", "Project search & replace")
-keymap("<leader>T", "<cmd>FzfLua awesome_colorschemes<cr>", "Fzf Themes")
-keymap("<leader>cs", "<cmd>FzfLua colorschemes<cr>", "Colorscheme selector")
 keymap("R", "<cmd>LspRestart<cr>", "LSP: Restart language server")
 keymap("<leader>lf", function()
-    require("conform").format({ async = true, lsp_fallback = true })
+  require("conform").format({ async = true, lsp_fallback = true })
 end, "LSP: Format buffer")
 keymap("<leader>gh", "<cmd>Gitsigns preview_hunk<cr>", "Git hunk")
 keymap("<leader>gb", "<cmd>Gitsigns blame<cr>", "Git blame")
@@ -90,3 +85,14 @@ keymap("<leader>gd", "<cmd>Gitsigns diffthis<cr>", "Git diff")
 keymap("yig", ":%y<CR>", "Yank buffer", "n")
 keymap("vig", "ggVG", "Visual select buffer", "n")
 keymap("cig", ":%d<CR>i", "Change buffer", "n")
+if is_neovide then
+  keymap("<C-=>", function()
+    local current_scale = vim.g.neovide_scale_factor
+    vim.g.neovide_scale_factor = current_scale + 0.1
+  end, "Increase font size")
+
+  keymap("<C-->", function()
+    local current_scale = vim.g.neovide_scale_factor
+    vim.g.neovide_scale_factor = current_scale - 0.1
+  end, "Decrease font size")
+end

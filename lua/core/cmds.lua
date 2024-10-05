@@ -1,37 +1,27 @@
-local feedkeys = require("util").feedkeys
+local feedkeys = require("utils").feedkeys
 
 -- Highlight on yank
 local highlight_group = vim.api.nvim_create_augroup("YankHighlight", { clear = true })
 vim.api.nvim_create_autocmd("TextYankPost", {
-    callback = function()
-        vim.highlight.on_yank()
-    end,
-    group = highlight_group,
-    pattern = "*",
+  callback = function()
+    vim.highlight.on_yank()
+  end,
+  group = highlight_group,
+  pattern = "*",
 })
 
 vim.cmd([[
     autocmd TermOpen * startinsert
     autocmd TermOpen * setlocal nonumber norelativenumber
     autocmd TermEnter * setlocal signcolumn=no
+    autocmd TermEnter * setlocal nospell
 ]])
 
 vim.cmd([[
-    colorscheme gruvbox
-    highlight NormalFloat guibg=#504945
+    autocmd FileType sql,mysql,plsql lua require('cmp').setup.buffer({ sources = {{ name = 'vim-dadbod-completion' }} })
 ]])
-
 
 -- vim.cmd([[
 --     colorscheme gruvbox
 --     highlight NormalFloat guibg=#504945
--- ]])
-
--- vim.cmd([[
---     colorscheme xcodedark
---     highlight NormalFloat guibg=#393B44
---     highlight WinSeparator guifg=#393B44
---     highlight link NeoTreeIndentMarker WinSeparator
---     highlight NeoTreeFloatBorder guifg=#393B44
---     highlight NeoTreeFloatTitle guibg=#393B44
 -- ]])

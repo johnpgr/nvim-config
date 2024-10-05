@@ -1,23 +1,20 @@
 return {
-    {
-        "morhetz/gruvbox",
-        config = function()
-            vim.cmd([[
-                let g:gruvbox_sign_column="bg0"
-            ]])
-        end,
-    },
-    "lunacookies/vim-colors-xcode",
-    "projekt0n/github-nvim-theme",
-    "savq/melange-nvim",
-    "folke/tokyonight.nvim",
-    "rose-pine/neovim",
-    {
-        "navarasu/onedark.nvim",
-        config = function()
-            require("onedark").setup({
-                style = "warm",
-            })
-        end,
-    },
+  -- "RRethy/base16-nvim",
+  {
+    "scottmckendry/cyberdream.nvim",
+    config = function()
+      require("cyberdream").setup({
+        transparent = true,
+        italic_comments = false,
+        hide_fillchars = true,
+        terminal_colors = true,
+        borderless_telescope = false,
+        extensions = {
+          telescope = true,
+          lazy = true,
+          cmp = true,
+        },
+      })
+    end,
+  },
 }
