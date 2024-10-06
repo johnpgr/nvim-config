@@ -7,7 +7,8 @@ local is_neovide = vim.g.neovide ~= nil
 
 return {
   "3rd/image.nvim",
-  enabled = not is_neovide,
+  -- I won't be using this plugin anymore because it's very bugged on wezterm
+  enabled = false,
   config = function()
     -- default config
     require("image").setup({
@@ -17,7 +18,7 @@ return {
           enabled = true,
           clear_in_insert_mode = true,
           download_remote_images = true,
-          only_render_image_at_cursor = false,
+          only_render_image_at_cursor = true,
           filetypes = { "markdown", "vimwiki" }, -- markdown extensions (ie. quarto) can go here
         },
         neorg = {

@@ -115,4 +115,11 @@ return {
     "ejrichards/mise.nvim",
     opts = {},
   },
+  {"lukas-reineke/virt-column.nvim",
+    opts = {
+      char = {"│"},
+      virtcolumn = "80",
+      highlight = { "NonText" }
+    },
+  },
 }
