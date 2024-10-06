@@ -3,6 +3,7 @@ local telescope = require("telescope-utils")
 local keymap = utils.keymap
 local feedkeys = utils.feedkeys
 local is_neovide = vim.g.neovide ~= nil
+local tmux = require("tmux")
 
 --Telescope
 keymap("<C-p>", telescope.list_files_cwd, "List files")
@@ -11,9 +12,9 @@ keymap("<leader>cs", require("telescope.builtin").colorscheme, "Change colorsche
 keymap("<leader>sc", telescope.list_nvim_config_files, "Search neovim config files")
 keymap("<leader>tc", "<cmd>TextCaseOpenTelescope<cr>", "Text case converter")
 keymap(
-  "<leader>ss",
-  telescope.list_spell_suggestions_under_cursor,
-  "List spell suggestions for current word under cursor"
+    "<leader>ss",
+    telescope.list_spell_suggestions_under_cursor,
+    "List spell suggestions for current word under cursor"
 )
 keymap("<leader>sg", require("telescope.builtin").git_files, "List Git files")
 keymap("<leader>sw", telescope.grep_string_under_cursor, "List occurrences of word under cursor")
@@ -24,25 +25,17 @@ keymap("<leader>sh", require("telescope.builtin").help_tags, "Search help tags")
 --
 keymap("<leader>ts", utils.toggle_spaces_width, "Toggle shift width")
 keymap("<leader>ti", utils.toggle_indent_mode, "Toggle indentation mode")
-keymap("<C-/>", "gcc", { remap = true, silent = true, desc = "Comment toggle" }, "n")
-keymap("<C-/>", "gc", { remap = true, silent = true, desc = "Comment toggle" }, "v")
-keymap("<leader>e", "<cmd>Neotree toggle<cr>", "Explorer")
-keymap("<C-k>", require("tmux").move_top, "Focus top split")
-keymap("<C-l>", require("tmux").move_right, "Focus right split")
-keymap("<C-j>", require("tmux").move_bottom, "Focus bottom split")
-keymap("<C-h>", require("tmux").move_left, "Focus left split")
-keymap("<A-k>", require("tmux").resize_top, "Focus top split")
-keymap("<A-l>", require("tmux").resize_right, "Focus right split")
-keymap("<A-j>", require("tmux").resize_bottom, "Focus bottom split")
-keymap("<A-h>", require("tmux").resize_left, "Focus left split")
--- keymap("<C-k>", "<C-w>k", "Focus up split")
--- keymap("<C-l>", "<C-w>l", "Focus left split")
--- keymap("<C-j>", "<C-w>j", "Focus down split")
--- keymap("<C-h>", "<C-w>h", "Focus right split")
--- keymap("<A-h>", "<C-w><", "Resize <")
--- keymap("<A-l>", "<C-w>>", "Resize >")
--- keymap("<A-j>", "<C-w>-", "Resize -")
--- keymap("<A-k>", "<C-w>+", "Resize +")
+keymap("<C-_>", "gcc", { remap = true, silent = true, desc = "Comment toggle" }, "n")
+keymap("<C-_>", "gc", { remap = true, silent = true, desc = "Comment toggle" }, "v")
+keymap("<leader>e", "<cmd>Oil<cr>", "Explorer")
+keymap("<C-k>", tmux.move_top, "Focus top split")
+keymap("<C-l>", tmux.move_right, "Focus right split")
+keymap("<C-j>", tmux.move_bottom, "Focus bottom split")
+keymap("<C-h>", tmux.move_left, "Focus left split")
+keymap("<A-k>", tmux.resize_top, "Focus top split")
+keymap("<A-l>", tmux.resize_right, "Focus right split")
+keymap("<A-j>", tmux.resize_bottom, "Focus bottom split")
+keymap("<A-h>", tmux.resize_left, "Focus left split")
 keymap("<A-=>", "<C-w>=", "Reset splits sizes")
 keymap("<leader>v", "<C-w>v<C-w>l", "New vertical split")
 keymap("<leader>h", "<C-w>s<C-w>j", "New horizontal split")
@@ -51,12 +44,12 @@ keymap("<C-d>", "<C-d>zz", "Better scroll down")
 keymap("<C-u>", "<C-u>zz", "Better scroll up")
 keymap("n", "nzz", "Better jump next", "n")
 keymap("]d", function()
-  vim.diagnostic.goto_next()
-  feedkeys("zz")
+    vim.diagnostic.goto_next()
+    feedkeys("zz")
 end, { desc = "Better jump next diagnostic", remap = true }, "n")
 keymap("[d", function()
-  vim.diagnostic.goto_prev()
-  feedkeys("zz")
+    vim.diagnostic.goto_prev()
+    feedkeys("zz")
 end, { desc = "Better jump prev diagnostic", remap = true }, "n")
 keymap("J", ":m '>+1<CR>gv=gv", "Move line down", "v")
 keymap("K", ":m '<-2<CR>gv=gv", "Move line up", "v")
@@ -73,7 +66,7 @@ keymap("<C-s>", vim.lsp.buf.signature_help, "LSP: Signature help", "i")
 keymap("K", vim.lsp.buf.hover, "LSP: Show hover message", "n")
 keymap("<leader>df", vim.diagnostic.open_float, "LSP: Show diagnostic message", "n")
 keymap("<F1>", function()
-  feedkeys(":SplitrunNew ")
+    feedkeys(":SplitrunNew ")
 end, "Splitrun")
 keymap("<leader>tt", "<cmd>tabnew<cr><cmd>term<cr>", "Open terminal in a new tab")
 keymap("<leader>tn", "<cmd>tabnew<cr>", "Open new tab")
@@ -85,24 +78,20 @@ keymap("<leader>w", [[yiw/<C-r>"<CR><C-o>]], "Search buffer with word under curs
 keymap("<leader>S", "<cmd>Spectre<cr>", "Project search & replace")
 keymap("R", "<cmd>LspRestart<cr>", "LSP: Restart language server")
 keymap("<leader>lf", function()
-  require("conform").format({ async = true, lsp_fallback = true })
+    require("conform").format({ async = true, lsp_fallback = true })
 end, "LSP: Format buffer")
-keymap("<leader>gh", "<cmd>Gitsigns preview_hunk<cr>", "Git hunk")
-keymap("<leader>gb", "<cmd>Gitsigns blame<cr>", "Git blame")
-keymap("<leader>gd", "<cmd>Gitsigns diffthis<cr>", "Git diff")
-keymap("<leader>nd", "<cmd>Noice dismiss<cr>", "Dismiss noice messages")
 keymap("yig", ":%y<CR>", "Yank buffer", "n")
 keymap("vig", "ggVG", "Visual select buffer", "n")
 keymap("cig", ":%d<CR>i", "Change buffer", "n")
 
 if is_neovide then
-  keymap("<C-=>", function()
-    local current_scale = vim.g.neovide_scale_factor
-    vim.g.neovide_scale_factor = current_scale + 0.1
-  end, "Increase font size")
+    keymap("<C-=>", function()
+        local current_scale = vim.g.neovide_scale_factor
+        vim.g.neovide_scale_factor = current_scale + 0.1
+    end, "Increase font size")
 
-  keymap("<C-->", function()
-    local current_scale = vim.g.neovide_scale_factor
-    vim.g.neovide_scale_factor = current_scale - 0.1
-  end, "Decrease font size")
+    keymap("<C-->", function()
+        local current_scale = vim.g.neovide_scale_factor
+        vim.g.neovide_scale_factor = current_scale - 0.1
+    end, "Decrease font size")
 end
