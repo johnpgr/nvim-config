@@ -22,9 +22,6 @@ local function delete_alt(buf)
   end
 end
 
-function M.setup(_)
-  M.define_commands()
-end
 
 function M.define_commands()
   vim.api.nvim_create_user_command("Splitrun", function(command)
@@ -75,4 +72,4 @@ function M.splitrun(command, opts)
   M.buffer_counter = M.buffer_counter + 1
 end
 
-return M
+M.define_commands()
