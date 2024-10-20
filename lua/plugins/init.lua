@@ -1,3 +1,5 @@
+local is_neovide = vim.g.neovide ~= nil
+
 return {
     "tpope/vim-fugitive",
     "kdheepak/lazygit.nvim",
@@ -50,6 +52,7 @@ return {
     },
     {
         "mg979/vim-visual-multi",
+        event = "BufRead",
         config = function()
             vim.cmd([[
             let g:VM_maps = {}
@@ -62,7 +65,7 @@ return {
     },
     {
         "echasnovski/mini.comment",
-        event = "VeryLazy",
+        event = "BufRead",
         dependencies = {
             {
                 "JoosepAlviste/nvim-ts-context-commentstring",
@@ -87,6 +90,7 @@ return {
     },
     {
         "echasnovski/mini.surround",
+        event = "BufRead",
         version = false,
         config = function()
             require("mini.surround").setup()
@@ -94,6 +98,7 @@ return {
     },
     {
         "echasnovski/mini.align",
+        event = "BufRead",
         version = false,
         config = function()
             require("mini.align").setup()
@@ -101,6 +106,7 @@ return {
     },
     {
         "nvim-pack/nvim-spectre",
+        event = "VeryLazy",
         lazy = true,
         cmd = { "Spectre" },
         dependencies = { "nvim-lua/plenary.nvim" },
@@ -127,9 +133,14 @@ return {
     },
     {
         "nvimdev/indentmini.nvim",
-        enabled = false,
+        event = "BufRead",
         config = function()
             require("indentmini").setup()
+
+            vim.cmd([[
+                highlight link IndentLine VirtColumn
+                highlight link IndentLineCurrent VirtColumn
+            ]])
         end,
     },
     {
@@ -143,10 +154,12 @@ return {
     },
     {
         "ejrichards/mise.nvim",
+        enabled = is_neovide,
         opts = {},
     },
     {
         "lukas-reineke/virt-column.nvim",
+        event = "BufRead",
         opts = {
             char = { "│" },
             virtcolumn = "80",

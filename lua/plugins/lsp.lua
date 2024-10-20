@@ -1,6 +1,8 @@
 local util = require("utils")
 local keymap = util.keymap
 
+local JS_TS_FORMATTERS = { "prettierd", "prettier", "deno_fmt" }
+
 return {
     {
         "stevearc/conform.nvim",
@@ -11,11 +13,11 @@ return {
             format_on_save = false,
             formatters_by_ft = {
                 lua = { "stylua" },
-                javascript = { { "prettierd", "prettier" } },
-                javascriptreact = { { "prettierd", "prettier" } },
-                typescript = { { "prettierd", "prettier" } },
-                typescriptreact = { { "prettierd", "prettier" } },
-                zig = { { "zig fmt" } },
+                javascript = JS_TS_FORMATTERS,
+                javascriptreact = JS_TS_FORMATTERS,
+                typescript = JS_TS_FORMATTERS,
+                typescriptreact = JS_TS_FORMATTERS,
+                zig = { "zigfmt" },
             },
         },
     },
@@ -74,10 +76,10 @@ return {
                 },
                 kotlin_language_server = {},
                 html = {
-                    filetypes = { "html", "typescriptreact" },
+                    filetypes = { "html" },
                 },
                 htmx = {
-                    filetypes = { "html", "typescriptreact" },
+                    filetypes = { "html" },
                 },
                 jsonls = {},
                 lua_ls = {
@@ -130,7 +132,7 @@ return {
         dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
         ft = { "typescript", "typescriptreact", "javascript", "javascriptreact" },
         keys = {
-            { "<leader>li", "<Cmd>TSToolsAddMissingImports<cr>",   desc = "LSP: Add missing imports" },
+            { "<leader>li", "<Cmd>TSToolsAddMissingImports<cr>", desc = "LSP: Add missing imports" },
             { "<leader>lx", "<Cmd>TSToolsRemoveUnusedImports<cr>", desc = "LSP: Remove unused missing imports" },
         },
         config = function()

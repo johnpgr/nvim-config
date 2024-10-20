@@ -1,4 +1,5 @@
 return {
+    "morhetz/gruvbox",
     {
         "rebelot/kanagawa.nvim",
         opts = { compile = true, commentStyle = { italic = false }, keywordStyle = { italic = false } },

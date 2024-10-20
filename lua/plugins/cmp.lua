@@ -31,7 +31,6 @@ return {
         config = function()
             local cmp = require("cmp")
             local luasnip = require("luasnip")
-            -- local lspkind = require("lspkind")
             luasnip.config.setup({})
             cmp.setup.cmdline("/", {
                 mapping = cmp.mapping.preset.cmdline(),
@@ -72,7 +71,7 @@ return {
                 --         ellipsis_char = "...",
                 --     }),
                 -- },
-
+                --
                 snippet = {
                     expand = function(args)
                         luasnip.lsp_expand(args.body)

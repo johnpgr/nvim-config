@@ -8,7 +8,7 @@ if not vim.loop.fs_stat(lazypath) then
         "clone",
         "--filter=blob:none",
         "https://github.com/folke/lazy.nvim.git",
-        "--branch=stable", -- latest stable release
+        "--branch=stable", -- latst stable release
         lazypath,
     })
 end
@@ -18,10 +18,8 @@ require("lazy").setup("plugins")
 require("colorscheme")
 require("keymaps")
 require("splitrun")
+require("cmds")
 
 for _, v in ipairs(vim.fn.readdir(vim.g.base46_cache)) do
     dofile(vim.g.base46_cache .. v)
 end
-
-require("cmds")
-

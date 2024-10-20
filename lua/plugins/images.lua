@@ -9,6 +9,7 @@ local is_kitty = os.getenv("TERM") == "xterm-kitty"
 return {
     "3rd/image.nvim",
     enabled = not is_neovide and is_kitty,
+    event = "BufRead",
     config = function()
         require("image").setup({
             backend = "kitty",

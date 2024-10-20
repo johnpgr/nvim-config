@@ -3,17 +3,17 @@ local fortune = fortunes()
 local M = {}
 
 M.base46 = {
-    theme = "blossom_light",
+    theme = "gruvchad",
 }
 
 M.ui = {
     statusline = { theme = "vscode_colored" },
     cmp = {
-        icons_left = false,  -- only for non-atom styles!
+        icons_left = false,     -- only for non-atom styles!
         lspkind_text = true,
-        style = "atom",      -- default/flat_light/flat_dark/atom/atom_colored
+        style = "atom_colored", -- default/flat_light/flat_dark/atom/atom_colored
         format_colors = {
-            tailwind = true, -- will work for css lsp too
+            tailwind = true,    -- will work for css lsp too
             icon = "󱓻",
         },
     },
@@ -47,9 +47,10 @@ M.nvdash = {
             end,
             hl = "NvDashLazy",
         },
-        { txt = "  Find File", keys = "Spc f f", cmd = "Telescope find_files" },
-        { txt = "󰈚  Recent Files", keys = "Spc f o", cmd = "Telescope oldfiles" },
-        { txt = "󰈭  Find Word", keys = "Spc f w", cmd = "Telescope live_grep" },
+        { txt = "󰱼  Find files", keys = "Spc f f", cmd = "Telescope find_files" },
+        { txt = "󱋡  Recent files", keys = "Spc f o", cmd = "Telescope oldfiles" },
+        { txt = "󰺮  Grep", keys = "Spc f w", cmd = "Telescope live_grep" },
+        { txt = "  Projects", keys = "Spc f p", cmd = "ProjectExplorer" },
         { txt = "  Colorschemes", keys = "Spc c s", cmd = "lua require('nvchad.themes').open()" },
         { txt = "  Mappings", keys = "Spc c h", cmd = "NvCheatsheet" },
         { txt = fortune[1] or "", hl = "NvDashLazy", no_gap = true },

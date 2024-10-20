@@ -41,15 +41,20 @@ vim.opt.showcmd = true
 vim.opt.scrolloff = 5
 vim.o.spell = true
 vim.o.spelllang = "en_us,pt_br"
-vim.o.backspace="indent,eol,start"
+vim.o.backspace = "indent,eol,start"
+vim.diagnostic.config({ virtual_text = false })
 
+-- Neovide
 if vim.g.neovide then
-    vim.o.guifont = "FiraCode Nerd Font:h14"
+    vim.o.guifont = "CaskaydiaCove Nerd Font Propo:h15"
     vim.g.neovide_floating_shadow = false
     vim.g.neovide_scale_factor = 1.0
     vim.g.neovide_transparency = 1.0
-    vim.g.neovide_scroll_animation_length = 0.1
-    vim.g.neovide_cursor_trail_size = 0
-    vim.g.neovide_cursor_animate_command_line = false
     vim.g.neovide_position_animation_length = 0
+    vim.g.neovide_cursor_animation_length = 0.00
+    vim.g.neovide_cursor_trail_size = 0
+    vim.g.neovide_cursor_animate_in_insert_mode = false
+    vim.g.neovide_cursor_animate_command_line = false
+    vim.g.neovide_scroll_animation_far_lines = 0
+    vim.g.neovide_scroll_animation_length = 0.1
 end

@@ -6,6 +6,7 @@ return {
       "nvim-treesitter/nvim-treesitter-context",
     },
     build = ":TSUpdate",
+    event = "BufRead",
     config = function()
       ---@diagnostic disable-next-line: missing-fields
       require("nvim-treesitter.configs").setup({
