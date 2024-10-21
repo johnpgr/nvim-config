@@ -3,7 +3,7 @@ local fortune = fortunes()
 local M = {}
 
 M.base46 = {
-    theme = "gruvchad",
+    theme = "ayu_light",
 }
 
 M.ui = {

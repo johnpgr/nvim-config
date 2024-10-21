@@ -1,6 +1,5 @@
 -- Image previewer
 local previewers = require("telescope.previewers")
-local image_api = require("image")
 local is_image_preview = false
 local image = nil
 local last_file_path = ""
@@ -42,7 +41,7 @@ local delete_image = function()
 end
 
 local create_image = function(filepath, winid, bufnr)
-    image = image_api.hijack_buffer(filepath, winid, bufnr)
+    image = require("image").hijack_buffer(filepath, winid, bufnr)
 
     if not image then
         return
@@ -133,6 +132,9 @@ buffer_previewers.cat = defaulter(function(opts)
     })
 end, {})
 
+local is_neovide = vim.g.neovide ~= nil
+local is_kitty = os.getenv("TERM") == "xterm-kitty"
+
 return {
     "nvim-telescope/telescope.nvim",
     event = "VeryLazy",
@@ -164,8 +166,8 @@ return {
                         ["<C-u>"] = false,
                     },
                 },
-                buffer_previewer_maker = buffer_previewer_maker,
-                file_previewer = buffer_previewers.cat.new,
+                buffer_previewer_maker = not is_neovide and is_kitty and buffer_previewer_maker or nil,
+                file_previewer = not is_neovide and is_kitty and buffer_previewers.cat.new or nil,
             },
             extensions = {
                 ["ui-select"] = {
