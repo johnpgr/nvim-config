@@ -295,13 +295,14 @@ end
 function M.list_recent_files()
     M.pretty_files_picker({
         picker = "oldfiles",
-        options = {only_cwd = true}
+        options = require("telescope.themes").get_dropdown({ previewer = false, only_cwd = true }),
     })
 end
 
 function M.list_files_cwd()
     M.pretty_files_picker({
         picker = "find_files",
+        options = require("telescope.themes").get_dropdown({ previewer = false }),
     })
 end
 

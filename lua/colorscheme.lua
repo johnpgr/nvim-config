@@ -1,1 +1,1 @@
-vim.cmd.colorscheme("nvchad")
+vim.cmd.colorscheme("gruvbox")

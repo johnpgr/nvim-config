@@ -37,7 +37,7 @@ return {
         },
 
         view_options = {
-            show_hidden = true,
+            -- show_hidden = true,
         },
         use_default_keymaps = false,
         watch_for_changes = true,

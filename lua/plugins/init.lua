@@ -1,26 +1,9 @@
-local is_neovide = vim.g.neovide ~= nil
-
 return {
     "tpope/vim-fugitive",
     "kdheepak/lazygit.nvim",
     "xiyaowong/transparent.nvim",
     "farmergreg/vim-lastplace",
     "nvim-tree/nvim-web-devicons",
-    { "nvchad/volt", lazy = true },
-    { "nvchad/menu", lazy = true },
-    {
-        "nvchad/ui",
-        config = function()
-            require("nvchad")
-        end,
-    },
-    {
-        "nvchad/base46",
-        lazy = true,
-        build = function()
-            require("base46").load_all_highlights()
-        end,
-    },
     {
         "crnvl96/lazydocker.nvim",
         event = "VeryLazy",
@@ -36,21 +19,6 @@ return {
         },
     },
     {
-        "johmsalas/text-case.nvim",
-        config = function()
-            require("textcase").setup({
-                prefix = "tc",
-                substitude_command_name = "S",
-            })
-        end,
-    },
-    {
-        "lewis6991/gitsigns.nvim",
-        config = function()
-            require("gitsigns").setup()
-        end,
-    },
-    {
         "mg979/vim-visual-multi",
         event = "BufRead",
         config = function()
@@ -64,31 +32,6 @@ return {
         end,
     },
     {
-        "echasnovski/mini.comment",
-        event = "BufRead",
-        dependencies = {
-            {
-                "JoosepAlviste/nvim-ts-context-commentstring",
-                lazy = true,
-                opts = {
-                    enable_autocmd = false,
-                },
-            },
-        },
-        opts = {
-            options = {
-                custom_commentstring = function()
-                    return require("ts_context_commentstring.internal").calculate_commentstring()
-                        or vim.bo.commentstring
-                end,
-            },
-            mappings = {
-                comment_line = "gcc",
-                comment_visual = "gc",
-            },
-        },
-    },
-    {
         "echasnovski/mini.surround",
         event = "BufRead",
         version = false,
@@ -97,11 +40,12 @@ return {
         end,
     },
     {
-        "echasnovski/mini.align",
-        event = "BufRead",
-        version = false,
+        "johmsalas/text-case.nvim",
         config = function()
-            require("mini.align").setup()
+            require("textcase").setup({
+                prefix = "tc",
+                substitude_command_name = "S",
+            })
         end,
     },
     {
@@ -132,18 +76,6 @@ return {
         opts = {},
     },
     {
-        "nvimdev/indentmini.nvim",
-        event = "BufRead",
-        config = function()
-            require("indentmini").setup()
-
-            vim.cmd([[
-                highlight link IndentLine VirtColumn
-                highlight link IndentLineCurrent VirtColumn
-            ]])
-        end,
-    },
-    {
         "iamcco/markdown-preview.nvim",
         cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
         build = "cd app && npm install",
@@ -151,19 +83,5 @@ return {
             vim.g.mkdp_filetypes = { "markdown" }
         end,
         ft = { "markdown" },
-    },
-    {
-        "ejrichards/mise.nvim",
-        enabled = is_neovide,
-        opts = {},
-    },
-    {
-        "lukas-reineke/virt-column.nvim",
-        event = "BufRead",
-        opts = {
-            char = { "│" },
-            virtcolumn = "80",
-            highlight = { "NonText" },
-        },
     },
 }

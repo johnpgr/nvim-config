@@ -1,4 +1,3 @@
-vim.opt.fillchars:append({ eob = " " })
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 vim.opt.diffopt:append("linematch:60")
@@ -7,7 +6,7 @@ vim.o.completeopt = "menu,menuone,popup,noinsert,noselect"
 vim.o.confirm = true
 vim.o.cursorline = true
 vim.o.expandtab = true
-vim.o.wrap = true
+vim.o.wrap = false
 if vim.fn.executable("rg") ~= 0 then
     vim.o.grepprg = "rg --vimgrep"
 end
@@ -18,8 +17,8 @@ vim.o.list = false
 vim.o.splitbelow = true
 vim.o.mouse = "nv"
 vim.o.pumheight = 10
-vim.o.number = true
-vim.o.relativenumber = true
+vim.o.number = false
+vim.o.relativenumber = false
 vim.o.shiftround = true
 vim.o.shiftwidth = 4
 vim.o.tabstop = 4
@@ -38,23 +37,8 @@ vim.g.editorconfig = true
 vim.opt.swapfile = true
 vim.g.markdown_recommended_style = 0
 vim.opt.showcmd = true
+vim.o.cmdheight = 1
 vim.opt.scrolloff = 5
 vim.o.spell = true
 vim.o.spelllang = "en_us,pt_br"
 vim.o.backspace = "indent,eol,start"
-vim.diagnostic.config({ virtual_text = false })
-
--- Neovide
-if vim.g.neovide then
-    vim.o.guifont = "CaskaydiaCove Nerd Font Propo:h15"
-    vim.g.neovide_floating_shadow = false
-    vim.g.neovide_scale_factor = 1.0
-    vim.g.neovide_transparency = 1.0
-    vim.g.neovide_position_animation_length = 0
-    vim.g.neovide_cursor_animation_length = 0.00
-    vim.g.neovide_cursor_trail_size = 0
-    vim.g.neovide_cursor_animate_in_insert_mode = false
-    vim.g.neovide_cursor_animate_command_line = false
-    vim.g.neovide_scroll_animation_far_lines = 0
-    vim.g.neovide_scroll_animation_length = 0.1
-end

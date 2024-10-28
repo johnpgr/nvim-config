@@ -20,13 +20,19 @@ return {
             { "nvim-lua/plenary.nvim" }, -- for curl, log wrapper
         },
         build = "make tiktoken", -- Only on MacOS or Linux
-        opts = {
-            mappings = {
-                reset = {
-                    normal = "<C-r>",
-                    insert = "<C-r>",
+        config = function()
+            require("CopilotChat").setup({
+                mappings = {
+                    complete = {
+                        insert = "",
+                    },
+                    reset = {
+                        normal = "<C-r>",
+                        insert = "<C-r>",
+                    },
                 },
-            },
-        },
+            })
+            require("CopilotChat.integrations.cmp").setup()
+        end,
     },
 }

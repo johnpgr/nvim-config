@@ -10,7 +10,11 @@ return {
         cmd = { "ConformInfo" },
         opts = {
             notify_on_error = false,
-            format_on_save = false,
+            format_after_save = {
+                async = true,
+                stop_after_first = true,
+                lsp_format = "fallback",
+            },
             formatters_by_ft = {
                 lua = { "stylua" },
                 javascript = JS_TS_FORMATTERS,
@@ -152,7 +156,7 @@ return {
                         includeInlayEnumMemberValueHints = true,
                     },
                     jsx_close_tag = {
-                        enable = true,
+                        enable = false,
                         filetypes = { "javascriptreact", "typescriptreact" },
                     },
                 },

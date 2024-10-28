@@ -31,6 +31,7 @@ return {
         config = function()
             local cmp = require("cmp")
             local luasnip = require("luasnip")
+            local lspkind = require("lspkind")
             luasnip.config.setup({})
             cmp.setup.cmdline("/", {
                 mapping = cmp.mapping.preset.cmdline(),
@@ -57,35 +58,34 @@ return {
                 --     completion = cmp.config.window.bordered(),
                 --     documentation = cmp.config.window.bordered(),
                 -- },
-                -- formatting = {
-                --     expandable_indicator = true,
-                --     fields = {
-                --         "kind",
-                --         "abbr",
-                --         "menu",
-                --     },
-                --     format = lspkind.cmp_format({
-                --         preset = "codicons",
-                --         mode = "symbol",
-                --         maxwidth = 50,
-                --         ellipsis_char = "...",
-                --     }),
-                -- },
-                --
+                formatting = {
+                    expandable_indicator = true,
+                    fields = {
+                        "kind",
+                        "abbr",
+                        "menu",
+                    },
+                    format = lspkind.cmp_format({
+                        preset = "codicons",
+                        mode = "symbol",
+                        maxwidth = 50,
+                        ellipsis_char = "...",
+                    }),
+                },
                 snippet = {
                     expand = function(args)
                         luasnip.lsp_expand(args.body)
                     end,
                 },
-                completion = { completeopt = "menu,menuone,noinsert" },
+                completion = { completeopt = "menu,menuone,popup,noinsert" },
                 -- For an understanding of why these mappings were
                 -- chosen, you will need to read `:help ins-completion`
                 -- No, but seriously. Please read `:help ins-completion`, it is really good!
                 mapping = cmp.mapping.preset.insert({
                     -- Select the [n]ext item
-                    ["<C-n>"] = cmp.mapping.select_next_item(),
+                    ["<C-n>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
                     -- Select the [p]revious item
-                    ["<C-p>"] = cmp.mapping.select_prev_item(),
+                    ["<C-p>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
                     -- Scroll the documentation window [b]ack / [f]orward
                     ["<C-b>"] = cmp.mapping.scroll_docs(-4),
                     ["<C-f>"] = cmp.mapping.scroll_docs(4),
@@ -97,10 +97,10 @@ return {
                     ["<Tab>"] = cmp.mapping(function(fallback)
                         local copilot_suggestions = require("copilot.suggestion")
 
-                        if cmp.visible() then
-                            cmp.select_next_item()
-                        elseif copilot_suggestions.is_visible() then
+                        if copilot_suggestions.is_visible() then
                             copilot_suggestions.accept()
+                        elseif cmp.visible() then
+                            cmp.confirm({ select = true })
                         elseif luasnip.expand_or_jumpable() then
                             luasnip.expand_or_jump()
                         else
@@ -111,10 +111,14 @@ return {
                         "s",
                     }),
                     ["<S-Tab>"] = cmp.mapping(function(fallback)
-                        if cmp.visible() then
-                            cmp.select_prev_item()
-                        elseif luasnip.locally_jumpable(-1) then
-                            luasnip.jump(-1)
+                        local copilot_suggestions = require("copilot.suggestion")
+
+                        if copilot_suggestions.is_visible() then
+                            copilot_suggestions.accept()
+                        elseif cmp.visible() then
+                            cmp.confirm({ select = true })
+                        elseif luasnip.expand_or_jumpable() then
+                            luasnip.expand_or_jump()
                         else
                             fallback()
                         end
@@ -165,8 +169,6 @@ return {
                     { name = "path" },
                 },
             }
-
-            opts = vim.tbl_extend("force", opts, require("nvchad.cmp"))
 
             cmp.setup(opts)
         end,
