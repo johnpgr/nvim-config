@@ -53,7 +53,7 @@ return {
             })
             local servers = {
                 tailwindcss = {
-                    filetypes = { "html", "typescriptreact" },
+                    filetypes = { "html", "typescriptreact", "javascriptreact", "css" },
                     root_dir = root_pattern(
                         "tailwind.config.js",
                         "tailwind.config.ts",
@@ -68,11 +68,10 @@ return {
                 denols = {
                     root_dir = root_pattern("deno.json", "deno.jsonc"),
                 },
-                eslint = {},
+                -- eslint = {},
                 gopls = {},
                 pyright = {},
                 rust_analyzer = {},
-                v_analyzer = { filetypes = { "vlang", "vsh" } },
                 prismals = {},
                 sqlls = {
                     filetypes = { "sql", "mysql" },
@@ -122,13 +121,6 @@ return {
                 },
             })
             require("mason-tool-installer").setup({ ensure_installed = ensure_installed_tools })
-
-            vim.filetype.add({
-                extension = {
-                    v = "vlang",
-                    vsh = "vlang",
-                },
-            })
         end,
     },
     {

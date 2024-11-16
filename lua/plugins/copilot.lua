@@ -22,6 +22,7 @@ return {
         build = "make tiktoken", -- Only on MacOS or Linux
         config = function()
             require("CopilotChat").setup({
+                model = "claude-3.5-sonnet",
                 mappings = {
                     complete = {
                         insert = "",

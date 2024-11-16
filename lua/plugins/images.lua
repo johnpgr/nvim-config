@@ -29,10 +29,10 @@ return {
                     filetypes = { "norg" },
                 },
                 html = {
-                    enabled = true,
+                    enabled = false,
                 },
                 css = {
-                    enabled = true,
+                    enabled = false,
                 },
             },
             max_width = nil,

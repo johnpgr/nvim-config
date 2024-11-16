@@ -36,7 +36,7 @@ return {
                 },
                 textobjects = {
                     select = {
-                        enable = false,
+                        enable = true,
                         lookahead = true,
                         keymaps = {
                             ["a="] = { query = "@assignment.outer", desc = "Select outer part of an assignment" },
@@ -86,7 +86,7 @@ return {
                         },
                     },
                     swap = {
-                        enable = false,
+                        enable = true,
                         swap_next = {
                             ["<leader>sn"] = "@parameter.inner",
                         },

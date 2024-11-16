@@ -49,6 +49,37 @@ return {
         end,
     },
     {
+        "nvimdev/indentmini.nvim",
+        config = function()
+            require("indentmini").setup()
+        end,
+    },
+    {
+        "echasnovski/mini.comment",
+        event = "VeryLazy",
+        dependencies = {
+            {
+                "JoosepAlviste/nvim-ts-context-commentstring",
+                lazy = true,
+                opts = {
+                    enable_autocmd = false,
+                },
+            },
+        },
+        opts = {
+            options = {
+                custom_commentstring = function()
+                    return require("ts_context_commentstring.internal").calculate_commentstring()
+                        or vim.bo.commentstring
+                end,
+            },
+            mappings = {
+                comment_line = "gcc",
+                comment_visual = "gc",
+            },
+        },
+    },
+    {
         "nvim-pack/nvim-spectre",
         event = "VeryLazy",
         lazy = true,
@@ -84,4 +115,36 @@ return {
         end,
         ft = { "markdown" },
     },
+    {
+        "ollykel/v-vim",
+        init = function()
+            require("nvim-web-devicons").set_icon({
+                v = {
+                    icon = "",
+                    color = "#5d87bf",
+                    cterm_color = "59",
+                    name = "Vlang",
+                },
+                vsh = {
+                    icon = "",
+                    color = "#5d87bf",
+                    cterm_color = "59",
+                    name = "Vlang",
+                },
+            })
+
+            vim.filetype.add({
+                extension = {
+                    v = "vlang",
+                    vsh = "vlang",
+                },
+            })
+
+            require("lspconfig")["v_analyzer"].setup({
+                cmd = { "v-analyzer" },
+                filetypes = { "vlang", "v", "vsh" },
+            })
+        end,
+    },
+    { "joerdav/templ.vim" },
 }

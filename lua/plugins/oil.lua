@@ -10,6 +10,7 @@ return {
         },
         skip_confirm_for_simple_edits = true,
         keymaps = {
+            ["<RightMouse>"] = "<LeftMouse><cmd>lua require('oil.actions').select.callback()<CR>",
             ["?"] = "actions.show_help",
             ["<CR>"] = "actions.select",
             ["<leader>v"] = {

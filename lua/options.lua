@@ -39,6 +39,6 @@ vim.g.markdown_recommended_style = 0
 vim.opt.showcmd = true
 vim.o.cmdheight = 1
 vim.opt.scrolloff = 5
-vim.o.spell = true
+vim.o.spell = false
 vim.o.spelllang = "en_us,pt_br"
 vim.o.backspace = "indent,eol,start"

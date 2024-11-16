@@ -21,16 +21,16 @@ vim.cmd([[
 
 vim.api.nvim_create_autocmd("LspAttach", {
     callback = function(args)
-        local client = vim.lsp.get_client_by_id(args.data.client_id)
-        if client then
-            client.server_capabilities.semanticTokensProvider = nil
-        end
+        -- local client = vim.lsp.get_client_by_id(args.data.client_id)
+        -- if client then
+        --     client.server_capabilities.semanticTokensProvider = nil
+        -- end
         vim.cmd([[
-            highlight DiagnosticUnderlineWarn gui=undercurl
             highlight DiagnosticUnderlineError gui=undercurl
             highlight DiagnosticUnderlineHint gui=undercurl
             highlight DiagnosticUnderlineInfo gui=undercurl
             highlight DiagnosticUnderlineOk gui=undercurl
+            highlight DiagnosticUnderlineWarn gui=undercurl
         ]])
     end,
 })
@@ -82,3 +82,6 @@ end, {
         return {}
     end,
 })
+
+vim.cmd.highlight("IndentLine guifg=#4f4c4a")
+vim.cmd.highlight("IndentLineCurrent guifg=#4f4c4a")
