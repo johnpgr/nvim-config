@@ -59,9 +59,6 @@ return {
             -- This avoid unnecessary jumps
             dap.defaults.fallback.switchbuf = "usevisible,usetab,newtab"
 
-            dap_ui.setup()
-            dap_virtual_text.setup({})
-
             -- Adapters
             -- C, C++, Rust
             dap.adapters.codelldb = {
