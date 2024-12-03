@@ -75,7 +75,6 @@ keymap("]t", "<cmd>tabnext<cr>", "Tab next")
 keymap("[t", "<cmd>tabprevious<cr>", "Tab previous")
 keymap("<leader>lg", "<cmd>LazyGit<cr>", "Lazygit")
 keymap("<leader>ld", "<cmd>LazyDocker<cr>", "Lazydocker")
-keymap("<leader>fr", "<cmd>Spectre<cr>", "Find & replace")
 keymap("<leader>lR", "<cmd>LspRestart<cr>", "LSP: Restart language server")
 keymap("<leader>lf", function()
     require("conform").format({
