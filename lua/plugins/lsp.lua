@@ -10,11 +10,7 @@ return {
         cmd = { "ConformInfo" },
         opts = {
             notify_on_error = false,
-            format_after_save = {
-                async = true,
-                stop_after_first = true,
-                lsp_format = "fallback",
-            },
+            format_after_save = false,
             formatters_by_ft = {
                 lua = { "stylua" },
                 javascript = JS_TS_FORMATTERS,
@@ -68,7 +64,7 @@ return {
                 denols = {
                     root_dir = root_pattern("deno.json", "deno.jsonc"),
                 },
-                -- eslint = {},
+                eslint = {},
                 gopls = {},
                 pyright = {},
                 rust_analyzer = {},
@@ -98,6 +94,7 @@ return {
                     },
                 },
                 zls = {},
+                clangd = {},
             }
 
             local tools = {

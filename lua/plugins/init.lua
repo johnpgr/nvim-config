@@ -50,6 +50,7 @@ return {
     },
     {
         "nvimdev/indentmini.nvim",
+        enabled = false,
         config = function()
             require("indentmini").setup()
         end,
@@ -147,4 +148,24 @@ return {
         end,
     },
     { "joerdav/templ.vim" },
+    {
+        "lewis6991/gitsigns.nvim",
+        event = "VeryLazy",
+        opts = {
+            attach_to_untracked = true,
+            preview_config = {
+                border = "none",
+            },
+        },
+    },
+    {
+        "mcauley-penney/visual-whitespace.nvim",
+        event = "VeryLazy",
+        config = true,
+    },
+    {
+        "stevearc/quicker.nvim",
+        event = "FileType qf",
+        opts = {},
+    },
 }

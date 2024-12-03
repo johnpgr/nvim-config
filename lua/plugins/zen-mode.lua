@@ -4,12 +4,13 @@ return {
     config = function()
         require("zen-mode").setup({
             window = {
+                width = 80,
                 backdrop = 1,
             },
         })
 
-        vim.cmd [[
+        vim.cmd([[
             highlight! link ZenBg NormalFloat
-        ]]
+        ]])
     end,
 }

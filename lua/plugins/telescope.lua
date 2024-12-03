@@ -21,6 +21,10 @@ return {
                 mappings = {
                     i = {
                         ["<C-u>"] = false,
+                        ["<C-q>"] = function(bufnr)
+                            require("telescope.actions").send_to_qflist(bufnr)
+                            vim.cmd("copen")
+                        end,
                     },
                 },
             },

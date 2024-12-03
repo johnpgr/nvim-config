@@ -2,7 +2,7 @@ local utils = require("utils")
 local telescope = require("telescope-utils")
 local keymap = utils.keymap
 local feedkeys = utils.feedkeys
-local is_neovide = vim.g.neovide ~= nil
+local gitsigns = require("gitsigns")
 
 --Telescope
 keymap("<leader>ff", telescope.list_files_cwd, "Find files")
@@ -20,6 +20,7 @@ keymap("<leader>fo", telescope.list_recent_files, "Find oldfiles")
 keymap("<leader><space>", require("telescope.builtin").buffers, "Open buffers")
 keymap("<leader>dl", require("telescope.builtin").diagnostics, "Diagnostic messages")
 keymap("<leader>fh", require("telescope.builtin").help_tags, "Find help tags")
+keymap("<leader>tr", require("telescope.builtin").resume, "Resume last finder")
 --
 keymap("<leader>ts", utils.toggle_spaces_width, "Toggle shift width")
 keymap("<leader>ti", utils.toggle_indent_mode, "Toggle indentation mode")
@@ -77,7 +78,11 @@ keymap("<leader>ld", "<cmd>LazyDocker<cr>", "Lazydocker")
 keymap("<leader>fr", "<cmd>Spectre<cr>", "Find & replace")
 keymap("<leader>lR", "<cmd>LspRestart<cr>", "LSP: Restart language server")
 keymap("<leader>lf", function()
-    require("conform").format()
+    require("conform").format({
+        async = true,
+        stop_after_first = true,
+        lsp_format = "fallback",
+    })
 end, "LSP: Format buffer")
 keymap("<leader>gh", "<cmd>Gitsigns preview_hunk<cr>", "Git hunk")
 keymap("<leader>gb", "<cmd>Gitsigns blame<cr>", "Git blame")
@@ -120,12 +125,6 @@ keymap("<leader>cp", function()
     local actions = require("CopilotChat.actions")
     require("CopilotChat.integrations.telescope").pick(actions.prompt_actions())
 end, "Copilot Prompts")
-keymap("<leader>cd", "<cmd>CopilotChatDocs<cr>", "Copilot Docs")
-keymap("<leader>ce", "<cmd>CopilotChatExplain<cr>", "Copilot Explain")
-keymap("<leader>cc", "<cmd>CopilotChatCommit<cr>", "Copilot Commit")
-keymap("<leader>co", "<cmd>CopilotChatOptimize<cr>", "Copilot Optimize")
-keymap("<leader>ct", "<cmd>CopilotChatTests<cr>", "Copilot Tests")
-keymap("<leader>cf", "<cmd>CopilotChatFixDiagnostic<cr>", "Copilot Fix Diagnostic")
 keymap("<leader>ca", function()
     local input = vim.fn.input("Ask Copilot: ")
     if input ~= "" then
@@ -138,3 +137,75 @@ keymap("<leader>du", "<cmd>DBUIToggle<cr>", "DBUI")
 
 --Treesitter
 keymap("<leader>th", "<cmd>TSToggle highlight<cr>", "Toggle treesitter highlight")
+
+-- Git Signs
+-- Navigation
+keymap("]c", function()
+    if vim.wo.diff then
+        vim.cmd.normal({ "]c", bang = true })
+    else
+        gitsigns.nav_hunk("next")
+    end
+end, "Goto next hunk")
+
+keymap("[c", function()
+    if vim.wo.diff then
+        vim.cmd.normal({ "[c", bang = true })
+    else
+        gitsigns.nav_hunk("prev")
+    end
+end, "Goto prev hunk")
+
+-- Actions
+keymap("<leader>hs", gitsigns.stage_hunk, "Hunk Stage")
+keymap("<leader>hr", gitsigns.reset_hunk, "Hunk Reset")
+keymap("<leader>hp", gitsigns.preview_hunk, "Hunk Preview")
+keymap("<leader>hi", gitsigns.preview_hunk_inline, "Hunk Inline Preview")
+keymap("<leader>hu", gitsigns.undo_stage_hunk, "Hunk Undo Stage")
+keymap("<leader>hb", function()
+    gitsigns.blame_line({ full = true })
+end, "Hunk Blame")
+keymap("<leader>hs", function()
+    gitsigns.stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
+end, "Stage selection", "v")
+keymap("<leader>hr", function()
+    gitsigns.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
+end, "Reset selection", "v")
+keymap("<leader>bs", gitsigns.stage_buffer, "Buffer Stage")
+keymap("<leader>br", gitsigns.reset_buffer, "Buffer Reset")
+keymap("<A-b>", gitsigns.toggle_current_line_blame, "Toggle Blame")
+keymap("<A-d>", gitsigns.toggle_deleted, "Toggle Deleted")
+
+-- Text object
+keymap("ih", ":<C-U>Gitsigns select_hunk<CR>", { silent = true }, { "o", "x" })
+keymap("ah", ":<C-U>Gitsigns select_hunk<CR>", { silent = true }, { "o", "x" })
+
+-- DAP
+keymap("<A-p>", function()
+    require("dapui").toggle({ reset = true })
+end, "Toggle DAP UI")
+keymap("<leader>db", require("dap").list_breakpoints, "DAP Breakpoints")
+keymap("<leader>ds", function()
+    local widgets = require("dap.ui.widgets")
+    widgets.centered_float(widgets.scopes, { border = "rounded" })
+end, "DAP Scopes")
+keymap("<F1>", function()
+    require("dap.ui.widgets").hover(nil, { border = "rounded" })
+end, "DAP Hover")
+keymap("<F4>", "<CMD>DapTerminate<CR>", "DAP Terminate")
+keymap("<F5>", "<CMD>DapContinue<CR>", "DAP Continue")
+keymap("<F6>", function()
+    require("dap").run_to_cursor()
+end, "Run to Cursor")
+keymap("<F9>", "<CMD>DapToggleBreakpoint<CR>", "Toggle Breakpoint")
+keymap("<F10>", "<CMD>DapStepOver<CR>", "Step Over")
+keymap("<F11>", "<CMD>DapStepInto<CR>", "Step Into")
+keymap("<F12>", "<CMD>DapStepOut<CR>", "Step Out")
+keymap("<F17>", function()
+    require("dap").run_last()
+end, "Run Last")
+keymap("<F21>", function()
+    vim.ui.input({ prompt = "Breakpoint condition: " }, function(input)
+        require("dap").set_breakpoint(input)
+    end)
+end, "Conditional Breakpoint")
