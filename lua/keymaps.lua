@@ -14,7 +14,7 @@ keymap("<leader>nc", function()
     feedkeys(":Oil<CR>")
 end, "Neovim config")
 keymap("<leader>ss", telescope.list_spell_suggestions_under_cursor, "Spell suggestions for word under cursor")
-keymap("<leader>fg", require("telescope.builtin").git_files, "Find Git files")
+keymap("<leader>fg", require("telescope.builtin").git_status, "Find Git status")
 keymap("<leader>w", telescope.grep_string_under_cursor, "List occurrences of word under cursor")
 keymap("<leader>fo", telescope.list_recent_files, "Find oldfiles")
 keymap("<leader><space>", require("telescope.builtin").buffers, "Open buffers")
@@ -127,22 +127,19 @@ keymap("<leader>ca", function()
     end
 end, "Copilot Ask", { "n", "v" })
 
---DBUI
-keymap("<leader>du", "<cmd>DBUIToggle<cr>", "DBUI")
-
 --Treesitter
 keymap("<leader>th", "<cmd>TSToggle highlight<cr>", "Toggle treesitter highlight")
 
 -- Git Signs
 -- Navigation
-keymap("]c", function()
+keymap("]h", function()
     if vim.wo.diff then
         vim.cmd.normal({ "]c", bang = true })
     else
         gitsigns.nav_hunk("next")
     end
 end, "Goto next hunk")
-keymap("[c", function()
+keymap("[h", function()
     if vim.wo.diff then
         vim.cmd.normal({ "[c", bang = true })
     else
@@ -153,21 +150,18 @@ end, "Goto prev hunk")
 -- Actions
 keymap("<leader>gs", gitsigns.stage_hunk, "Hunk Stage")
 keymap("<leader>gr", gitsigns.reset_hunk, "Hunk Reset")
-keymap("<leader>gp", gitsigns.preview_hunk, "Hunk Preview")
 keymap("<leader>gi", gitsigns.preview_hunk_inline, "Hunk Inline Preview")
 keymap("<leader>gu", gitsigns.undo_stage_hunk, "Hunk Undo Stage")
-keymap("<leader>gb", function()
-    gitsigns.blame_line({ full = true })
-end, "Hunk Blame")
 keymap("<leader>gs", function()
     gitsigns.stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
 end, "Stage selection", "v")
+keymap("<leader>gb", gitsigns.toggle_current_line_blame, "Toggle Blame inline")
 keymap("<leader>gr", function()
     gitsigns.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
 end, "Reset selection", "v")
 keymap("<leader>bs", gitsigns.stage_buffer, "Buffer Stage")
 keymap("<leader>br", gitsigns.reset_buffer, "Buffer Reset")
-keymap("<A-b>", gitsigns.toggle_current_line_blame, "Toggle Blame")
+keymap("<A-p>", gitsigns.preview_hunk, "Hunk Preview")
 keymap("<A-d>", gitsigns.toggle_deleted, "Toggle Deleted")
 keymap("<A-w>", gitsigns.toggle_word_diff, "Toggle Word diff")
 
@@ -176,7 +170,7 @@ keymap("ih", ":<C-U>Gitsigns select_hunk<CR>", { silent = true }, { "o", "x" })
 keymap("ah", ":<C-U>Gitsigns select_hunk<CR>", { silent = true }, { "o", "x" })
 
 -- DAP
-keymap("<A-p>", function()
+keymap("<leader>du", function()
     require("dapui").toggle({ reset = true })
 end, "Toggle DAP UI")
 keymap("<leader>db", require("dap").list_breakpoints, "DAP Breakpoints")
