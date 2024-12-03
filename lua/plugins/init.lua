@@ -150,4 +150,8 @@ return {
         "stevearc/overseer.nvim",
         opts = {},
     },
+    {
+        "stevearc/dressing.nvim",
+        opts = {},
+    },
 }
