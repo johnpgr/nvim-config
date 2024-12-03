@@ -146,4 +146,8 @@ return {
         event = "FileType qf",
         opts = {},
     },
+    {
+        "stevearc/overseer.nvim",
+        opts = {},
+    },
 }
