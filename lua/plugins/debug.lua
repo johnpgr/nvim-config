@@ -32,13 +32,13 @@ return {
                     },
                 },
             },
-            "theHamsta/nvim-dap-virtual-text",
+            { "theHamsta/nvim-dap-virtual-text", opts = {} },
             "nvim-neotest/nvim-nio",
         },
         config = function()
             local dap = require("dap")
-            local dap_ui = require("dapui")
-            local dap_virtual_text = require("nvim-dap-virtual-text")
+            -- local dap_ui = require("dapui")
+            -- local dap_virtual_text = require("nvim-dap-virtual-text")
 
             for _, group in pairs({
                 "DapBreakpoint",
