@@ -6,11 +6,12 @@ return {
             window = {
                 width = 80,
                 backdrop = 1,
+                options = {
+                    signcolumn = "no",
+                    number = false,
+                    foldcolumn = "0",
+                }
             },
         })
-
-        vim.cmd([[
-            highlight! link ZenBg NormalFloat
-        ]])
     end,
 }

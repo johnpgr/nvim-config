@@ -14,5 +14,7 @@ vim.opt.runtimepath:prepend(lazypath)
 require("options")
 require("lazy").setup("plugins")
 require("colorscheme")
+require("hl")
 require("keymaps")
 require("cmds")
+

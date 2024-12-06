@@ -13,7 +13,7 @@ return {
     },
     {
         "CopilotC-Nvim/CopilotChat.nvim",
-        branch = "canary",
+        branch = "main",
         event = "VeryLazy",
         dependencies = {
             { "zbirenbaum/copilot.lua" }, -- or github/copilot.vim
@@ -23,6 +23,7 @@ return {
         config = function()
             require("CopilotChat").setup({
                 model = "claude-3.5-sonnet",
+                chat_autocomplete = true,
                 mappings = {
                     complete = {
                         insert = "",
@@ -33,7 +34,6 @@ return {
                     },
                 },
             })
-            require("CopilotChat.integrations.cmp").setup()
         end,
     },
 }

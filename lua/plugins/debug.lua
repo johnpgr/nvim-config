@@ -5,40 +5,13 @@ return {
         dependencies = {
             {
                 "rcarriga/nvim-dap-ui",
-                opts = {
-                    icons = {
-                        expanded = "󰅀",
-                        collapsed = "󰅂",
-                        current_frame = "󰅂",
-                    },
-                    layouts = {
-                        {
-                            elements = { "console", "watches" },
-                            position = "bottom",
-                            size = 15,
-                        },
-                    },
-                    expand_lines = false,
-                    controls = {
-                        enabled = false,
-                    },
-                    floating = {
-                        border = "rounded",
-                    },
-                    render = {
-                        indent = 2,
-                        -- Hide variable types as C++'s are verbose
-                        max_type_length = 0,
-                    },
-                },
+                opts = {},
             },
             { "theHamsta/nvim-dap-virtual-text", opts = {} },
             "nvim-neotest/nvim-nio",
         },
         config = function()
             local dap = require("dap")
-            -- local dap_ui = require("dapui")
-            -- local dap_virtual_text = require("nvim-dap-virtual-text")
 
             for _, group in pairs({
                 "DapBreakpoint",
@@ -67,6 +40,19 @@ return {
                 executable = {
                     command = "codelldb",
                     args = { "--port", "${port}" },
+                },
+            }
+
+            dap.configurations.c = {
+                {
+                    name = "Launch file",
+                    type = "codelldb",
+                    request = "launch",
+                    program = function()
+                        return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
+                    end,
+                    cwd = "${workspaceFolder}",
+                    stopOnEntry = false,
                 },
             }
         end,

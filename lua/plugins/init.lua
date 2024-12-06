@@ -148,10 +148,23 @@ return {
     },
     {
         "stevearc/overseer.nvim",
-        opts = {},
+        opts = {
+            task_list = {
+                bindings = {
+                    ["<C-l>"] = false,
+                    ["<C-h>"] = false,
+                },
+            },
+        },
     },
     {
         "stevearc/dressing.nvim",
-        opts = {},
+        opts = {
+            input = {
+                win_options = {
+                    winhighlight = "FloatTitle:,NormalFloat:,FloatBorder:",
+                },
+            },
+        },
     },
 }
