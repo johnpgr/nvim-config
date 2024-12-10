@@ -6,9 +6,15 @@ return {
             "nvim-treesitter/nvim-treesitter-textobjects",
         },
         build = ":TSUpdate",
-        event = "BufRead",
+        event = "BufReadPre",
         config = function()
-            ---@diagnostic disable-next-line: missing-fields
+            local function disable_large_files(lang, buf)
+                local max_filesize = 1024 * 1024 -- 1MB in bytes
+                local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+                if ok and stats and stats.size > max_filesize then
+                    return true
+                end
+            end
             require("nvim-treesitter.configs").setup({
                 ensure_installed = {
                     "go",
@@ -25,7 +31,7 @@ return {
                     "kotlin",
                 },
                 auto_install = true,
-                highlight = { enable = false },
+                highlight = { enable = true, disable = disable_large_files },
                 indent = { enable = false },
                 incremental_selection = {
                     enable = true,
@@ -66,7 +72,7 @@ return {
                         },
                     },
                     move = {
-                        enable = false,
+                        enable = true,
                         set_jumps = true,
                         goto_next_start = {
                             ["]f"] = "@function.outer",

@@ -10,4 +10,5 @@ return {
     { "folke/tokyonight.nvim", opts = {} },
     { "catppuccin/nvim", name = "catppuccin" },
     { "miikanissi/modus-themes.nvim", priority = 1000 },
+    { "felipeagc/fleet-theme-nvim" },
 }

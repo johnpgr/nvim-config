@@ -1,23 +1,6 @@
 return {
-    "tpope/vim-fugitive",
-    "kdheepak/lazygit.nvim",
-    "xiyaowong/transparent.nvim",
     "farmergreg/vim-lastplace",
     "nvim-tree/nvim-web-devicons",
-    {
-        "crnvl96/lazydocker.nvim",
-        event = "VeryLazy",
-        opts = {
-            popup_window = {
-                border = {
-                    highlight = "Normal",
-                },
-            },
-        },
-        dependencies = {
-            "MunifTanjim/nui.nvim",
-        },
-    },
     {
         "mg979/vim-visual-multi",
         event = "BufRead",
@@ -29,14 +12,6 @@ return {
             "Select all occurrences under cursor
             nmap <C-M-n> <Plug>(VM-Select-All)
         ]])
-        end,
-    },
-    {
-        "echasnovski/mini.surround",
-        event = "BufRead",
-        version = false,
-        config = function()
-            require("mini.surround").setup()
         end,
     },
     {
