@@ -1,3 +1,14 @@
+-- Declare a global function to retrieve the current directory
+function _G.get_oil_winbar()
+    local dir = require("oil").get_current_dir()
+    if dir then
+        return vim.fn.fnamemodify(dir, ":~")
+    else
+        -- If there is no current directory (e.g. over ssh), just show the buffer name
+        return vim.api.nvim_buf_get_name(0)
+    end
+end
+
 return {
     "stevearc/oil.nvim",
     enabled = true,
@@ -10,6 +21,7 @@ return {
         },
         skip_confirm_for_simple_edits = true,
         keymaps = {
+            ["q"] = "actions.close",
             ["<RightMouse>"] = "<LeftMouse><cmd>lua require('oil.actions').select.callback()<CR>",
             ["?"] = "actions.show_help",
             ["<CR>"] = "actions.select",
@@ -23,10 +35,8 @@ return {
                 opts = { horizontal = true },
                 desc = "Open the entry in a horizontal split",
             },
-            ["<leader>tn"] = { "actions.select", opts = { tab = true }, desc = "Open the entry in new tab" },
             ["<leader>p"] = "actions.preview",
-            ["<leader>q"] = "actions.close",
-            ["<leader>r"] = "actions.refresh",
+            ["<F5>"] = "actions.refresh",
             ["<backspace>"] = "actions.parent",
             ["_"] = "actions.open_cwd",
             ["`"] = "actions.cd",
@@ -36,7 +46,9 @@ return {
             ["H"] = "actions.toggle_hidden",
             ["g\\"] = "actions.toggle_trash",
         },
-
+        win_options = {
+            winbar = "%!v:lua.get_oil_winbar()",
+        },
         view_options = {
             -- show_hidden = true,
         },

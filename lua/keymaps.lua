@@ -75,7 +75,7 @@ keymap("<leader>tn", "<cmd>tabnew<cr>", "Open new tab")
 keymap("<Esc>", "<C-\\><C-n>", "Terminal mode easy exit", "t")
 keymap("]t", "<cmd>tabnext<cr>", "Tab next")
 keymap("[t", "<cmd>tabprevious<cr>", "Tab previous")
-keymap("<leader>ng", function() require("neogit").open() end, "Neogit")
+keymap("<leader>ng", function() require("neogit").open({kind = "replace"}) end, "Neogit")
 keymap("<leader>lR", "<cmd>LspRestart<cr>", "LSP: Restart language server")
 keymap("<leader>lf", function()
     conform.format({
