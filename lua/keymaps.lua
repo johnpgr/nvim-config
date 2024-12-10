@@ -4,24 +4,18 @@ local feedkeys = utils.feedkeys
 
 local telescope = require("telescope-utils")
 local telescope_builtin = require("telescope.builtin")
-local conform = require("conform")
 local gitsigns = require("gitsigns")
 local tmux = require("tmux")
 
---Telescope
-keymap("<leader>ff", telescope.list_files_cwd, "Find files")
-keymap("<leader>fw", telescope.live_grep, "Find word")
+--#region Telescope
+keymap("<C-p>", telescope.list_files_cwd, "Find files")
+keymap("<C-f>", telescope.live_grep, "Find word")
+keymap("<C-e>", telescope.list_recent_files, "Find oldfiles")
+keymap("<leader><space>", telescope_builtin.buffers, "Find open buffers")
 keymap("<leader>fs", telescope.list_spell_suggestions_under_cursor, "Find Spell suggestions")
-keymap("<leader>fg", telescope_builtin.git_status, "Find Git status")
-keymap("<leader>fo", telescope.list_recent_files, "Find oldfiles")
-keymap("<leader>fb", telescope_builtin.buffers, "Find open buffers")
 keymap("<leader>fh", telescope_builtin.help_tags, "Find help tags")
 keymap("<leader>fr", telescope_builtin.resume, "Resume last finder")
-keymap("<leader>fn", function()
-    telescope_builtin.find_files({
-        cwd = vim.fn.stdpath("config"),
-    })
-end, "Find in neovim config files")
+--
 
 keymap("<leader>ts", utils.toggle_spaces_width, "Toggle shift width")
 keymap("<leader>ti", utils.toggle_indent_mode, "Toggle indentation mode")
@@ -75,10 +69,12 @@ keymap("<leader>tn", "<cmd>tabnew<cr>", "Open new tab")
 keymap("<Esc>", "<C-\\><C-n>", "Terminal mode easy exit", "t")
 keymap("]t", "<cmd>tabnext<cr>", "Tab next")
 keymap("[t", "<cmd>tabprevious<cr>", "Tab previous")
-keymap("<leader>ng", function() require("neogit").open({kind = "replace"}) end, "Neogit")
+keymap("<C-g>", function()
+    require("neogit").open({ kind = "replace" })
+end, "Neogit")
 keymap("<leader>lR", "<cmd>LspRestart<cr>", "LSP: Restart language server")
-keymap("<leader>lf", function()
-    conform.format({
+keymap("<A-F>", function()
+    require("conform").format({
         async = true,
         stop_after_first = true,
         lsp_format = "fallback",
@@ -90,32 +86,34 @@ keymap("cig", ":%d<CR>i", "Change buffer", "n")
 keymap("<leader>fc", function()
     require("telescope.builtin").colorscheme({ enable_preview = true })
 end, "Find Colorscheme")
-keymap("<leader>qc", "<cmd>cclose<cr>", "Quickfixlist close")
-keymap("<leader>qo", "<cmd>copen<cr>", "Quickfixlist open")
+
+--#region Quickfixlist
+local function toggle_qf()
+    local qf_exists = false
+    for _, win in pairs(vim.fn.getwininfo()) do
+        if win.quickfix == 1 then
+            qf_exists = true
+        end
+    end
+    if qf_exists then
+        vim.cmd.cclose()
+    else
+        vim.cmd.copen()
+    end
+end
+
+keymap("<leader>qf", toggle_qf, "Quickfixlist close")
 keymap("<leader>qn", "<cmd>cnext<cr>", "Quickfixlist next")
 keymap("<leader>qp", "<cmd>cprevious<cr>", "Quickfixlist previous")
-keymap("<leader>R", function()
-    local cfgdir = vim.fn.stdpath("config")
-    local initlua = cfgdir .. "/init.lua"
-    feedkeys(":source " .. initlua .. "<CR>")
-    print("Reloaded " .. initlua)
-end, "Reload neovim config")
-keymap("<leader>zm", "<cmd>ZenMode<cr>", "Zen mode")
-keymap("<leader>dc", require("dap").continue, "Debug: Continue")
-keymap("<leader>do", require("dap").step_over, "Debug: Step over")
-keymap("<leader>di", require("dap").step_into, "Debug: Step into")
-keymap("<leader>dO", require("dap").step_out, "Debug: Step out")
-keymap("<leader>db", require("dap").toggle_breakpoint, "Debug: Toggle breakpoint")
-keymap("<leader>dB", function()
-    require("dap").set_breakpoint(vim.fn.input("Breakpoint condition: "))
-end, "Debug: Set breakpoint condition")
+--
+
 keymap("<leader>i", "<cmd>Inspect<cr>", "Inspect")
--- toggle spellchecking
+keymap("<leader>zm", "<cmd>ZenMode<cr>", "Zen mode")
 keymap("<leader>st", function()
     vim.opt.spell = not vim.opt.spell:get()
 end, "Toggle spellchecking")
 
--- CopilotChat
+--#region CopilotChat
 keymap("<leader>ct", "<cmd>CopilotChatToggle<cr>", "Copilot Toggle")
 keymap("<leader>cp", function()
     local actions = require("CopilotChat.actions")
@@ -127,12 +125,30 @@ keymap("<leader>ca", function()
         require("CopilotChat").ask(input, { selection = require("CopilotChat.select").visual })
     end
 end, "Copilot Ask", { "n", "v" })
+--
 
---Treesitter
 keymap("<leader>th", "<cmd>TSToggle highlight<cr>", "Toggle treesitter highlight")
 
--- Git Signs
--- Navigation
+--#region Gitsigns
+local function toggle_diffview()
+    local diffview = require("diffview")
+    local diffview_tab_exists = false
+    for _, win in ipairs(vim.api.nvim_list_wins()) do
+        local buf = vim.api.nvim_win_get_buf(win)
+        local buf_name = vim.api.nvim_buf_get_name(buf)
+        if buf_name:match("^diffview://") then
+            diffview_tab_exists = true
+            break
+        end
+    end
+
+    if diffview_tab_exists then
+        diffview.close()
+    else
+        diffview.open({})
+    end
+end
+
 keymap("]h", function()
     if vim.wo.diff then
         vim.cmd.normal({ "]c", bang = true })
@@ -147,21 +163,27 @@ keymap("[h", function()
         gitsigns.nav_hunk("prev")
     end
 end, "Goto prev hunk")
-
--- Actions
-keymap("<A-s>", gitsigns.stage_hunk, "Hunk Stage", {"n","v"})
+keymap("<A-s>", gitsigns.stage_hunk, "Hunk Stage", { "n", "v" })
 keymap("<A-r>", gitsigns.reset_hunk, "Hunk Reset")
 keymap("<A-u>", gitsigns.undo_stage_hunk, "Hunk Undo Stage")
 keymap("<A-b>", gitsigns.toggle_current_line_blame, "Toggle Blame inline")
 keymap("<A-p>", gitsigns.preview_hunk, "Hunk Preview")
 keymap("<A-d>", gitsigns.toggle_deleted, "Toggle Deleted")
 keymap("<A-w>", gitsigns.toggle_word_diff, "Toggle Word diff")
-
--- Text object
+keymap("<A-D>", toggle_diffview, "Diffview Open")
 keymap("ih", ":<C-U>Gitsigns select_hunk<CR>", { silent = true }, { "o", "x" })
 keymap("ah", ":<C-U>Gitsigns select_hunk<CR>", { silent = true }, { "o", "x" })
+--
 
--- DAP
+--#region DAP
+keymap("<leader>dc", require("dap").continue, "Debug: Continue")
+keymap("<leader>do", require("dap").step_over, "Debug: Step over")
+keymap("<leader>di", require("dap").step_into, "Debug: Step into")
+keymap("<leader>dO", require("dap").step_out, "Debug: Step out")
+keymap("<leader>db", require("dap").toggle_breakpoint, "Debug: Toggle breakpoint")
+keymap("<leader>dB", function()
+    require("dap").set_breakpoint(vim.fn.input("Breakpoint condition: "))
+end, "Debug: Set breakpoint condition")
 keymap("<leader>du", function()
     require("dapui").toggle({ reset = true })
 end, "Toggle DAP UI")
@@ -199,6 +221,7 @@ keymap("<F21>", function()
         require("dap").set_breakpoint(input)
     end)
 end, "Conditional Breakpoint")
+--
 
 -- Overseer
 keymap("<leader>tl", "<cmd>OverseerToggle<cr>", "Task List")

@@ -1,12 +1,11 @@
 return {
     "NeogitOrg/neogit",
     dependencies = {
-        "sindrets/diffview.nvim",
         "nvim-lua/plenary.nvim",
-        "nvim-telescope/telescope.nvim",
     },
     cmd = "Neogit",
     opts = {
+        graph_style = "kitty",
         commit_editor = {
             kind = "vsplit",
             show_staged_diff = false,

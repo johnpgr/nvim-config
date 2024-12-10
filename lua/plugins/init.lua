@@ -1,6 +1,7 @@
 return {
     "farmergreg/vim-lastplace",
     "nvim-tree/nvim-web-devicons",
+    "sindrets/diffview.nvim",
     {
         "mg979/vim-visual-multi",
         event = "BufRead",
