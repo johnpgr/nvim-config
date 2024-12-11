@@ -63,17 +63,41 @@ return {
                 },
                 denols = {
                     root_dir = root_pattern("deno.json", "deno.jsonc"),
+                    on_attach = function(client, bufnr)
+                        print("denols on_attach")
+                        require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
+                    end,
                 },
-                eslint = {},
-                gopls = {},
-                pyright = {},
-                rust_analyzer = {},
+                eslint = {
+                    on_attach = function(client, bufnr)
+                        require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
+                    end,
+                },
+                gopls = {
+                    on_attach = function(client, bufnr)
+                        require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
+                    end,
+                },
+                pyright = {
+                    on_attach = function(client, bufnr)
+                        require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
+                    end,
+                },
+                rust_analyzer = {
+                    on_attach = function(client, bufnr)
+                        require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
+                    end,
+                },
                 prismals = {},
                 sqlls = {
                     filetypes = { "sql", "mysql" },
                     cmd = { "sql-language-server", "up", "--method", "stdio" },
                 },
-                kotlin_language_server = {},
+                kotlin_language_server = {
+                    on_attach = function(client, bufnr)
+                        require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
+                    end,
+                },
                 html = {
                     filetypes = { "html" },
                 },
@@ -82,6 +106,9 @@ return {
                 },
                 jsonls = {},
                 lua_ls = {
+                    on_attach = function(client, bufnr)
+                        require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
+                    end,
                     settings = {
                         Lua = {
                             completion = {
@@ -93,8 +120,16 @@ return {
                         },
                     },
                 },
-                zls = {},
-                clangd = {},
+                zls = {
+                    on_attach = function(client, bufnr)
+                        require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
+                    end,
+                },
+                clangd = {
+                    on_attach = function(client, bufnr)
+                        require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
+                    end,
+                },
             }
 
             local tools = {
@@ -133,6 +168,9 @@ return {
             require("typescript-tools").setup({
                 root_dir = root_pattern("package.json", "tsconfig.json", "jsconfig.json"),
                 single_file_support = false,
+                on_attach = function(client, bufnr)
+                    require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
+                end,
                 settings = {
                     tsserver_file_preferences = {
                         includeInlayParameterNameHints = "all",

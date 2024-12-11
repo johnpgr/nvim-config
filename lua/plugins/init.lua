@@ -5,6 +5,8 @@ return {
     "nvim-tree/nvim-web-devicons",
     -- Git diff viewer
     "sindrets/diffview.nvim",
+    -- Workspace diagnostics
+    "artemave/workspace-diagnostics.nvim",
     {
         -- Multiple cursors plugin
         "mg979/vim-visual-multi",
