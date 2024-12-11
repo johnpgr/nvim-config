@@ -249,21 +249,35 @@ end
 which_key.add({ { "<leader>q", group = "Quickfix" } })
 keymap("<A-q>", toggle_qf, "Quickfixlist toggle")
 keymap("]q", function()
-    if #vim.fn.getqflist() == 1 then
-        vim.cmd('cfirst')
-        vim.cmd('copen')
-    else
-        vim.cmd('cnext')
+    local qf_list = vim.fn.getqflist()
+    local qf_length = #qf_list
+    if qf_length == 0 then
+        return
     end
+
+    local current_idx = vim.fn.getqflist({ idx = 0 }).idx
+    if current_idx >= qf_length then
+        vim.cmd("cfirst")
+    else
+        vim.cmd("cnext")
+    end
+    vim.cmd("copen")
 end, "Quickfixlist next")
 
 keymap("[q", function()
-    if #vim.fn.getqflist() == 1 then
-        vim.cmd('cfirst')
-        vim.cmd('copen')
-    else
-        vim.cmd('cprevious')
+    local qf_list = vim.fn.getqflist()
+    local qf_length = #qf_list
+    if qf_length == 0 then
+        return
     end
+
+    local current_idx = vim.fn.getqflist({ idx = 0 }).idx
+    if current_idx <= 1 then
+        vim.cmd("clast")
+    else
+        vim.cmd("cprevious")
+    end
+    vim.cmd("copen")
 end, "Quickfixlist previous")
 --#endregion
 
