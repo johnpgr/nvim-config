@@ -1,6 +1,8 @@
+_G.COPILOT_ENABLED = true
 local utils = require("utils")
 local keymap = utils.keymap
 local feedkeys = utils.feedkeys
+local which_key = require("which-key")
 
 local telescope = require("telescope-utils")
 local telescope_builtin = require("telescope.builtin")
@@ -8,15 +10,24 @@ local gitsigns = require("gitsigns")
 local tmux = require("tmux")
 
 --#region Telescope
+which_key.add({ { "<leader>f", group = "Find" } })
 keymap("<C-p>", telescope.list_files_cwd, "Find files")
 keymap("<C-f>", telescope.live_grep, "Find word")
 keymap("<C-e>", telescope.list_recent_files, "Find oldfiles")
+keymap("<leader>ff", telescope.list_files_cwd, "Find files")
+keymap("<leader>fw", telescope.live_grep, "Find word")
+keymap("<leader>fo", telescope.list_recent_files, "Find oldfiles")
 keymap("<leader><space>", telescope_builtin.buffers, "Find open buffers")
+keymap("<leader>fb", telescope_builtin.buffers, "Find open buffers")
 keymap("<leader>fs", telescope.list_spell_suggestions_under_cursor, "Find Spell suggestions")
 keymap("<leader>fh", telescope_builtin.help_tags, "Find help tags")
 keymap("<leader>fr", telescope_builtin.resume, "Resume last finder")
---
+keymap("<leader>fc", function()
+    require("telescope.builtin").colorscheme({ enable_preview = true })
+end, "Find Colorscheme")
+--#endregion
 
+--#region General
 keymap("<leader>ts", utils.toggle_spaces_width, "Toggle shift width")
 keymap("<leader>ti", utils.toggle_indent_mode, "Toggle indentation mode")
 keymap("<C-_>", "gcc", { remap = true, silent = true, desc = "Comment toggle" }, "n")
@@ -24,6 +35,7 @@ keymap("<C-_>", "gc", { remap = true, silent = true, desc = "Comment toggle" }, 
 keymap("<C-/>", "gcc", { remap = true, silent = true, desc = "Comment toggle" }, "n")
 keymap("<C-/>", "gc", { remap = true, silent = true, desc = "Comment toggle" }, "v")
 keymap("<leader>e", "<cmd>Oil<cr>", "Explorer")
+keymap("<leader>L", "<cmd>Lazy<cr>", "Lazy.nvim")
 keymap("<C-k>", tmux.move_top, "Focus top split")
 keymap("<C-l>", tmux.move_right, "Focus right split")
 keymap("<C-j>", tmux.move_bottom, "Focus bottom split")
@@ -38,8 +50,6 @@ keymap("<leader>V", "<cmd>bo vsp<cr>", "New vertical split")
 keymap("<leader>h", "<cmd>sp<cr>", "New horizontal split")
 keymap("<leader>H", "<cmd>bo sp<cr>", "New horizontal split")
 keymap("<Esc>", "<cmd>noh<cr>", "Clear search highlights", "n")
--- keymap("<C-d>", "<C-d>zz", "Better scroll down")
--- keymap("<C-u>", "<C-u>zz", "Better scroll up")
 keymap("n", "nzz", "Better jump next", "n")
 keymap("]d", function()
     vim.diagnostic.goto_next()
@@ -58,6 +68,7 @@ keymap("K", ":m '<-2<CR>gv=gv", "Move line up", "v")
 keymap("<leader>i", "<cmd>Inspect<cr>", "Inspect")
 keymap("<leader>zm", "<cmd>ZenMode<cr>", "Zen mode")
 keymap("<leader>st", function()
+    ---@diagnostic disable-next-line: undefined-field
     vim.opt.spell = not vim.opt.spell:get()
 end, "Toggle spellchecking")
 keymap("yig", ":%y<CR>", "Yank buffer", "n")
@@ -75,6 +86,13 @@ local function format_buffer()
         lsp_format = "fallback",
     })
 end
+
+local floating_highlight_map = {
+    [vim.diagnostic.severity.ERROR] = "DiagnosticFloatingError",
+    [vim.diagnostic.severity.WARN] = "DiagnosticFloatingWarn",
+    [vim.diagnostic.severity.INFO] = "DiagnosticFloatingInfo",
+    [vim.diagnostic.severity.HINT] = "DiagnosticFloatingHint",
+}
 
 local function smart_hover()
     -- Check if there's already a hover window open
@@ -120,13 +138,6 @@ local function smart_hover()
 
         -- Add diagnostics section if we have any
         if #diagnostics > 0 then
-            local floating_highlight_map = {
-                [vim.diagnostic.severity.ERROR] = "DiagnosticFloatingError",
-                [vim.diagnostic.severity.WARN] = "DiagnosticFloatingWarn",
-                [vim.diagnostic.severity.INFO] = "DiagnosticFloatingInfo",
-                [vim.diagnostic.severity.HINT] = "DiagnosticFloatingHint",
-            }
-
             table.insert(contents, " Diagnostics: ")
 
             -- Mark header for highlighting
@@ -158,6 +169,7 @@ local function smart_hover()
                 end
             end
         end
+
         if #diagnostics > 0 then
             table.insert(contents, " ```") -- Margin at the end of the diagnostics
         end
@@ -196,7 +208,7 @@ keymap("gd", vim.lsp.buf.definition, "LSP: Goto definition", "n")
 keymap("gD", vim.lsp.buf.type_definition, "LSP: Goto type definition", "n")
 keymap("gr", vim.lsp.buf.references, "LSP: Goto references", "n")
 keymap({ "<F2>", "<leader>lr" }, vim.lsp.buf.rename, "LSP: Rename variable", "n")
-keymap({ "<leader>la", "<C-.>" }, vim.lsp.buf.code_action, "LSP: Code actions")
+keymap("<leader>la", vim.lsp.buf.code_action, "LSP: Code actions")
 keymap("<leader>ls", vim.lsp.buf.signature_help, "LSP: Signature help")
 keymap("<C-s>", vim.lsp.buf.signature_help, "LSP: Signature help", "i")
 keymap("<leader>lr", "<cmd>LspRestart<cr>", "LSP: Restart language server")
@@ -227,18 +239,14 @@ local function toggle_qf()
     end
 end
 
+which_key.add({ { "<leader>q", group = "Quickfix" } })
 keymap("<leader>qf", toggle_qf, "Quickfixlist close")
 keymap("<leader>qn", "<cmd>cnext<cr>", "Quickfixlist next")
 keymap("<leader>qp", "<cmd>cprevious<cr>", "Quickfixlist previous")
---
-
-keymap("<leader>i", "<cmd>Inspect<cr>", "Inspect")
-keymap("<leader>zm", "<cmd>ZenMode<cr>", "Zen mode")
-keymap("<leader>st", function()
-    vim.opt.spell = not vim.opt.spell:get()
-end, "Toggle spellchecking")
+--#endregion
 
 --#region CopilotChat
+which_key.add({ { "<leader>c", group = "Copilot" } })
 keymap("<leader>ct", "<cmd>CopilotChatToggle<cr>", "Copilot Toggle")
 keymap("<leader>cp", function()
     local actions = require("CopilotChat.actions")
@@ -250,11 +258,16 @@ keymap("<leader>ca", function()
         require("CopilotChat").ask(input, { selection = require("CopilotChat.select").visual })
     end
 end, "Copilot Ask", { "n", "v" })
+keymap("<leader>cc", function()
+    COPILOT_ENABLED = not COPILOT_ENABLED
+    require("copilot.command").toggle()
+    print("Copilot completion is now " .. (COPILOT_ENABLED and "enabled" or "disabled"))
+end, "Copilot Completion Toggle")
 --
 
 keymap("<leader>th", "<cmd>TSToggle highlight<cr>", "Toggle treesitter highlight")
 
---#region Gitsigns
+--#region Git
 local function toggle_diffview()
     local diffview = require("diffview")
     local diffview_tab_exists = false
@@ -298,9 +311,13 @@ keymap("<A-w>", gitsigns.toggle_word_diff, "Toggle Word diff")
 keymap("<A-D>", toggle_diffview, "Diffview Open")
 keymap("ih", ":<C-U>Gitsigns select_hunk<CR>", { silent = true }, { "o", "x" })
 keymap("ah", ":<C-U>Gitsigns select_hunk<CR>", { silent = true }, { "o", "x" })
---
+keymap("<C-g>", function()
+    require("neogit").open({ kind = "replace" })
+end, "Neogit")
+--#endregion
 
 --#region DAP
+which_key.add({ { "<leader>d", group = "Debug" } })
 keymap("<leader>dc", require("dap").continue, "Debug: Continue")
 keymap("<leader>do", require("dap").step_over, "Debug: Step over")
 keymap("<leader>di", require("dap").step_into, "Debug: Step into")
@@ -346,8 +363,9 @@ keymap("<F21>", function()
         require("dap").set_breakpoint(input)
     end)
 end, "Conditional Breakpoint")
---
 
--- Overseer
+--#region Overseer
+which_key.add({ { "<leader>t", group = "Tasks" } })
 keymap("<leader>tl", "<cmd>OverseerToggle<cr>", "Task List")
 keymap("<leader>tr", "<cmd>OverseerRun<cr>", "Task Run")
+--#endregion
