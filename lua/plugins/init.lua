@@ -1,8 +1,12 @@
 return {
+    -- Remembers last cursor position when reopening files
     "farmergreg/vim-lastplace",
+    -- Adds file icons to Neovim
     "nvim-tree/nvim-web-devicons",
+    -- Git diff viewer
     "sindrets/diffview.nvim",
     {
+        -- Multiple cursors plugin
         "mg979/vim-visual-multi",
         event = "BufRead",
         config = function()
@@ -16,6 +20,7 @@ return {
         end,
     },
     {
+        -- Text case conversions (snake_case, camelCase, etc.)
         "johmsalas/text-case.nvim",
         config = function()
             require("textcase").setup({
@@ -25,6 +30,7 @@ return {
         end,
     },
     {
+        -- Indentation guides
         "nvimdev/indentmini.nvim",
         enabled = false,
         config = function()
@@ -32,10 +38,12 @@ return {
         end,
     },
     {
+        -- Code commenting plugin
         "echasnovski/mini.comment",
         event = "VeryLazy",
         dependencies = {
             {
+                -- Context-aware commenting for different languages
                 "JoosepAlviste/nvim-ts-context-commentstring",
                 lazy = true,
                 opts = {
@@ -57,11 +65,13 @@ return {
         },
     },
     {
+        -- Displays keybindings in popup
         "folke/which-key.nvim",
         event = "VeryLazy",
         opts = {},
     },
     {
+        -- Markdown preview in browser
         "iamcco/markdown-preview.nvim",
         cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
         build = "cd app && npm install",
@@ -71,17 +81,18 @@ return {
         ft = { "markdown" },
     },
     {
+        -- V programming language support
         "ollykel/v-vim",
         init = function()
             require("nvim-web-devicons").set_icon({
                 v = {
-                    icon = "",
+                    icon = "",
                     color = "#5d87bf",
                     cterm_color = "59",
                     name = "Vlang",
                 },
                 vsh = {
-                    icon = "",
+                    icon = "",
                     color = "#5d87bf",
                     cterm_color = "59",
                     name = "Vlang",
@@ -101,8 +112,10 @@ return {
             })
         end,
     },
+    -- Templ template language support
     { "joerdav/templ.vim" },
     {
+        -- Git integration showing changes in sign column
         "lewis6991/gitsigns.nvim",
         event = "VeryLazy",
         opts = {
@@ -113,32 +126,25 @@ return {
         },
     },
     {
+        -- Shows whitespace characters
         "mcauley-penney/visual-whitespace.nvim",
         event = "VeryLazy",
         config = true,
     },
     {
+        -- Enhanced quickfix window navigation
         "stevearc/quicker.nvim",
         event = "FileType qf",
         opts = {},
     },
     {
+        -- Task runner and job management
         "stevearc/overseer.nvim",
         opts = {
             task_list = {
                 bindings = {
                     ["<C-l>"] = false,
                     ["<C-h>"] = false,
-                },
-            },
-        },
-    },
-    {
-        "stevearc/dressing.nvim",
-        opts = {
-            input = {
-                win_options = {
-                    winhighlight = "FloatTitle:,NormalFloat:,FloatBorder:",
                 },
             },
         },
