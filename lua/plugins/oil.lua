@@ -88,7 +88,10 @@ return {
             winbar = "%!v:lua.get_oil_winbar()",
         },
         view_options = {
-            -- show_hidden = true,
+            is_hidden_file = function(name, bufnr)
+                local m = name:match("^%.")
+                return m ~= nil and name ~= ".."
+            end,
         },
         use_default_keymaps = false,
         watch_for_changes = true,

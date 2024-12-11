@@ -87,6 +87,13 @@ local function format_buffer()
     })
 end
 
+keymap("<space>x", function()
+    for _, client in ipairs(vim.lsp.buf_get_clients()) do
+        print("client: ", client.name)
+        require("workspace-diagnostics").populate_workspace_diagnostics(client, 0)
+    end
+end, "LSP: Refresh diagnostics")
+
 local floating_highlight_map = {
     [vim.diagnostic.severity.ERROR] = "DiagnosticFloatingError",
     [vim.diagnostic.severity.WARN] = "DiagnosticFloatingWarn",
@@ -240,9 +247,24 @@ local function toggle_qf()
 end
 
 which_key.add({ { "<leader>q", group = "Quickfix" } })
-keymap("<leader>qf", toggle_qf, "Quickfixlist close")
-keymap("<leader>qn", "<cmd>cnext<cr>", "Quickfixlist next")
-keymap("<leader>qp", "<cmd>cprevious<cr>", "Quickfixlist previous")
+keymap("<A-q>", toggle_qf, "Quickfixlist toggle")
+keymap("]q", function()
+    if #vim.fn.getqflist() == 1 then
+        vim.cmd('cfirst')
+        vim.cmd('copen')
+    else
+        vim.cmd('cnext')
+    end
+end, "Quickfixlist next")
+
+keymap("[q", function()
+    if #vim.fn.getqflist() == 1 then
+        vim.cmd('cfirst')
+        vim.cmd('copen')
+    else
+        vim.cmd('cprevious')
+    end
+end, "Quickfixlist previous")
 --#endregion
 
 --#region CopilotChat
