@@ -55,37 +55,162 @@ keymap("<", "<gv", "Keep selection when indenting multiple lines", "v")
 keymap(">", ">gv", "Keep selection when indenting multiple lines", "v")
 keymap("J", ":m '>+1<CR>gv=gv", "Move line down", "v")
 keymap("K", ":m '<-2<CR>gv=gv", "Move line up", "v")
-keymap("gd", vim.lsp.buf.definition, "LSP: Goto definition", "n")
-keymap("gD", vim.lsp.buf.type_definition, "LSP: Goto type definition", "n")
-keymap("gr", vim.lsp.buf.references, "LSP: Goto references", "n")
-keymap("<leader>ld", vim.diagnostic.setqflist, "LSP: Send diagnostics to quickfix", "n")
-keymap("<leader>lr", vim.lsp.buf.rename, "LSP: Rename variable", "n")
-keymap("<leader>la", vim.lsp.buf.code_action, "LSP: Code actions")
-keymap("<leader>ls", vim.lsp.buf.signature_help, "LSP: Signature help")
-keymap("<C-s>", vim.lsp.buf.signature_help, "LSP: Signature help", "i")
-keymap("<leader>df", vim.diagnostic.open_float, "LSP: Show diagnostic message", "n")
-keymap("<leader>tt", "<cmd>tabnew<cr><cmd>term<cr>", "Open terminal in a new tab")
-keymap("<leader>tn", "<cmd>tabnew<cr>", "Open new tab")
-keymap("<Esc>", "<C-\\><C-n>", "Terminal mode easy exit", "t")
-keymap("]t", "<cmd>tabnext<cr>", "Tab next")
-keymap("[t", "<cmd>tabprevious<cr>", "Tab previous")
-keymap("<C-g>", function()
-    require("neogit").open({ kind = "replace" })
-end, "Neogit")
-keymap("<leader>lR", "<cmd>LspRestart<cr>", "LSP: Restart language server")
-keymap("<A-F>", function()
+keymap("<leader>i", "<cmd>Inspect<cr>", "Inspect")
+keymap("<leader>zm", "<cmd>ZenMode<cr>", "Zen mode")
+keymap("<leader>st", function()
+    vim.opt.spell = not vim.opt.spell:get()
+end, "Toggle spellchecking")
+keymap("yig", ":%y<CR>", "Yank buffer", "n")
+keymap("vig", "ggVG", "Visual select buffer", "n")
+keymap("cig", ":%d<CR>i", "Change buffer", "n")
+--#endregion
+
+--#region LSP
+which_key.add({ { "<leader>l", group = "LSP" } })
+
+local function format_buffer()
     require("conform").format({
         async = true,
         stop_after_first = true,
         lsp_format = "fallback",
     })
-end, "LSP: Format buffer")
-keymap("yig", ":%y<CR>", "Yank buffer", "n")
-keymap("vig", "ggVG", "Visual select buffer", "n")
-keymap("cig", ":%d<CR>i", "Change buffer", "n")
-keymap("<leader>fc", function()
-    require("telescope.builtin").colorscheme({ enable_preview = true })
-end, "Find Colorscheme")
+end
+
+local function smart_hover()
+    -- Check if there's already a hover window open
+    local hover_win = nil
+    for _, win in pairs(vim.api.nvim_list_wins()) do
+        if vim.api.nvim_win_get_config(win).relative == "win" then
+            hover_win = win
+            if vim.api.nvim_win_is_valid(hover_win) then
+                vim.api.nvim_set_current_win(hover_win)
+                return
+            end
+        end
+    end
+
+    local hover_params = vim.lsp.util.make_position_params()
+    local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+    row = row - 1
+
+    vim.lsp.buf_request(0, "textDocument/hover", hover_params, function(_, result)
+        if not result or not result.contents then
+            return
+        end
+
+        local diagnostics = vim.diagnostic.get(0, {
+            lnum = row,
+            col = col,
+        })
+
+        diagnostics = vim.tbl_filter(function(d)
+            return d.lnum == row
+                and col >= (d.col or 0)
+                and col <= (d.end_col or #vim.api.nvim_buf_get_lines(0, row, row + 1, true)[1])
+        end, diagnostics)
+
+        -- Convert hover result first
+        local contents = vim.lsp.util.convert_input_to_markdown_lines(result.contents)
+        -- Add padding to hover contents
+        for i, line in ipairs(contents) do
+            contents[i] = " " .. line .. " "
+        end
+
+        local highlights = {}
+
+        -- Add diagnostics section if we have any
+        if #diagnostics > 0 then
+            local floating_highlight_map = {
+                [vim.diagnostic.severity.ERROR] = "DiagnosticFloatingError",
+                [vim.diagnostic.severity.WARN] = "DiagnosticFloatingWarn",
+                [vim.diagnostic.severity.INFO] = "DiagnosticFloatingInfo",
+                [vim.diagnostic.severity.HINT] = "DiagnosticFloatingHint",
+            }
+
+            table.insert(contents, " Diagnostics: ")
+
+            -- Mark header for highlighting
+            table.insert(highlights, {
+                line = #contents - 1,
+                hlname = "Bold",
+                prefix_length = 1, -- Account for left padding
+                suffix_length = 1, -- Account for right padding
+                content = " Diagnostics: ",
+            })
+
+            for i, diagnostic in ipairs(diagnostics) do
+                local prefix = string.format("%d. ", i)
+                local suffix = diagnostic.code and string.format(" [%s]", diagnostic.code) or ""
+                local message_lines = vim.split(diagnostic.message, "\n")
+
+                for j = 1, #message_lines do
+                    local pre = j == 1 and prefix or string.rep(" ", #prefix)
+                    local suf = j == #message_lines and suffix or ""
+                    local line = " " .. pre .. message_lines[j] .. suf .. " "
+                    table.insert(contents, line)
+                    table.insert(highlights, {
+                        line = #contents - 1,
+                        hlname = floating_highlight_map[diagnostic.severity],
+                        prefix_length = #pre + 1,
+                        suffix_length = #suf + 1,
+                        content = line,
+                    })
+                end
+            end
+        end
+        if #diagnostics > 0 then
+            table.insert(contents, " ```") -- Margin at the end of the diagnostics
+        end
+
+        local buf, win = vim.lsp.util.open_floating_preview(contents, "markdown", {
+            border = "none",
+            focus = false,
+        })
+
+        -- Apply highlights for diagnostics
+        for _, hl in ipairs(highlights) do
+            local line_length = #hl.content
+
+            -- Highlight prefix (number) as NormalFloat
+            if hl.prefix_length > 0 then
+                vim.api.nvim_buf_add_highlight(buf, -1, "NormalFloat", hl.line, 1, hl.prefix_length) -- Start at 1 to skip left padding
+            end
+
+            -- Highlight main diagnostic message
+            local message_start = hl.prefix_length
+            local message_end = line_length - hl.suffix_length
+            vim.api.nvim_buf_add_highlight(buf, -1, hl.hlname, hl.line, message_start, message_end)
+
+            -- Highlight suffix (code) as NormalFloat
+            if hl.suffix_length > 0 then
+                vim.api.nvim_buf_add_highlight(buf, -1, "NormalFloat", hl.line, message_end, line_length - 1) -- -1 to account for right padding
+            end
+        end
+
+        return buf, win
+    end)
+end
+
+keymap("K", smart_hover, "LSP: Hover", "n")
+keymap("gd", vim.lsp.buf.definition, "LSP: Goto definition", "n")
+keymap("gD", vim.lsp.buf.type_definition, "LSP: Goto type definition", "n")
+keymap("gr", vim.lsp.buf.references, "LSP: Goto references", "n")
+keymap({ "<F2>", "<leader>lr" }, vim.lsp.buf.rename, "LSP: Rename variable", "n")
+keymap({ "<leader>la", "<C-.>" }, vim.lsp.buf.code_action, "LSP: Code actions")
+keymap("<leader>ls", vim.lsp.buf.signature_help, "LSP: Signature help")
+keymap("<C-s>", vim.lsp.buf.signature_help, "LSP: Signature help", "i")
+keymap("<leader>lr", "<cmd>LspRestart<cr>", "LSP: Restart language server")
+keymap({ "<A-F>", "<leader>lf" }, format_buffer, "LSP: Format buffer")
+keymap("<leader>ld", vim.diagnostic.setqflist, "LSP: Diagnostics List", "n")
+--#endregion
+
+--#region Tabs/Terminal
+keymap("<leader>tt", "<cmd>tabnew<cr><cmd>term<cr>", "Open terminal in a new tab")
+keymap("<leader>tn", "<cmd>tabnew<cr>", "Open new tab")
+keymap("<Esc>", "<C-\\><C-n>", "Terminal mode easy exit", "t")
+keymap("]t", "<cmd>tabnext<cr>", "Tab next")
+keymap("[t", "<cmd>tabprevious<cr>", "Tab previous")
+--#endregion
 
 --#region Quickfixlist
 local function toggle_qf()
