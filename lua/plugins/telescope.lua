@@ -29,14 +29,12 @@ return {
                 },
             },
             extensions = {
-                ["ui-select"] = {
-                    require("telescope.themes").get_dropdown(),
-                },
+                fzf = {},
             },
             pickers = {
                 buffers = {
                     previewer = false,
-                    theme = "dropdown",
+                    theme = "ivy",
                     mappings = {
                         i = {
                             ["<C-d>"] = actions.delete_buffer,
@@ -44,6 +42,7 @@ return {
                     },
                 },
                 colorscheme = {
+                    theme = "ivy",
                     mappings = {
                         i = {
                             ["<CR>"] = function(bufnr)
