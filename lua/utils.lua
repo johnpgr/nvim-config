@@ -93,4 +93,141 @@ function M.toggle_indent_mode()
     print("Current indentation mode: " .. current_mode)
 end
 
+local floating_highlight_map = {
+    [vim.diagnostic.severity.ERROR] = "DiagnosticFloatingError",
+    [vim.diagnostic.severity.WARN] = "DiagnosticFloatingWarn",
+    [vim.diagnostic.severity.INFO] = "DiagnosticFloatingInfo",
+    [vim.diagnostic.severity.HINT] = "DiagnosticFloatingHint",
+}
+
+function M.smart_hover()
+    -- Check if there's already a hover window open
+    local hover_win = nil
+    for _, win in pairs(vim.api.nvim_list_wins()) do
+        if vim.api.nvim_win_get_config(win).relative == "win" then
+            hover_win = win
+            if vim.api.nvim_win_is_valid(hover_win) then
+                vim.api.nvim_set_current_win(hover_win)
+                return
+            end
+        end
+    end
+
+    local hover_params = vim.lsp.util.make_position_params()
+    local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+    row = row - 1
+
+    local function show_window(contents, highlights)
+        local buf, win = vim.lsp.util.open_floating_preview(contents, "markdown", {
+            border = "none",
+            focus = false,
+        })
+
+        -- Find where the diagnostic section starts
+        local diagnostic_start = 0
+        for i, line in ipairs(contents) do
+            if line == " Diagnostics: " then
+                diagnostic_start = i - 1
+                break
+            end
+        end
+
+        -- Apply highlights for diagnostics with adjusted line numbers
+        for _, hl in ipairs(highlights or {}) do
+            local line_length = #hl.content
+            if diagnostic_start > 0 then
+                hl.line = hl.line + diagnostic_start
+            end
+
+            if hl.prefix_length > 0 then
+                vim.api.nvim_buf_add_highlight(buf, -1, "NormalFloat", hl.line, 1, hl.prefix_length)
+            end
+
+            local message_start = hl.prefix_length
+            local message_end = line_length - hl.suffix_length
+            vim.api.nvim_buf_add_highlight(buf, -1, hl.hlname, hl.line, message_start, message_end)
+
+            if hl.suffix_length > 0 then
+                vim.api.nvim_buf_add_highlight(buf, -1, "NormalFloat", hl.line, message_end, line_length)
+            end
+        end
+
+        return buf, win
+    end
+
+    local function get_diagnostics_content()
+        local diagnostics = vim.diagnostic.get(0, {
+            lnum = row,
+            col = col,
+        })
+
+        diagnostics = vim.tbl_filter(function(d)
+            return d.lnum == row
+                and col >= (d.col or 0)
+                and col <= (d.end_col or #vim.api.nvim_buf_get_lines(0, row, row + 1, true)[1])
+        end, diagnostics)
+
+        if #diagnostics == 0 then
+            return nil, nil
+        end
+
+        local contents = { " Diagnostics: " }
+        local highlights = {
+            {
+                line = 0,
+                hlname = "Bold",
+                prefix_length = 1,
+                suffix_length = 1,
+                content = " Diagnostics: ",
+            },
+        }
+
+        for i, diagnostic in ipairs(diagnostics) do
+            local prefix = string.format("%d. ", i)
+            local suffix = diagnostic.code and string.format(" [%s]", diagnostic.code) or ""
+            local message_lines = vim.split(diagnostic.message, "\n")
+
+            for j = 1, #message_lines do
+                local pre = j == 1 and prefix or string.rep(" ", #prefix)
+                local suf = j == #message_lines and suffix or ""
+                local line = " " .. pre .. message_lines[j] .. suf .. " "
+                table.insert(contents, line)
+                table.insert(highlights, {
+                    line = #contents - 1,
+                    hlname = floating_highlight_map[diagnostic.severity],
+                    prefix_length = #pre + 1,
+                    suffix_length = #suf + 1,
+                    content = line,
+                })
+            end
+        end
+        return contents, highlights
+    end
+
+    vim.lsp.buf_request(0, "textDocument/hover", hover_params, function(_, result)
+        local contents = {}
+        local highlights = {}
+
+        -- Add hover content if available
+        if result and result.contents then
+            local hover_contents = vim.lsp.util.convert_input_to_markdown_lines(result.contents)
+            for _, line in ipairs(hover_contents) do
+                table.insert(contents, " " .. line .. " ")
+            end
+        end
+
+        -- Get diagnostics content
+        local diag_contents, diag_highlights = get_diagnostics_content()
+        -- If we have either hover content or diagnostics, show the window
+        if (#contents > 0 and result) or diag_contents then
+            local diagnostic_start = 0
+            if diag_contents then
+                vim.list_extend(contents, diag_contents)
+                vim.list_extend(highlights, diag_highlights)
+            end
+            show_window(contents, highlights)
+        end
+    end)
+end
+
 return M
