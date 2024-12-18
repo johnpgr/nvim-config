@@ -74,6 +74,7 @@ end, "Toggle spellchecking")
 keymap("yig", ":%y<CR>", "Yank buffer", "n")
 keymap("vig", "ggVG", "Visual select buffer", "n")
 keymap("cig", ":%d<CR>i", "Change buffer", "n")
+keymap("<leader>o", "<cmd>Outline<CR>", "Toggle Outline")
 --#endregion
 
 --#region LSP
@@ -218,7 +219,6 @@ keymap({ "<F2>", "<leader>lr" }, vim.lsp.buf.rename, "LSP: Rename variable", "n"
 keymap("<leader>la", vim.lsp.buf.code_action, "LSP: Code actions")
 keymap("<leader>ls", vim.lsp.buf.signature_help, "LSP: Signature help")
 keymap("<C-s>", vim.lsp.buf.signature_help, "LSP: Signature help", "i")
-keymap("<leader>lr", "<cmd>LspRestart<cr>", "LSP: Restart language server")
 keymap({ "<A-F>", "<leader>lf" }, format_buffer, "LSP: Format buffer")
 keymap("<leader>ld", vim.diagnostic.setqflist, "LSP: Diagnostics List", "n")
 --#endregion
@@ -283,18 +283,18 @@ end, "Quickfixlist previous")
 
 --#region CopilotChat
 which_key.add({ { "<leader>c", group = "Copilot" } })
-keymap("<leader>ct", "<cmd>CopilotChatToggle<cr>", "Copilot Toggle")
+keymap("<leader>cc", "<cmd>CopilotChatToggle<cr>", "Copilot Chat Toggle")
 keymap("<leader>cp", function()
     local actions = require("CopilotChat.actions")
     require("CopilotChat.integrations.telescope").pick(actions.prompt_actions())
-end, "Copilot Prompts")
+end, "Copilot Chat Prompts")
 keymap("<leader>ca", function()
     local input = vim.fn.input("Ask Copilot: ")
     if input ~= "" then
         require("CopilotChat").ask(input, { selection = require("CopilotChat.select").visual })
     end
-end, "Copilot Ask", { "n", "v" })
-keymap("<leader>cc", function()
+end, "Copilot Chat Ask", { "n", "v" })
+keymap("<leader>ct", function()
     COPILOT_ENABLED = not COPILOT_ENABLED
     require("copilot.command").toggle()
     print("Copilot completion is now " .. (COPILOT_ENABLED and "enabled" or "disabled"))
@@ -401,7 +401,6 @@ keymap("<F21>", function()
 end, "Conditional Breakpoint")
 
 --#region Overseer
-which_key.add({ { "<leader>t", group = "Tasks" } })
-keymap("<leader>tl", "<cmd>OverseerToggle<cr>", "Task List")
-keymap("<leader>tr", "<cmd>OverseerRun<cr>", "Task Run")
+keymap("<A-T>", "<cmd>OverseerToggle<cr>", "Task view")
+keymap("<A-R>", "<cmd>OverseerRun<cr>", "Task Run")
 --#endregion

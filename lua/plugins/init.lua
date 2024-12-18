@@ -145,10 +145,27 @@ return {
         opts = {
             task_list = {
                 bindings = {
+                    ["R"] = "<cmd>OverseerQuickAction restart<cr>",
+                    ["D"] = "<cmd>OverseerQuickAction dispose<cr>",
+                    ["W"] = "<cmd>OverseerQuickAction watch<cr>",
+                    ["S"] = "<cmd>OverseerQuickAction stop<cr>",
                     ["<C-l>"] = false,
                     ["<C-h>"] = false,
+                    ["<C-k>"] = false,
+                    ["<C-j>"] = false,
                 },
             },
         },
+    },
+    {
+        -- Symbols outline viewer
+        "hedyhli/outline.nvim",
+        config = function()
+            require("outline").setup({
+                outline_window = {
+                    position = "left",
+                }
+            })
+        end,
     },
 }
