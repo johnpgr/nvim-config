@@ -116,3 +116,13 @@ vim.api.nvim_create_user_command("CRun", function()
 end, {
     desc = "Compile and run C file",
 })
+
+-- vim.api.nvim_create_autocmd("FileType", {
+--     pattern = "oil",
+--     callback = function()
+--         vim.opt_local.number = false
+--         vim.opt_local.relativenumber = false
+--         vim.opt_local.signcolumn = "no"
+--         vim.opt_local.foldcolumn = "0"
+--     end,
+-- })

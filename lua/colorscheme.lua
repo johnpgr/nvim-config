@@ -1,1 +1,1 @@
-vim.cmd.colorscheme("fleet")
+vim.cmd.colorscheme("catppuccin")

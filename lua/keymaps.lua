@@ -110,6 +110,12 @@ keymap("<leader>ld", vim.diagnostic.setqflist, "LSP: Diagnostics List", "n")
 --#region Tabs/Terminal
 keymap("<leader>tt", "<cmd>tabnew<cr><cmd>term<cr>", "Open terminal in a new tab")
 keymap("<leader>tn", "<cmd>tabnew<cr>", "Open new tab")
+-- Open new tab in neovim config directory
+keymap("<leader>nc", function ()
+    vim.cmd("tabnew")
+    vim.cmd("cd " .. vim.fn.stdpath("config"))
+    vim.cmd("Oil")
+end, "Open new tab in neovim config directory")
 keymap("<Esc>", "<C-\\><C-n>", "Terminal mode easy exit", "t")
 keymap("]t", "<cmd>tabnext<cr>", "Tab next")
 keymap("[t", "<cmd>tabprevious<cr>", "Tab previous")

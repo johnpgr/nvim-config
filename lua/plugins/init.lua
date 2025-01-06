@@ -1,3 +1,5 @@
+local is_neovide = vim.g.neovide ~= nil
+
 return {
     -- Remembers last cursor position when reopening files
     "farmergreg/vim-lastplace",
@@ -167,5 +169,11 @@ return {
                 }
             })
         end,
+    },
+
+    {
+        "ejrichards/mise.nvim",
+        enabled = is_neovide,
+        opts = {},
     },
 }

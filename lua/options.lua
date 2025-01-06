@@ -4,7 +4,7 @@ vim.opt.diffopt:append("linematch:60")
 vim.o.clipboard = "unnamedplus"
 vim.o.completeopt = "menu,menuone,popup,noinsert,noselect"
 vim.o.confirm = true
-vim.o.cursorline = false
+vim.o.cursorline = true
 vim.o.expandtab = true
 vim.o.wrap = false
 if vim.fn.executable("rg") ~= 0 then
@@ -19,7 +19,7 @@ vim.o.mouse = "nv"
 vim.o.pumheight = 10
 vim.o.number = true
 vim.o.numberwidth = 2
-vim.o.relativenumber = false
+vim.o.relativenumber = true
 vim.o.shiftround = true
 vim.o.shiftwidth = 4
 vim.o.tabstop = 4
@@ -52,5 +52,21 @@ vim.o.foldenable = true
 vim.o.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]
 
 vim.diagnostic.config({
-    virtual_text = false
+    virtual_text = false,
 })
+
+local is_neovide = vim.g.neovide ~= nil
+
+if is_neovide then
+    vim.cmd("cd ~")
+    vim.o.guifont = "JetBrainsMono Nerd Font:h15"
+    vim.g.neovide_scale_factor = 1
+
+    vim.keymap.set("n", "<C-=>", function()
+        vim.g.neovide_scale_factor = vim.g.neovide_scale_factor * 1.1
+    end, { desc = "Increase Neovide scale factor" })
+
+    vim.keymap.set("n", "<C-->", function()
+        vim.g.neovide_scale_factor = vim.g.neovide_scale_factor / 1.1
+    end, { desc = "Decrease Neovide scale factor" })
+end

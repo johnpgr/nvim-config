@@ -12,11 +12,13 @@ hl("NormalFloat", { bg = "#292929" }) -- fleet theme float background
 vim.cmd([[
     hi! link WinBar OilDir
     hi! link NormalFloat Pmenu
-    hi! WinSeparator guibg=none
-    hi! VertSplit guibg=none
-    hi! link NeogitWinSeparator WinSeparator
-    hi! FloatBorder guifg=#292929
-    hi! FloatBorder guibg=#292929
+    " hi! WinSeparator guibg=none
+    " hi! VertSplit guibg=none
+    " hi! link NeogitWinSeparator WinSeparator
+    " hi! FloatBorder guifg=#292929
+    " hi! FloatBorder guibg=#292929
+    " hi! CursorLineNr guifg=#ffffff
+    " hi! CursorLineFold guibg=#292929
 ]])
 
 -- vim.cmd([[
