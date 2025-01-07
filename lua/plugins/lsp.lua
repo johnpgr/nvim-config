@@ -3,6 +3,8 @@ local keymap = util.keymap
 
 local JS_TS_FORMATTERS = { "prettierd", "prettier", "deno_fmt" }
 
+vim.g.zig_fmt_autosave = 0
+
 return {
     {
         "stevearc/conform.nvim",

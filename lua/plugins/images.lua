@@ -4,11 +4,11 @@ package.path = package.path .. ";" .. vim.fn.expand("$HOME") .. "/.luarocks/shar
 package.path = package.path .. ";" .. vim.fn.expand("$HOME") .. "/.luarocks/share/lua/5.1/?.lua"
 
 local is_neovide = vim.g.neovide ~= nil
-local is_kitty = os.getenv("TERM") == "xterm-kitty"
+local enable = os.getenv("TERM") == "xterm-kitty" or os.getenv("TERM") == "xterm-ghostty"
 
 return {
     "3rd/image.nvim",
-    enabled = not is_neovide and is_kitty,
+    enabled = not is_neovide and enable,
     event = "BufRead",
     config = function()
         require("image").setup({

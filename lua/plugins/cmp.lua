@@ -27,11 +27,16 @@ return {
                     },
                 },
             },
+            {
+                "xzbdmw/colorful-menu.nvim",
+                config = function()
+                    require("colorful-menu").setup({})
+                end,
+            },
         },
         config = function()
             local cmp = require("cmp")
             local luasnip = require("luasnip")
-            local lspkind = require("lspkind")
             luasnip.config.setup({})
             local mappings = cmp.mapping.preset.insert({
                 -- Select the [n]ext item
@@ -136,38 +141,26 @@ return {
             })
 
             cmp.setup({
-                -- formatting = {
-                --     expandable_indicator = true,
-                --     fields = {
-                --         "kind",
-                --         "abbr",
-                --         "menu",
-                --     },
-                --     format = lspkind.cmp_format({
-                --         preset = "codicons",
-                --         mode = "symbol",
-                --         maxwidth = 50,
-                --         ellipsis_char = "...",
-                --     }),
-                -- },
                 formatting = {
-                    fields = { "kind", "abbr", "menu" },
+                    expandable_indicator = true,
+                    fields = {
+                        "kind",
+                        "abbr",
+                        "menu",
+                    },
                     format = function(entry, vim_item)
-                        local completion_item = entry:get_completion_item()
-                        local highlights_info = require("colorful-menu").highlights(completion_item, vim.bo.filetype)
+                        local kind = require("lspkind").cmp_format({
+                            preset = "codicons",
+                            mode = "symbol",
+                            maxwidth = 50,
+                            ellipsis_char = "...",
+                        })(entry, vim.deepcopy(vim_item))
+                        local highlights_info = require("colorful-menu").cmp_highlights(entry)
 
-                        -- error, such as missing parser, fallback to use raw label.
-                        if highlights_info == nil then
-                            vim_item.abbr = completion_item.label
-                        else
+                        if highlights_info ~= nil then
                             vim_item.abbr_hl_group = highlights_info.highlights
                             vim_item.abbr = highlights_info.text
                         end
-
-                        local kind = require("lspkind").cmp_format({
-                            preset = "codicons",
-                            mode = "symbol_text",
-                        })(entry, vim_item)
                         local strings = vim.split(kind.kind, "%s", { trimempty = true })
                         vim_item.kind = strings[1] or ""
                         vim_item.menu = ""
@@ -195,51 +188,6 @@ return {
                     { name = "luasnip" },
                     { name = "path" },
                 },
-            })
-        end,
-    },
-    {
-        "xzbdmw/colorful-menu.nvim",
-        config = function()
-            -- You don't need to set these options.
-            require("colorful-menu").setup({
-                ft = {
-                    lua = {
-                        -- Maybe you want to dim arguments a bit.
-                        auguments_hl = "@comment",
-                    },
-                    go = {
-                        -- When true, label for field and variable will format like "foo: Foo"
-                        -- instead of go's original syntax "foo Foo".
-                        add_colon_before_type = false,
-                    },
-                    typescript = {
-                        -- Add more filetype when needed, these three taken from lspconfig are default value.
-                        enabled = { "typescript", "typescriptreact", "typescript.tsx" },
-                        -- Or "vtsls", their information is different, so we
-                        -- need to know in advance.
-                        ls = "typescript-language-server",
-                        extra_info_hl = "@comment",
-                    },
-                    rust = {
-                        -- Such as (as Iterator), (use std::io).
-                        extra_info_hl = "@comment",
-                    },
-                    c = {
-                        -- Such as "From <stdio.h>"
-                        extra_info_hl = "@comment",
-                    },
-
-                    -- If true, try to highlight "not supported" languages.
-                    fallback = true,
-                },
-                -- If the built-in logic fails to find a suitable highlight group,
-                -- this highlight is applied to the label.
-                fallback_highlight = "@variable",
-                -- If provided, the plugin truncates the final displayed text to
-                -- this width (measured in display cells). Any highlights that extend
-                -- beyond the truncation point are ignored. Default 60.
-                max_width = 60,
             })
         end,
     },
