@@ -157,10 +157,11 @@ return {
                         })(entry, vim.deepcopy(vim_item))
                         local highlights_info = require("colorful-menu").cmp_highlights(entry)
 
-                        if highlights_info ~= nil then
+                        if highlights_info ~= nil and highlights_info.text ~= nil then
                             vim_item.abbr_hl_group = highlights_info.highlights
                             vim_item.abbr = highlights_info.text
                         end
+
                         local strings = vim.split(kind.kind, "%s", { trimempty = true })
                         vim_item.kind = strings[1] or ""
                         vim_item.menu = ""
@@ -175,13 +176,9 @@ return {
                 },
                 mapping = mappings,
                 completion = { completeopt = "menu,menuone,popup,noinsert" },
-                -- For an understanding of why these mappings were
-                -- chosen, you will need to read `:help ins-completion`
-                -- No, but seriously. Please read `:help ins-completion`, it is really good!
                 sources = {
                     {
                         name = "lazydev",
-                        -- set group index to 0 to skip loading LuaLS completions as lazydev recommends it
                         group_index = 0,
                     },
                     { name = "nvim_lsp" },

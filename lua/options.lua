@@ -19,7 +19,7 @@ vim.o.mouse = "nv"
 vim.o.pumheight = 10
 vim.o.number = true
 vim.o.numberwidth = 2
-vim.o.relativenumber = true
+vim.o.relativenumber = false
 vim.o.shiftround = true
 vim.o.shiftwidth = 4
 vim.o.tabstop = 4
@@ -59,7 +59,7 @@ local is_neovide = vim.g.neovide ~= nil
 
 if is_neovide then
     vim.cmd("cd ~")
-    vim.o.guifont = "JetBrainsMono Nerd Font:h15"
+    vim.o.guifont = "LiterationMono Nerd Font Mono:h12"
     vim.g.neovide_scale_factor = 1
 
     vim.keymap.set("n", "<C-=>", function()
