@@ -15,10 +15,10 @@ vim.cmd([[
     hi! WinSeparator guibg=none
     hi! VertSplit guibg=none
     hi! link NeogitWinSeparator WinSeparator
-    " hi! FloatBorder guifg=#292929
-    " hi! FloatBorder guibg=#292929
-    " hi! CursorLineNr guifg=#ffffff
-    " hi! CursorLineFold guibg=#292929
+    hi! FloatBorder guifg=#292929
+    hi! FloatBorder guibg=#292929
+    hi! CursorLineNr guifg=#ffffff
+    hi! CursorLineFold guibg=#292929
 ]])
 
 -- vim.cmd([[

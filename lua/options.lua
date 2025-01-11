@@ -59,7 +59,7 @@ local is_neovide = vim.g.neovide ~= nil
 
 if is_neovide then
     vim.cmd("cd ~")
-    vim.o.guifont = "LiterationMono Nerd Font Mono:h12"
+    vim.o.guifont = "Consolas Nerd Font:h14"
     vim.g.neovide_scale_factor = 1
 
     vim.keymap.set("n", "<C-=>", function()
