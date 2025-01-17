@@ -20,6 +20,7 @@ vim.cmd([[
     " hi! CursorLineFold guibg=#292929
     " Gruvbox theme highlight corrections
     hi! SignColumn guibg=none
+    hi! FoldColumn guibg=none
     hi! GitSignsChange guibg=none
     hi! GitSignsAdd guibg=none
     hi! Operator guibg=none
