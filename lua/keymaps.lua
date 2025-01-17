@@ -111,7 +111,7 @@ keymap("<leader>ld", vim.diagnostic.setqflist, "LSP: Diagnostics List", "n")
 keymap("<leader>tt", "<cmd>tabnew<cr><cmd>term<cr>", "Open terminal in a new tab")
 keymap("<leader>tn", "<cmd>tabnew<cr>", "Open new tab")
 -- Open new tab in neovim config directory
-keymap("<leader>nc", function ()
+keymap("<leader>nc", function()
     vim.cmd("tabnew")
     vim.cmd("cd " .. vim.fn.stdpath("config"))
     vim.cmd("Oil")
@@ -294,3 +294,24 @@ end, "Conditional Breakpoint")
 keymap("<A-T>", "<cmd>OverseerToggle<cr>", "Task view")
 keymap("<A-R>", "<cmd>OverseerRun<cr>", "Task Run")
 --#endregion
+
+local function toggle_cmp()
+    local cmp = require("cmp")
+    if cmp.get_config().completion.autocomplete == false then
+        cmp.setup({
+            completion = {
+                autocomplete = { "InsertEnter", "TextChanged" },
+            },
+        })
+        print("Autocompletion enabled")
+    else
+        cmp.setup({
+            completion = {
+                autocomplete = false,
+            },
+        })
+        print("Autocompletion disabled")
+    end
+end
+
+keymap("<leader>ta", toggle_cmp, "Toggle Autocomplete")
