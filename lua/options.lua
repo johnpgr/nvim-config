@@ -46,6 +46,8 @@ vim.opt.scrolloff = 5
 vim.o.spell = false
 vim.o.spelllang = "en_us,pt_br"
 vim.o.backspace = "indent,eol,start"
+vim.g.copilot_enabled = true
+vim.g.chat_autosave = true
 -- UFO folding
 -- vim.o.foldcolumn = "1" -- '0' is not bad
 -- vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value

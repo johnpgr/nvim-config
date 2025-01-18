@@ -72,7 +72,13 @@ return {
         -- Displays keybindings in popup
         "folke/which-key.nvim",
         event = "VeryLazy",
-        opts = {},
+        opts = {
+            preset = "helix",
+            win = {
+                border = "none",
+                padding = { 1, 2, 2, 2 },
+            },
+        },
     },
     {
         -- Markdown preview in browser

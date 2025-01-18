@@ -1,3 +1,13 @@
+local title_prompt = [[
+Generate chat title in filepath-friendly format for:
+
+```
+%s
+```
+
+Output only the title and nothing else in your response.
+]]
+
 return {
     {
         "zbirenbaum/copilot.lua",
@@ -16,12 +26,31 @@ return {
         branch = "main",
         event = "BufReadPre",
         dependencies = {
-            { "zbirenbaum/copilot.lua" }, -- or github/copilot.vim
-            { "nvim-lua/plenary.nvim" }, -- for curl, log wrapper
+            { "zbirenbaum/copilot.lua" },
+            { "nvim-lua/plenary.nvim" },
         },
-        build = "make tiktoken", -- Only on MacOS or Linux
+        build = "make tiktoken",
         config = function()
-            require("CopilotChat").setup({
+            local chat = require("CopilotChat")
+            chat.setup({
+                callback = function(response)
+                    if not vim.g.chat_autosave then
+                        return
+                    end
+
+                    if vim.g.chat_title then
+                        chat.save(vim.g.chat_title)
+                        return
+                    end
+
+                    chat.ask(vim.trim(title_prompt:format(response)), {
+                        headless = true,
+                        callback = function(gen_response)
+                            vim.g.chat_title = vim.trim(gen_response)
+                            chat.save(vim.g.chat_title)
+                        end,
+                    })
+                end,
                 model = "claude-3.5-sonnet",
                 chat_autocomplete = true,
                 mappings = {
@@ -29,8 +58,8 @@ return {
                         insert = "",
                     },
                     reset = {
-                        normal = "<C-r>",
-                        insert = "<C-r>",
+                        normal = "",
+                        insert = "",
                     },
                 },
             })

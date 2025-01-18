@@ -1,4 +1,3 @@
-_G.COPILOT_ENABLED = true
 local utils = require("utils")
 local keymap = utils.keymap
 local feedkeys = utils.feedkeys
@@ -173,23 +172,76 @@ end, "Quickfixlist previous")
 
 --#region CopilotChat
 which_key.add({ { "<leader>c", group = "Copilot" } })
-keymap("<leader>cc", "<cmd>CopilotChatToggle<cr>", "Copilot Chat Toggle")
+local chat = require("CopilotChat")
+local chat_select = require("CopilotChat.select")
+local actions = require("telescope.actions")
+local action_state = require("telescope.actions.state")
+
+local function parse_history_path(file)
+    return vim.fn.fnamemodify(file, ":t:r")
+end
+
+local function format_display_name(filename)
+    filename = filename:gsub("%.%w+$", "")
+    return filename:gsub("%-", " "):gsub("^%w", string.upper)
+end
+
+local function find_chat_history()
+    telescope_builtin.find_files(vim.tbl_extend("force",
+        require("telescope.themes").get_ivy({ previewer = false }),
+        {
+            prompt_title = "Chat History",
+            cwd = chat.config.history_path,
+            hidden = true,
+            follow = true,
+            entry_maker = function(entry)
+                return {
+                    value = entry,
+                    display = format_display_name(entry),
+                    ordinal = entry,
+                    path = entry,
+                }
+            end,
+            attach_mappings = function(prompt_bufnr, _)
+                actions.select_default:replace(function()
+                    actions.close(prompt_bufnr)
+                    local selection = action_state.get_selected_entry()
+                    local path = selection.value
+                    chat.load(parse_history_path(path))
+                    chat.toggle()
+                end)
+                return true
+            end,
+        }
+    ))
+end
+
+keymap("<leader>ch", find_chat_history, "Find Chat History")
+keymap("<leader>cc", "<cmd>CopilotChatToggle<cr>", "CopilotChat Toggle")
 keymap("<leader>cp", function()
-    local actions = require("CopilotChat.actions")
-    require("CopilotChat.integrations.telescope").pick(actions.prompt_actions())
-end, "Copilot Chat Prompts")
+    local chat_actions = require("CopilotChat.actions")
+    require("CopilotChat.integrations.telescope").pick(chat_actions.prompt_actions())
+end, "CopilotChat Prompts")
+keymap("<leader>tc", function()
+    vim.g.chat_autosave = not vim.g.chat_autosave
+    print("CopilotChat autosave is now " .. (vim.g.chat_autosave and "enabled" or "disabled"))
+end, "Toggle CopilotChat autosave")
 keymap("<leader>ca", function()
     local input = vim.fn.input("Ask Copilot: ")
     if input ~= "" then
-        require("CopilotChat").ask(input, { selection = require("CopilotChat.select").visual })
+        chat.ask(input, { selection = chat_select.visual })
     end
-end, "Copilot Chat Ask", { "n", "v" })
+end, "CopilotChat Ask", { "n", "v" })
+keymap("<leader>cx", function()
+    vim.g.chat_title = nil
+    chat.reset()
+end, "CopilotChat Reset")
 keymap("<leader>ct", function()
-    COPILOT_ENABLED = not COPILOT_ENABLED
+    vim.g.copilot_enabled = not vim.g.copilot_enabled
     require("copilot.command").toggle()
-    print("Copilot completion is now " .. (COPILOT_ENABLED and "enabled" or "disabled"))
+    print("Copilot completion is now " .. (vim.g.copilot_enabled and "enabled" or "disabled"))
 end, "Copilot Completion Toggle")
---
+--#endregion
 
 keymap("<leader>th", "<cmd>TSToggle highlight<cr>", "Toggle treesitter highlight")
 
