@@ -216,13 +216,13 @@ local function find_chat_history()
     ))
 end
 
-keymap("<leader>ch", find_chat_history, "Find Chat History")
+keymap("<leader>ch", find_chat_history, "CopilotChat History")
 keymap("<leader>cc", "<cmd>CopilotChatToggle<cr>", "CopilotChat Toggle")
 keymap("<leader>cp", function()
     local chat_actions = require("CopilotChat.actions")
     require("CopilotChat.integrations.telescope").pick(chat_actions.prompt_actions())
 end, "CopilotChat Prompts")
-keymap("<leader>tc", function()
+keymap("<leader>tca", function()
     vim.g.chat_autosave = not vim.g.chat_autosave
     print("CopilotChat autosave is now " .. (vim.g.chat_autosave and "enabled" or "disabled"))
 end, "Toggle CopilotChat autosave")
@@ -236,11 +236,11 @@ keymap("<leader>cx", function()
     vim.g.chat_title = nil
     chat.reset()
 end, "CopilotChat Reset")
-keymap("<leader>ct", function()
+keymap("<leader>tcc", function()
     vim.g.copilot_enabled = not vim.g.copilot_enabled
     require("copilot.command").toggle()
     print("Copilot completion is now " .. (vim.g.copilot_enabled and "enabled" or "disabled"))
-end, "Copilot Completion Toggle")
+end, "Toggle Copilot completion")
 --#endregion
 
 keymap("<leader>th", "<cmd>TSToggle highlight<cr>", "Toggle treesitter highlight")
