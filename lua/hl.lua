@@ -8,7 +8,7 @@ hl("DapStopped", { fg = "#61AFEF" }) -- blue for stopped threads
 hl("NormalFloat", { bg = "#292929" }) -- fleet theme float background
 
 vim.cmd([[
-    hi! link WinBar OilDir
+    hi! link WinBar Normal
     hi! link NormalFloat Pmenu
     hi! FloatBorder guibg=none
     hi! WinSeparator guibg=none

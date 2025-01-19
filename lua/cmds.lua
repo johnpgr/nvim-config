@@ -8,6 +8,7 @@ vim.api.nvim_create_autocmd("TextYankPost", {
     pattern = "*",
 })
 
+-- Better terminal buffer
 vim.cmd([[
     autocmd TermOpen * startinsert
     autocmd TermOpen * setlocal nonumber norelativenumber
@@ -15,10 +16,12 @@ vim.cmd([[
     autocmd TermEnter * setlocal nospell
 ]])
 
+-- Vim dadbod
 vim.cmd([[
     autocmd FileType sql,mysql,plsql lua require('cmp').setup.buffer({ sources = {{ name = 'vim-dadbod-completion' }} })
 ]])
 
+-- Make undercurls work properly
 vim.api.nvim_create_autocmd("LspAttach", {
     callback = function(args)
         -- local client = vim.lsp.get_client_by_id(args.data.client_id)
@@ -83,13 +86,6 @@ end, {
     end,
 })
 
--- Gruvbox
--- vim.cmd.highlight("IndentLine guifg=#4f4c4a")
--- vim.cmd.highlight("IndentLineCurrent guifg=#4f4c4a")
--- Catpuccin
-vim.cmd.highlight("IndentLine guifg=#585c6b")
-vim.cmd.highlight("IndentLineCurrent guifg=#585c6b")
-
 -- set makeprg and errorformat for GCC in {.c, .h} files
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
     callback = function()
@@ -117,12 +113,11 @@ end, {
     desc = "Compile and run C file",
 })
 
--- vim.api.nvim_create_autocmd("FileType", {
---     pattern = "oil",
---     callback = function()
---         vim.opt_local.number = false
---         vim.opt_local.relativenumber = false
---         vim.opt_local.signcolumn = "no"
---         vim.opt_local.foldcolumn = "0"
---     end,
--- })
+vim.keymap.set('n', '<leader>ff', function()
+    local current_path = ""
+    if vim.fn.expand("%:p") ~= "" then
+        current_path = vim.fn.expand("%:h") .. "/"
+    end
+    vim.cmd('set cmdheight=1')
+    vim.fn.feedkeys(":e " .. current_path, "n")
+end, { desc = "Find file with current path" })

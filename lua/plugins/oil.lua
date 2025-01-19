@@ -2,22 +2,43 @@
 function _G.get_oil_winbar()
     local dir = require("oil").get_current_dir()
     if dir then
-        return vim.fn.fnamemodify(dir, ":~")
+        -- Remove trailing slash unless dir is just "/"
+        dir = dir:len() > 1 and dir:gsub("/$", "") or dir
+        return dir .. ":"
     else
         -- If there is no current directory (e.g. over ssh), just show the buffer name
         return vim.api.nvim_buf_get_name(0)
     end
 end
 
+local permission_hlgroups = {
+    ["-"] = "NonText",
+    ["r"] = "DiagnosticSignWarn",
+    ["w"] = "DiagnosticSignError",
+    ["x"] = "DiagnosticSignOk",
+}
+
 return {
     "stevearc/oil.nvim",
-    enabled = true,
     opts = {
         columns = {
-            "permissions",
-            "size",
-            "ctime",
-            "icon",
+            {
+                "permissions",
+                highlight = function(permission_str)
+                    local hls = {}
+                    for i = 1, #permission_str do
+                        local char = permission_str:sub(i, i)
+                        table.insert(hls, { permission_hlgroups[char], i - 1, i })
+                    end
+                    return hls
+                end,
+            },
+            { "size", highlight = "Special" },
+            { "mtime", highlight = "Number" },
+            {
+                "icon",
+                add_padding = false,
+            },
         },
         skip_confirm_for_simple_edits = true,
         keymaps = {
