@@ -3,30 +3,40 @@ local keymap = utils.keymap
 local feedkeys = utils.feedkeys
 local which_key = require("which-key")
 
-local telescope = require("telescope-utils")
-local telescope_builtin = require("telescope.builtin")
 local gitsigns = require("gitsigns")
 local tmux = require("tmux")
 
---#region Telescope
-which_key.add({ { "<leader>f", group = "Find" } })
-keymap("<C-p>", telescope.list_files_cwd, "Find files")
-keymap("<C-f>", telescope.live_grep, "Find word")
-keymap("<C-e>", telescope.list_recent_files, "Find oldfiles")
-keymap("<leader>ff", telescope.list_files_cwd, "Find files")
-keymap("<leader>fw", telescope.live_grep, "Find word")
-keymap("<leader>fo", telescope.list_recent_files, "Find oldfiles")
-keymap("<leader><space>", telescope_builtin.buffers, "Find open buffers")
-keymap("<leader>fb", telescope_builtin.buffers, "Find open buffers")
-keymap("<leader>fs", telescope.list_spell_suggestions_under_cursor, "Find Spell suggestions")
-keymap("<leader>fh", telescope_builtin.help_tags, "Find help tags")
-keymap("<leader>fr", telescope_builtin.resume, "Resume last finder")
-keymap("<leader>fc", function()
-    require("telescope.builtin").colorscheme({ enable_preview = true })
-end, "Find Colorscheme")
---#endregion
+string.remove_start = function(str, substr)
+    if str:sub(1, #substr) == substr then
+        return str:sub(#substr + 1), true
+    end
+    return str, false
+end
+
+local function find_files()
+    local current_path = ""
+    local changed = false
+
+    if vim.fn.expand("%:p") ~= "" then
+        current_path = vim.fn.expand("%:p")
+        -- Remove oil:// prefix if present
+        current_path, changed = current_path:remove_start("oil://")
+        -- If it was an oil buffer, the ending / is already there.
+        if not changed then
+            -- If it's a directory, ensure it ends with /
+            if vim.fn.isdirectory(current_path) == 1 then
+                current_path = current_path .. "/"
+            else
+                current_path = vim.fn.fnamemodify(current_path, ":h") .. "/"
+            end
+        end
+    end
+    feedkeys(":e " .. current_path)
+end
 
 --#region General
+keymap("<C-p>", find_files, "Find Files")
+keymap("<C-f>", ":Grep ", "Live grep")
 keymap("<leader>ts", utils.toggle_spaces_width, "Toggle shift width")
 keymap("<leader>ti", utils.toggle_indent_mode, "Toggle indentation mode")
 keymap("<C-_>", "gcc", { remap = true, silent = true, desc = "Comment toggle" }, "n")
@@ -88,7 +98,7 @@ local function format_buffer()
 end
 
 keymap("<space>x", function()
-    for _, client in ipairs(vim.lsp.buf_get_clients()) do
+    for _, client in ipairs(vim.lsp.get_clients()) do
         print("client: ", client.name)
         require("workspace-diagnostics").populate_workspace_diagnostics(client, 0)
     end
@@ -174,54 +184,9 @@ end, "Quickfixlist previous")
 which_key.add({ { "<leader>c", group = "Copilot" } })
 local chat = require("CopilotChat")
 local chat_select = require("CopilotChat.select")
-local actions = require("telescope.actions")
-local action_state = require("telescope.actions.state")
 
-local function parse_history_path(file)
-    return vim.fn.fnamemodify(file, ":t:r")
-end
-
-local function format_display_name(filename)
-    filename = filename:gsub("%.%w+$", "")
-    return filename:gsub("%-", " "):gsub("^%w", string.upper)
-end
-
-local function find_chat_history()
-    telescope_builtin.find_files(vim.tbl_extend("force",
-        require("telescope.themes").get_ivy({ previewer = false }),
-        {
-            prompt_title = "Chat History",
-            cwd = chat.config.history_path,
-            hidden = true,
-            follow = true,
-            entry_maker = function(entry)
-                return {
-                    value = entry,
-                    display = format_display_name(entry),
-                    ordinal = entry,
-                    path = entry,
-                }
-            end,
-            attach_mappings = function(prompt_bufnr, _)
-                actions.select_default:replace(function()
-                    actions.close(prompt_bufnr)
-                    local selection = action_state.get_selected_entry()
-                    local path = selection.value
-                    chat.load(parse_history_path(path))
-                    chat.toggle()
-                end)
-                return true
-            end,
-        }
-    ))
-end
-
-keymap("<leader>ch", find_chat_history, "CopilotChat History")
+keymap("<leader>ch", "CopilotChatLoad ", "CopilotChat History")
 keymap("<leader>cc", "<cmd>CopilotChatToggle<cr>", "CopilotChat Toggle")
-keymap("<leader>cp", function()
-    local chat_actions = require("CopilotChat.actions")
-    require("CopilotChat.integrations.telescope").pick(chat_actions.prompt_actions())
-end, "CopilotChat Prompts")
 keymap("<leader>tca", function()
     vim.g.chat_autosave = not vim.g.chat_autosave
     print("CopilotChat autosave is now " .. (vim.g.chat_autosave and "enabled" or "disabled"))

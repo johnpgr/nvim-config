@@ -113,11 +113,19 @@ end, {
     desc = "Compile and run C file",
 })
 
-vim.keymap.set('n', '<leader>ff', function()
-    local current_path = ""
-    if vim.fn.expand("%:p") ~= "" then
-        current_path = vim.fn.expand("%:h") .. "/"
-    end
-    vim.cmd('set cmdheight=1')
-    vim.fn.feedkeys(":e " .. current_path, "n")
-end, { desc = "Find file with current path" })
+vim.api.nvim_create_user_command('Grep', function(opts)
+    vim.cmd('silent grep! ' .. opts.args)
+    vim.cmd('cwindow')
+end, { nargs = '+' })
+
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = { "markdown" },
+    callback = function()
+        local cmp = require("cmp")
+        cmp.setup.buffer({
+            completion = {
+                autocomplete = false
+            }
+        })
+    end,
+})
