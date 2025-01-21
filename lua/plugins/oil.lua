@@ -1,10 +1,13 @@
+local utils = require("utils")
+
 -- Declare a global function to retrieve the current directory
 function _G.get_oil_winbar()
     local dir = require("oil").get_current_dir()
     if dir then
         -- Remove trailing slash unless dir is just "/"
-        dir = dir:len() > 1 and dir:gsub("/$", "") or dir
-        return dir .. ":"
+        dir = dir:len() > 1 and dir:gsub(utils.slash .. "$", "") or dir
+        -- Only add ":" if it doesn't already end with ":"
+        return dir:match(":$") and dir or dir .. ":"
     else
         -- If there is no current directory (e.g. over ssh), just show the buffer name
         return vim.api.nvim_buf_get_name(0)

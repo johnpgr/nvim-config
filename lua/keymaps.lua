@@ -13,21 +13,34 @@ string.remove_start = function(str, substr)
     return str, false
 end
 
+local SLASH = utils.is_windows and "\\" or "/"
+
+local function unixtow32path(path)
+    -- Replace forward slashes with backslashes
+    local win_path = path:gsub("/", "\\")
+    -- Remove leading backslash if present
+    return win_path:gsub("^\\(%a)\\", "%1:\\")
+end
+
 local function find_files()
     local current_path = ""
     local changed = false
 
     if vim.fn.expand("%:p") ~= "" then
         current_path = vim.fn.expand("%:p")
-        -- Remove oil:// prefix if present
         current_path, changed = current_path:remove_start("oil://")
+
         -- If it was an oil buffer, the ending / is already there.
-        if not changed then
+        if changed then
+            if utils.is_windows then
+                current_path = unixtow32path(current_path)
+            end
+        else
             -- If it's a directory, ensure it ends with /
             if vim.fn.isdirectory(current_path) == 1 then
-                current_path = current_path .. "/"
+                current_path = current_path .. SLASH
             else
-                current_path = vim.fn.fnamemodify(current_path, ":h") .. "/"
+                current_path = vim.fn.fnamemodify(current_path, ":h") .. SLASH
             end
         end
     end

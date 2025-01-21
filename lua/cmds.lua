@@ -86,38 +86,13 @@ end, {
     end,
 })
 
--- set makeprg and errorformat for GCC in {.c, .h} files
-vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-    callback = function()
-        local file_path = vim.fn.expand("%:p")
-        local file_name = vim.fn.expand("%:t")
-        local out_path = vim.fn.expand("%:p:h"):gsub("src", "out") .. "/" .. file_name:gsub("%.c$", "")
-        local GCC_ARGS = "-Wall -Wextra -Werror -Wpedantic -std=c2x -lm -o " .. out_path
-
-        vim.bo.makeprg = "gcc " .. GCC_ARGS .. " " .. file_path
-        vim.bo.errorformat = "%f:%l:%c: %t%*[^:]%m"
-    end,
-    pattern = "*.c",
-})
-
-vim.api.nvim_create_user_command("CRun", function()
-    vim.cmd("make")
-
-    if vim.v.shell_error == 0 then
-        local file_name = vim.fn.expand("%:t"):gsub("%.c$", "")
-        local out_path = vim.fn.expand("%:p:h"):gsub("src", "out") .. "/" .. file_name
-
-        vim.cmd(string.format("split | terminal %s", out_path))
-    end
-end, {
-    desc = "Compile and run C file",
-})
-
+-- Better :grep command
 vim.api.nvim_create_user_command('Grep', function(opts)
     vim.cmd('silent grep! ' .. opts.args)
     vim.cmd('cwindow')
 end, { nargs = '+' })
 
+-- Disable autocompletion in markdown files
 vim.api.nvim_create_autocmd("FileType", {
     pattern = { "markdown" },
     callback = function()
@@ -128,4 +103,15 @@ vim.api.nvim_create_autocmd("FileType", {
             }
         })
     end,
+})
+
+-- Autoloads local config in directories
+vim.api.nvim_create_autocmd({ "DirChanged", "VimEnter" }, {
+  pattern = "*",
+  callback = function()
+    local local_config = vim.fn.getcwd() .. "/.nvim/init.lua"
+    if vim.fn.filereadable(local_config) == 1 then
+      vim.cmd("source " .. local_config)
+    end
+  end,
 })

@@ -1,5 +1,9 @@
 local M = {}
 
+M.is_neovide = vim.g.neovide ~= nil
+M.is_windows = vim.loop.os_uname().version:match("Windows")
+M.slash = M.is_windows and "\\" or "/"
+
 function M.lua_ls_on_init(client)
     local path = vim.tbl_get(client, "workspace_folders", 1, "name")
     if not path then

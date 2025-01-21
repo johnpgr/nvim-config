@@ -75,11 +75,11 @@ return {
                         require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
                     end,
                 },
-                gopls = {
-                    on_attach = function(client, bufnr)
-                        require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
-                    end,
-                },
+                -- gopls = {
+                --     on_attach = function(client, bufnr)
+                --         require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
+                --     end,
+                -- },
                 pyright = {
                     on_attach = function(client, bufnr)
                         require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
@@ -103,9 +103,9 @@ return {
                 html = {
                     filetypes = { "html" },
                 },
-                htmx = {
-                    filetypes = { "html" },
-                },
+                -- htmx = {
+                --     filetypes = { "html" },
+                -- },
                 jsonls = {},
                 lua_ls = {
                     on_attach = function(client, bufnr)

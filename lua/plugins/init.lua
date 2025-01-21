@@ -1,4 +1,4 @@
-local is_neovide = vim.g.neovide ~= nil
+local utils = require("utils")
 
 return {
     -- Remembers last cursor position when reopening files
@@ -179,7 +179,7 @@ return {
 
     {
         "ejrichards/mise.nvim",
-        enabled = is_neovide,
+        enabled = utils.is_neovide and not utils.is_windows,
         opts = {},
     },
 }
