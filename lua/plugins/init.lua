@@ -3,6 +3,8 @@ local utils = require("utils")
 return {
     -- Remembers last cursor position when reopening files
     "farmergreg/vim-lastplace",
+    -- Undo tree visualizer
+    "mbbill/undotree",
     -- Adds file icons to Neovim
     "nvim-tree/nvim-web-devicons",
     -- Git diff viewer

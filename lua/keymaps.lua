@@ -97,6 +97,7 @@ keymap("yig", ":%y<CR>", "Yank buffer", "n")
 keymap("vig", "ggVG", "Visual select buffer", "n")
 keymap("cig", ":%d<CR>i", "Change buffer", "n")
 keymap("<leader>o", "<cmd>Outline<CR>", "Toggle Outline")
+keymap('<leader>u', vim.cmd.UndotreeToggle, "Toggle undotree")
 --#endregion
 
 --#region LSP

@@ -8,6 +8,7 @@ hl("DapStopped", { fg = "#61AFEF" }) -- blue for stopped threads
 hl("NormalFloat", { bg = "#292929" }) -- fleet theme float background
 
 vim.cmd([[
+    hi! Normal guibg=none
     hi! link WinBar Normal
     hi! link NormalFloat Pmenu
     hi! FloatBorder guibg=none
@@ -18,15 +19,15 @@ vim.cmd([[
 
 vim.cmd([[
     " Gruvbox theme highlight corrections
-    hi! SignColumn guibg=none
-    hi! FoldColumn guibg=none
-    hi! GitSignsChange guibg=none
-    hi! GitSignsAdd guibg=none
-    hi! Operator guibg=none
-    hi! GruvboxGreenSign guibg=none
-    hi! GruvboxAquaSign guibg=none
-    hi! GruvboxRedSign guibg=none
-    hi! GruvboxRed guifg=#fb6150
+    " hi! SignColumn guibg=none
+    " hi! FoldColumn guibg=none
+    " hi! GitSignsChange guibg=none
+    " hi! GitSignsAdd guibg=none
+    " hi! Operator guibg=none
+    " hi! GruvboxGreenSign guibg=none
+    " hi! GruvboxAquaSign guibg=none
+    " hi! GruvboxRedSign guibg=none
+    " hi! GruvboxRed guifg=#fb6150
 ]])
 
 vim.cmd([[
