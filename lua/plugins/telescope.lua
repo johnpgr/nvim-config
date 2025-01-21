@@ -1,3 +1,5 @@
+local is_windows = vim.fn.has("win32") == 1
+
 return {
     "nvim-telescope/telescope.nvim",
     event = "VeryLazy",
@@ -7,7 +9,7 @@ return {
             "nvim-telescope/telescope-fzf-native.nvim",
             build = "make",
             cond = function()
-                return vim.fn.executable("make") == 1
+                return not is_windows and vim.fn.executable("make") == 1
             end,
         },
     },
@@ -28,7 +30,7 @@ return {
                     },
                 },
             },
-            extensions = {
+            extensions = is_windows and {} or {
                 fzf = {},
             },
             pickers = {
@@ -62,6 +64,8 @@ return {
                 },
             },
         })
+
+        if is_windows then return end
 
         telescope.load_extension("fzf")
     end,

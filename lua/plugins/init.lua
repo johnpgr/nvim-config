@@ -1,4 +1,4 @@
-local is_neovide = vim.g.neovide ~= nil
+local utils = require("utils")
 
 return {
     -- Remembers last cursor position when reopening files
@@ -7,6 +7,8 @@ return {
     "nvim-tree/nvim-web-devicons",
     -- Git diff viewer
     "sindrets/diffview.nvim",
+    -- Undotree
+    "mbbill/undotree",
     -- Workspace diagnostics
     "artemave/workspace-diagnostics.nvim",
     {
@@ -176,10 +178,9 @@ return {
             })
         end,
     },
-
     {
         "ejrichards/mise.nvim",
-        enabled = is_neovide,
+        enabled = utils.is_neovide and not utils.is_windows,
         opts = {},
     },
 }

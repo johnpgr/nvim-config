@@ -86,38 +86,12 @@ end, {
     end,
 })
 
--- set makeprg and errorformat for GCC in {.c, .h} files
-vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+vim.api.nvim_create_autocmd({ "DirChanged", "VimEnter" }, {
+    pattern = "*",
     callback = function()
-        local file_path = vim.fn.expand("%:p")
-        local file_name = vim.fn.expand("%:t")
-        local out_path = vim.fn.expand("%:p:h"):gsub("src", "out") .. "/" .. file_name:gsub("%.c$", "")
-        local GCC_ARGS = "-Wall -Wextra -Werror -Wpedantic -std=c2x -lm -o " .. out_path
-
-        vim.bo.makeprg = "gcc " .. GCC_ARGS .. " " .. file_path
-        vim.bo.errorformat = "%f:%l:%c: %t%*[^:]%m"
+        local local_config = vim.fn.getcwd() .. "/.nvim/init.lua"
+        if vim.fn.filereadable(local_config) == 1 then
+            vim.cmd("source " .. local_config)
+        end
     end,
-    pattern = "*.c",
 })
-
-vim.api.nvim_create_user_command("CRun", function()
-    vim.cmd("make")
-
-    if vim.v.shell_error == 0 then
-        local file_name = vim.fn.expand("%:t"):gsub("%.c$", "")
-        local out_path = vim.fn.expand("%:p:h"):gsub("src", "out") .. "/" .. file_name
-
-        vim.cmd(string.format("split | terminal %s", out_path))
-    end
-end, {
-    desc = "Compile and run C file",
-})
-
-vim.keymap.set('n', '<leader>ff', function()
-    local current_path = ""
-    if vim.fn.expand("%:p") ~= "" then
-        current_path = vim.fn.expand("%:h") .. "/"
-    end
-    vim.cmd('set cmdheight=1')
-    vim.fn.feedkeys(":e " .. current_path, "n")
-end, { desc = "Find file with current path" })
