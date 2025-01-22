@@ -36,7 +36,7 @@ return {
             pickers = {
                 buffers = {
                     previewer = false,
-                    theme = "ivy",
+                    theme = "dropdown",
                     mappings = {
                         i = {
                             ["<C-d>"] = actions.delete_buffer,
@@ -44,7 +44,6 @@ return {
                     },
                 },
                 colorscheme = {
-                    theme = "ivy",
                     mappings = {
                         i = {
                             ["<CR>"] = function(bufnr)

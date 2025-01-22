@@ -187,33 +187,30 @@ local function format_display_name(filename)
 end
 
 local function find_chat_history()
-    telescope_builtin.find_files(vim.tbl_extend("force",
-        require("telescope.themes").get_ivy({ previewer = false }),
-        {
-            prompt_title = "Chat History",
-            cwd = chat.config.history_path,
-            hidden = true,
-            follow = true,
-            entry_maker = function(entry)
-                return {
-                    value = entry,
-                    display = format_display_name(entry),
-                    ordinal = entry,
-                    path = entry,
-                }
-            end,
-            attach_mappings = function(prompt_bufnr, _)
-                actions.select_default:replace(function()
-                    actions.close(prompt_bufnr)
-                    local selection = action_state.get_selected_entry()
-                    local path = selection.value
-                    chat.load(parse_history_path(path))
-                    chat.toggle()
-                end)
-                return true
-            end,
-        }
-    ))
+    telescope_builtin.find_files({
+        prompt_title = "Chat History",
+        cwd = chat.config.history_path,
+        hidden = true,
+        follow = true,
+        entry_maker = function(entry)
+            return {
+                value = entry,
+                display = format_display_name(entry),
+                ordinal = entry,
+                path = entry,
+            }
+        end,
+        attach_mappings = function(prompt_bufnr, _)
+            actions.select_default:replace(function()
+                actions.close(prompt_bufnr)
+                local selection = action_state.get_selected_entry()
+                local path = selection.value
+                chat.load(parse_history_path(path))
+                chat.toggle()
+            end)
+            return true
+        end,
+    })
 end
 
 keymap("<leader>ch", find_chat_history, "CopilotChat History")

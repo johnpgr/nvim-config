@@ -295,21 +295,19 @@ end
 function M.list_recent_files()
     M.pretty_files_picker({
         picker = "oldfiles",
-        options = require("telescope.themes").get_ivy({ previewer = false, only_cwd = true }),
+        options = { only_cwd = true },
     })
 end
 
 function M.list_files_cwd()
     M.pretty_files_picker({
         picker = "find_files",
-        options = require("telescope.themes").get_ivy({ previewer = false }),
     })
 end
 
 function M.live_grep()
     M.pretty_grep_picker({
         picker = "live_grep",
-        options = require("telescope.themes").get_ivy({ previewer = true }),
     })
 end
 
