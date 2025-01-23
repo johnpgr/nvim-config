@@ -27,6 +27,8 @@ end, "Find Colorscheme")
 --#endregion
 
 --#region General
+-- Compile the current file
+keymap("<A-m>", "<cmd>silent make<cr><cmd>copen<cr>", "Compile current file")
 keymap("<leader>ts", utils.toggle_spaces_width, "Toggle shift width")
 keymap("<leader>ti", utils.toggle_indent_mode, "Toggle indentation mode")
 keymap("<C-_>", "gcc", { remap = true, silent = true, desc = "Comment toggle" }, "n")
@@ -205,7 +207,9 @@ local function find_chat_history()
                 actions.close(prompt_bufnr)
                 local selection = action_state.get_selected_entry()
                 local path = selection.value
-                chat.load(parse_history_path(path))
+                local parsed = parse_history_path(path)
+                vim.g.chat_title = parsed
+                chat.load(parsed)
                 chat.toggle()
             end)
             return true

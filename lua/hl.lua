@@ -18,15 +18,15 @@ vim.cmd([[
 
 vim.cmd([[
     " Gruvbox theme highlight corrections
-    hi! SignColumn guibg=none
-    hi! FoldColumn guibg=none
-    hi! GitSignsChange guibg=none
-    hi! GitSignsAdd guibg=none
-    hi! Operator guibg=none
-    hi! GruvboxGreenSign guibg=none
-    hi! GruvboxAquaSign guibg=none
-    hi! GruvboxRedSign guibg=none
-    hi! GruvboxRed guifg=#fb6150
+    " hi! SignColumn guibg=none
+    " hi! FoldColumn guibg=none
+    " hi! GitSignsChange guibg=none
+    " hi! GitSignsAdd guibg=none
+    " hi! Operator guibg=none
+    " hi! GruvboxGreenSign guibg=none
+    " hi! GruvboxAquaSign guibg=none
+    " hi! GruvboxRedSign guibg=none
+    " hi! GruvboxRed guifg=#fb6150
 ]])
 
 vim.cmd([[
@@ -35,4 +35,8 @@ vim.cmd([[
     " hi! FloatBorder guibg=#292929
     " hi! CursorLineNr guifg=#ffffff
     " hi! CursorLineFold guibg=#292929
+]])
+
+vim.cmd([[
+    hi! @comment guifg=#026440
 ]])

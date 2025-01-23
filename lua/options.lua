@@ -7,7 +7,7 @@ vim.opt.diffopt:append("linematch:60")
 vim.o.clipboard = "unnamedplus"
 vim.o.completeopt = "menu,menuone,popup,noinsert,noselect"
 vim.o.confirm = true
-vim.o.cursorline = false
+vim.o.cursorline = true
 vim.o.expandtab = true
 vim.o.wrap = false
 if vim.fn.executable("rg") ~= 0 then

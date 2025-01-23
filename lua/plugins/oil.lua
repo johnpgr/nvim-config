@@ -116,5 +116,6 @@ return {
         },
         use_default_keymaps = false,
         watch_for_changes = true,
+        constrain_cursor = "name",
     },
 }

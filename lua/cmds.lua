@@ -1,3 +1,4 @@
+local utils = require("utils")
 -- Highlight on yank
 local highlight_group = vim.api.nvim_create_augroup("YankHighlight", { clear = true })
 vim.api.nvim_create_autocmd("TextYankPost", {
@@ -94,4 +95,24 @@ vim.api.nvim_create_autocmd({ "DirChanged", "VimEnter" }, {
             vim.cmd("source " .. local_config)
         end
     end,
+})
+
+vim.api.nvim_create_user_command("QueryReplace", function (opts)
+    local query = ""
+    vim.ui.input({prompt = "Query: "}, function (input)
+        query = input
+    end)
+
+    if query == "" then
+        return
+    end
+
+    vim.ui.input({prompt = "Replace " .. query .. " with: "}, function (replace)
+        if replace == "" then
+            return
+        end
+        utils.feedkeys(":%s/" .. query .. "/" .. replace .. "/gc" .. "<CR>")
+    end)
+end, {
+    nargs = 0,
 })

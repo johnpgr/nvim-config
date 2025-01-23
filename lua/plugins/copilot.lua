@@ -5,7 +5,7 @@ Generate chat title in filepath-friendly format for:
 %s
 ```
 
-Output only the title and nothing else in your response.
+Output only the title and nothing else in your response. USE HYPHENS ONLY to separate words.
 ]]
 
 return {
