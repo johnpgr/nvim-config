@@ -28,7 +28,7 @@ end, "Find Colorscheme")
 
 --#region General
 -- Compile the current file
-keymap("<A-m>", "<cmd>silent make<cr><cmd>copen<cr>", "Compile current file")
+keymap("<leader>L", "<cmd>Lazy<cr>", "Lazy.nvim")
 keymap("<leader>ts", utils.toggle_spaces_width, "Toggle shift width")
 keymap("<leader>ti", utils.toggle_indent_mode, "Toggle indentation mode")
 keymap("<C-_>", "gcc", { remap = true, silent = true, desc = "Comment toggle" }, "n")
@@ -368,3 +368,47 @@ local function toggle_cmp()
 end
 
 keymap("<leader>ta", toggle_cmp, "Toggle Autocomplete")
+
+keymap("<C-CR>", function()
+    local line = vim.fn.getline(".")
+    local file, lnum, col = string.match(line, "([^:]+):(%d+):(%d+):")
+
+    if not (file and lnum and col) then
+        vim.notify("No file:line:column pattern found in current line", vim.log.levels.WARN)
+        return
+    end
+
+    if vim.fn.filereadable(file) ~= 1 then
+        vim.notify("File not found: " .. file, vim.log.levels.ERROR)
+        return
+    end
+
+    lnum = tonumber(lnum)
+    col = tonumber(col)
+
+    -- Find if the file is already open in a buffer
+    local bufnr = vim.fn.bufnr(vim.fn.fnamemodify(file, ":p"))
+    local win_id = nil
+
+    -- Check if buffer is visible in any window
+    if bufnr ~= -1 then
+        local wins = vim.fn.getbufinfo(bufnr)[1].windows
+        if #wins > 0 then
+            win_id = wins[1]
+        end
+    end
+
+    if win_id then
+        -- If buffer is visible, switch to its window
+        vim.fn.win_gotoid(win_id)
+    else
+        -- If buffer isn't visible, create a new split
+        vim.cmd("topleft split " .. file)
+    end
+
+    -- Move cursor to error position
+    vim.api.nvim_win_set_cursor(0, { lnum, col - 1 })
+
+    -- Center the screen on the error
+    vim.cmd("normal! zz")
+end, "Jump to error location")

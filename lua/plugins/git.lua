@@ -5,7 +5,7 @@ return {
     },
     cmd = "Neogit",
     opts = {
-        graph_style = "kitty",
+        graph_style = "ascii",
         commit_editor = {
             kind = "vsplit",
             show_staged_diff = false,

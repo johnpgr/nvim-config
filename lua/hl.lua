@@ -5,7 +5,6 @@ hl("DapBreakpointCondition", { fg = "#FFB74C" }) -- orange for conditional break
 hl("DapBreakpointRejected", { fg = "#767676" }) -- gray for rejected/invalid breakpoints
 hl("DapLogPoint", { fg = "#61AFEF" }) -- blue for logpoints
 hl("DapStopped", { fg = "#61AFEF" }) -- blue for stopped threads
-hl("NormalFloat", { bg = "#292929" }) -- fleet theme float background
 
 vim.cmd([[
     hi! link WinBar Normal
@@ -31,6 +30,7 @@ vim.cmd([[
 
 vim.cmd([[
     " Fleet theme highlight corrections
+    " hi! NormalFloat guibg=#292929
     " hi! FloatBorder guifg=#292929
     " hi! FloatBorder guibg=#292929
     " hi! CursorLineNr guifg=#ffffff
@@ -38,5 +38,5 @@ vim.cmd([[
 ]])
 
 vim.cmd([[
-    hi! @comment guifg=#026440
+    " hi! @comment guifg=#026440
 ]])

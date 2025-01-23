@@ -1,1 +1,1 @@
-vim.cmd.colorscheme("lackluster-night")
+vim.cmd.colorscheme("everforest")
