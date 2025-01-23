@@ -386,6 +386,9 @@ keymap("<C-CR>", function()
     lnum = tonumber(lnum)
     col = tonumber(col)
 
+    -- Store current window id
+    local current_win = vim.api.nvim_get_current_win()
+
     -- Find if the file is already open in a buffer
     local bufnr = vim.fn.bufnr(vim.fn.fnamemodify(file, ":p"))
     local win_id = nil
@@ -402,8 +405,18 @@ keymap("<C-CR>", function()
         -- If buffer is visible, switch to its window
         vim.fn.win_gotoid(win_id)
     else
-        -- If buffer isn't visible, create a new split
-        vim.cmd("topleft split " .. file)
+        -- Check for window above current window
+        local window_above = vim.fn.winnr("#")
+
+        if window_above ~= 0 then
+            -- Go to window above
+            vim.cmd("wincmd k")
+            -- Open file in this window
+            vim.cmd("edit " .. file)
+        else
+            -- If no window above, create new split
+            vim.cmd("topleft split " .. file)
+        end
     end
 
     -- Move cursor to error position
