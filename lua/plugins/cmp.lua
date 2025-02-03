@@ -35,6 +35,7 @@ return {
             },
         },
         config = function()
+            local utils = require("utils")
             local cmp = require("cmp")
             local luasnip = require("luasnip")
             luasnip.config.setup({})
@@ -140,35 +141,47 @@ return {
                 }),
             })
 
-            cmp.setup({
-                formatting = {
-                    expandable_indicator = true,
-                    fields = {
-                        "kind",
-                        "abbr",
-                        "menu",
-                    },
-                    format = function(entry, vim_item)
-                        local kind = require("lspkind").cmp_format({
-                            preset = "codicons",
-                            mode = "symbol",
-                            maxwidth = 50,
-                            ellipsis_char = "...",
-                        })(entry, vim.deepcopy(vim_item))
-                        local highlights_info = require("colorful-menu").cmp_highlights(entry)
-
-                        if highlights_info ~= nil and highlights_info.text ~= nil then
-                            vim_item.abbr_hl_group = highlights_info.highlights
-                            vim_item.abbr = highlights_info.text
-                        end
-
-                        local strings = vim.split(kind.kind, "%s", { trimempty = true })
-                        vim_item.kind = strings[1] or ""
-                        vim_item.menu = ""
-
-                        return vim_item
-                    end,
+            local formatting = {
+                fields = {
+                    "abbr",
+                    "menu",
                 },
+                expandable_indicator = true,
+                format = function(entry, vim_item)
+                    local lspkind_opts = {
+                        preset = "codicons",
+                        mode = "symbol",
+                        maxwidth = 50,
+                        ellipsis_char = "...",
+                    }
+
+                    local kind = require("lspkind").cmp_format(lspkind_opts)(entry, vim.deepcopy(vim_item))
+                    local highlights_info = require("colorful-menu").cmp_highlights(entry)
+
+                    if highlights_info ~= nil and highlights_info.text ~= nil then
+                        vim_item.abbr_hl_group = highlights_info.highlights
+                        vim_item.abbr = highlights_info.text
+                    end
+
+                    local strings = vim.split(kind.kind, "%s", { trimempty = true })
+                    vim_item.kind = strings[1] or ""
+                    vim_item.menu = ""
+
+                    return vim_item
+                end,
+            }
+
+
+            if utils.nerd_icons then
+                formatting.fields = {
+                    "kind",
+                    "abbr",
+                    "menu",
+                }
+            end
+
+            cmp.setup({
+                formatting = formatting,
                 snippet = {
                     expand = function(args)
                         luasnip.lsp_expand(args.body)
@@ -186,6 +199,26 @@ return {
                     { name = "path" },
                 },
             })
+
+            local function toggle_cmp()
+                if cmp.get_config().completion.autocomplete == false then
+                    cmp.setup({
+                        completion = {
+                            autocomplete = { "InsertEnter", "TextChanged" },
+                        },
+                    })
+                    print("Autocompletion enabled")
+                else
+                    cmp.setup({
+                        completion = {
+                            autocomplete = false,
+                        },
+                    })
+                    print("Autocompletion disabled")
+                end
+            end
+
+            utils.keymap("<leader>ta", toggle_cmp, "Toggle Autocomplete")
         end,
     },
 }

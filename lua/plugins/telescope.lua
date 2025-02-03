@@ -1,9 +1,11 @@
-local is_windows = vim.fn.has("win32") == 1
+local utils = require('utils')
+local is_windows = utils.is_windows
+local is_neovide = utils.is_neovide
 
 return {
     "nvim-telescope/telescope.nvim",
     event = "VeryLazy",
-    branch = "0.1.x",
+    -- branch = "0.1.x",
     dependencies = {
         {
             "nvim-telescope/telescope-fzf-native.nvim",
@@ -20,6 +22,18 @@ return {
 
         telescope.setup({
             defaults = {
+                layout_strategy = "horizontal",
+                layout_config = {
+                    horizontal = {
+                        prompt_position = "top",
+                    },
+                },
+                sorting_strategy = "ascending",
+                path_display = {
+                    filename_first = {
+                        reverse_directories = false,
+                    },
+                },
                 mappings = {
                     i = {
                         ["<C-u>"] = false,
@@ -38,10 +52,22 @@ return {
                     previewer = false,
                     theme = "dropdown",
                     mappings = {
+                        n = {
+                            ["<C-d>"] = actions.delete_buffer,
+                        },
                         i = {
                             ["<C-d>"] = actions.delete_buffer,
                         },
                     },
+                },
+                find_files = {
+                    previewer = false,
+                    theme = "dropdown"
+                },
+                oldfiles = {
+                    previewer = false,
+                    theme = "dropdown",
+                    only_cwd = true,
                 },
                 colorscheme = {
                     mappings = {
@@ -64,8 +90,11 @@ return {
             },
         })
 
-        if is_windows then return end
-
-        telescope.load_extension("fzf")
+        if is_neovide then
+            telescope.load_extension('projects')
+        end
+        if not is_windows then
+            telescope.load_extension("fzf")
+        end
     end,
 }

@@ -4,7 +4,8 @@ package.path = package.path .. ";" .. vim.fn.expand("$HOME") .. "/.luarocks/shar
 package.path = package.path .. ";" .. vim.fn.expand("$HOME") .. "/.luarocks/share/lua/5.1/?.lua"
 
 local is_neovide = vim.g.neovide ~= nil
-local enable = os.getenv("TERM") == "xterm-kitty" or os.getenv("TERM") == "xterm-ghostty"
+local term = os.getenv("TERM")
+local enable = term == "xterm-kitty" or term == "xterm-ghostty"
 
 return {
     "3rd/image.nvim",
@@ -19,7 +20,7 @@ return {
                     clear_in_insert_mode = true,
                     download_remote_images = true,
                     only_render_image_at_cursor = true,
-                    filetypes = { "markdown", "vimwiki" }, -- markdown extensions (ie. quarto) can go here
+                    filetypes = { "markdown", "vimwiki" },
                 },
                 neorg = {
                     enabled = true,

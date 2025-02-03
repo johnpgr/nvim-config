@@ -33,7 +33,7 @@ return {
             dap.defaults.fallback.switchbuf = "usevisible,usetab,newtab"
 
             -- Adapters
-            -- C, C++, Rust
+            -- C, C++, Rust, Zig
             dap.adapters.codelldb = {
                 type = "server",
                 port = "${port}",
@@ -45,7 +45,7 @@ return {
 
             dap.configurations.c = {
                 {
-                    name = "Launch file",
+                    name = "Launch",
                     type = "codelldb",
                     request = "launch",
                     program = function()
@@ -53,6 +53,18 @@ return {
                     end,
                     cwd = "${workspaceFolder}",
                     stopOnEntry = false,
+                },
+            }
+
+            dap.configurations.zig = {
+                {
+                    name = "Launch",
+                    type = "codelldb",
+                    request = "launch",
+                    program = "${workspaceFolder}/zig-out/bin/${workspaceFolderBasename}",
+                    cwd = "${workspaceFolder}",
+                    stopOnEntry = false,
+                    args = {},
                 },
             }
         end,

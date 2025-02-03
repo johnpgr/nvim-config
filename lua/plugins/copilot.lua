@@ -31,6 +31,13 @@ return {
         },
         build = "make tiktoken",
         config = function()
+
+            -- Enable Treesitter highlighting for chat buffer
+            vim.api.nvim_create_autocmd({"BufEnter", "BufWinEnter"}, {
+                pattern = "copilot-chat",
+                command = "TSBufEnable highlight",
+            })
+
             local chat = require("CopilotChat")
             chat.setup({
                 callback = function(response)

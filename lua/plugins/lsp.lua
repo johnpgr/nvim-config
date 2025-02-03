@@ -162,8 +162,7 @@ return {
         dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
         ft = { "typescript", "typescriptreact", "javascript", "javascriptreact" },
         keys = {
-            { "<leader>li", "<Cmd>TSToolsAddMissingImports<cr>", desc = "LSP: Add missing imports" },
-            { "<leader>lx", "<Cmd>TSToolsRemoveUnusedImports<cr>", desc = "LSP: Remove unused missing imports" },
+            { "<leader>li", "<Cmd>TSToolsOrganizeImports<cr>", desc = "LSP: Organize imports" },
         },
         config = function()
             local root_pattern = require("lspconfig.util").root_pattern

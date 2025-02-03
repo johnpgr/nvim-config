@@ -2,28 +2,28 @@ local utils = require("utils")
 local keymap = utils.keymap
 local feedkeys = utils.feedkeys
 local which_key = require("which-key")
-
-local telescope = require("telescope-utils")
 local telescope_builtin = require("telescope.builtin")
 local gitsigns = require("gitsigns")
 local tmux = require("tmux")
+local is_neovide = utils.is_neovide
 
 --#region Telescope
 which_key.add({ { "<leader>f", group = "Find" } })
-keymap("<C-p>", telescope.list_files_cwd, "Find files")
-keymap("<C-f>", telescope.live_grep, "Find word")
-keymap("<C-e>", telescope.list_recent_files, "Find oldfiles")
-keymap("<leader>ff", telescope.list_files_cwd, "Find files")
-keymap("<leader>fw", telescope.live_grep, "Find word")
-keymap("<leader>fo", telescope.list_recent_files, "Find oldfiles")
+keymap("<leader>ff", telescope_builtin.find_files, "Find files")
+keymap("<C-p>", telescope_builtin.find_files, "Find files")
+keymap("<leader>fw", telescope_builtin.live_grep, "Find word")
+keymap("<C-S-f>", telescope_builtin.live_grep, "Find word")
+keymap("<leader>fo", telescope_builtin.oldfiles, "Find oldfiles")
 keymap("<leader><space>", telescope_builtin.buffers, "Find open buffers")
-keymap("<leader>fb", telescope_builtin.buffers, "Find open buffers")
-keymap("<leader>fs", telescope.list_spell_suggestions_under_cursor, "Find Spell suggestions")
+keymap("<leader>fs", telescope_builtin.spell_suggest, "Find Spell suggestions")
 keymap("<leader>fh", telescope_builtin.help_tags, "Find help tags")
 keymap("<leader>fr", telescope_builtin.resume, "Resume last finder")
 keymap("<leader>fc", function()
     require("telescope.builtin").colorscheme({ enable_preview = true })
 end, "Find Colorscheme")
+if is_neovide then
+    keymap("<leader>fp", require("telescope").extensions.projects.projects, "Find Projects")
+end
 --#endregion
 
 --#region General
@@ -51,6 +51,8 @@ keymap("<leader>V", "<cmd>bo vsp<cr>", "New vertical split")
 keymap("<leader>h", "<cmd>sp<cr>", "New horizontal split")
 keymap("<leader>H", "<cmd>bo sp<cr>", "New horizontal split")
 keymap("<Esc>", "<cmd>noh<cr>", "Clear search highlights", "n")
+-- keymap("<C-d>","<C-d>zz", "Better jump half page down", "n")
+-- keymap("<C-u>","<C-u>zz", "Better jump half page up", "n")
 keymap("n", "nzz", "Better jump next", "n")
 keymap("]d", function()
     vim.diagnostic.goto_next()
@@ -283,14 +285,14 @@ end, "Goto prev hunk")
 keymap("<A-s>", gitsigns.stage_hunk, "Hunk Stage", { "n", "v" })
 keymap("<A-r>", gitsigns.reset_hunk, "Hunk Reset")
 keymap("<A-u>", gitsigns.undo_stage_hunk, "Hunk Undo Stage")
-keymap("<A-b>", gitsigns.toggle_current_line_blame, "Toggle Blame inline")
+keymap("<leader>tb", gitsigns.toggle_current_line_blame, "Toggle Blame inline")
 keymap("<A-p>", gitsigns.preview_hunk, "Hunk Preview")
 keymap("<A-d>", gitsigns.toggle_deleted, "Toggle Deleted")
 keymap("<A-w>", gitsigns.toggle_word_diff, "Toggle Word diff")
-keymap("<A-D>", toggle_diffview, "Diffview Open")
+keymap("<leader>dv", toggle_diffview, "Toggle DiffView")
 keymap("ih", ":<C-U>Gitsigns select_hunk<CR>", { silent = true }, { "o", "x" })
 keymap("ah", ":<C-U>Gitsigns select_hunk<CR>", { silent = true }, { "o", "x" })
-keymap("<C-g>", function()
+keymap("<leader>ng", function()
     require("neogit").open({ kind = "replace" })
 end, "Neogit")
 --#endregion
@@ -344,84 +346,52 @@ keymap("<F21>", function()
 end, "Conditional Breakpoint")
 
 --#region Overseer
-keymap("<A-T>", "<cmd>OverseerToggle<cr>", "Task view")
-keymap("<A-R>", "<cmd>OverseerRun<cr>", "Task Run")
+keymap("<C-b>", "<cmd>OverseerToggle<cr>", "Task view")
+keymap("<C-F5>", "<cmd>OverseerRun<cr>", "Task Run")
+keymap("<A-r>", "<cmd>OverseerQuickAction restart<cr>", "Task Restart")
+keymap("gl", utils.left_jump_to_error_loc, "Jump to error location")
+keymap("gL", utils.up_jump_to_error_loc, "Jump to error location")
 --#endregion
 
-local function toggle_cmp()
-    local cmp = require("cmp")
-    if cmp.get_config().completion.autocomplete == false then
-        cmp.setup({
-            completion = {
-                autocomplete = { "InsertEnter", "TextChanged" },
-            },
-        })
-        print("Autocompletion enabled")
-    else
-        cmp.setup({
-            completion = {
-                autocomplete = false,
-            },
-        })
-        print("Autocompletion disabled")
+string.remove_start = function(str, substr)
+    if str:sub(1, #substr) == substr then
+        return str:sub(#substr + 1), true
     end
+    return str, false
 end
 
-keymap("<leader>ta", toggle_cmp, "Toggle Autocomplete")
+local SLASH = utils.is_windows and "\\" or "/"
 
-keymap("<C-CR>", function()
-    local line = vim.fn.getline(".")
-    local file, lnum, col = string.match(line, "([^:]+):(%d+):(%d+):")
+local function unixtow32path(path)
+    -- Replace forward slashes with backslashes
+    local win_path = path:gsub("/", "\\")
+    -- Remove leading backslash if present
+    return win_path:gsub("^\\(%a)\\", "%1:\\")
+end
 
-    if not (file and lnum and col) then
-        vim.notify("No file:line:column pattern found in current line", vim.log.levels.WARN)
-        return
-    end
+local function find_files()
+    local current_path = ""
+    local changed = false
 
-    if vim.fn.filereadable(file) ~= 1 then
-        vim.notify("File not found: " .. file, vim.log.levels.ERROR)
-        return
-    end
+    if vim.fn.expand("%:p") ~= "" then
+        current_path = vim.fn.expand("%:p")
+        current_path, changed = current_path:remove_start("oil://")
 
-    lnum = tonumber(lnum)
-    col = tonumber(col)
-
-    -- Store current window id
-    local current_win = vim.api.nvim_get_current_win()
-
-    -- Find if the file is already open in a buffer
-    local bufnr = vim.fn.bufnr(vim.fn.fnamemodify(file, ":p"))
-    local win_id = nil
-
-    -- Check if buffer is visible in any window
-    if bufnr ~= -1 then
-        local wins = vim.fn.getbufinfo(bufnr)[1].windows
-        if #wins > 0 then
-            win_id = wins[1]
-        end
-    end
-
-    if win_id then
-        -- If buffer is visible, switch to its window
-        vim.fn.win_gotoid(win_id)
-    else
-        -- Check for window above current window
-        local window_above = vim.fn.winnr("#")
-
-        if window_above ~= 0 then
-            -- Go to window above
-            vim.cmd("wincmd k")
-            -- Open file in this window
-            vim.cmd("edit " .. file)
+        -- If it was an oil buffer, the ending / is already there.
+        if changed then
+            if utils.is_windows then
+                current_path = unixtow32path(current_path)
+            end
         else
-            -- If no window above, create new split
-            vim.cmd("topleft split " .. file)
+            -- If it's a directory, ensure it ends with /
+            if vim.fn.isdirectory(current_path) == 1 then
+                current_path = current_path .. SLASH
+            else
+                current_path = vim.fn.fnamemodify(current_path, ":h") .. SLASH
+            end
         end
     end
+    feedkeys(":e " .. current_path)
+end
 
-    -- Move cursor to error position
-    vim.api.nvim_win_set_cursor(0, { lnum, col - 1 })
-
-    -- Center the screen on the error
-    vim.cmd("normal! zz")
-end, "Jump to error location")
+keymap("<C-e>", find_files, "Find files")

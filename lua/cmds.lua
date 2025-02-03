@@ -25,10 +25,11 @@ vim.cmd([[
 -- Make undercurls work properly
 vim.api.nvim_create_autocmd("LspAttach", {
     callback = function(args)
-        -- local client = vim.lsp.get_client_by_id(args.data.client_id)
-        -- if client then
-        --     client.server_capabilities.semanticTokensProvider = nil
-        -- end
+        -- Disable LSP semantic tokens
+        local client = vim.lsp.get_client_by_id(args.data.client_id)
+        if client then
+            client.server_capabilities.semanticTokensProvider = nil
+        end
         vim.cmd([[
             highlight DiagnosticUnderlineError gui=undercurl
             highlight DiagnosticUnderlineHint gui=undercurl

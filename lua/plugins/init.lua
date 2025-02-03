@@ -4,13 +4,15 @@ return {
     -- Remembers last cursor position when reopening files
     "farmergreg/vim-lastplace",
     -- Adds file icons to Neovim
-    "nvim-tree/nvim-web-devicons",
+    { "nvim-tree/nvim-web-devicons", enabled = utils.nerd_icons },
     -- Git diff viewer
     "sindrets/diffview.nvim",
     -- Undotree
     "mbbill/undotree",
     -- Workspace diagnostics
     "artemave/workspace-diagnostics.nvim",
+    -- Transparent background
+    "xiyaowong/transparent.nvim",
     {
         -- Multiple cursors plugin
         "mg979/vim-visual-multi",
@@ -70,18 +72,7 @@ return {
             },
         },
     },
-    {
-        -- Displays keybindings in popup
-        "folke/which-key.nvim",
-        event = "VeryLazy",
-        opts = {
-            preset = "helix",
-            win = {
-                border = "none",
-                padding = { 1, 2, 2, 2 },
-            },
-        },
-    },
+
     {
         -- Markdown preview in browser
         "iamcco/markdown-preview.nvim",
@@ -96,20 +87,22 @@ return {
         -- V programming language support
         "ollykel/v-vim",
         init = function()
-            require("nvim-web-devicons").set_icon({
-                v = {
-                    icon = "",
-                    color = "#5d87bf",
-                    cterm_color = "59",
-                    name = "Vlang",
-                },
-                vsh = {
-                    icon = "",
-                    color = "#5d87bf",
-                    cterm_color = "59",
-                    name = "Vlang",
-                },
-            })
+            if utils.nerd_icons then
+                require("nvim-web-devicons").set_icon({
+                    v = {
+                        icon = "",
+                        color = "#5d87bf",
+                        cterm_color = "59",
+                        name = "Vlang",
+                    },
+                    vsh = {
+                        icon = "",
+                        color = "#5d87bf",
+                        cterm_color = "59",
+                        name = "Vlang",
+                    },
+                })
+            end
 
             vim.filetype.add({
                 extension = {
@@ -138,12 +131,6 @@ return {
         },
     },
     {
-        -- Shows whitespace characters
-        "mcauley-penney/visual-whitespace.nvim",
-        event = "VeryLazy",
-        config = true,
-    },
-    {
         -- Enhanced quickfix window navigation
         "stevearc/quicker.nvim",
         event = "FileType qf",
@@ -154,6 +141,7 @@ return {
         "stevearc/overseer.nvim",
         opts = {
             task_list = {
+                -- min_width = { 80, 0.25 },
                 bindings = {
                     ["R"] = "<cmd>OverseerQuickAction restart<cr>",
                     ["D"] = "<cmd>OverseerQuickAction dispose<cr>",
@@ -174,7 +162,7 @@ return {
             require("outline").setup({
                 outline_window = {
                     position = "left",
-                }
+                },
             })
         end,
     },
@@ -182,5 +170,12 @@ return {
         "ejrichards/mise.nvim",
         enabled = utils.is_neovide and not utils.is_windows,
         opts = {},
+    },
+    {
+        "ahmedkhalf/project.nvim",
+        enabled = utils.is_neovide,
+        config = function()
+            require("project_nvim").setup({})
+        end,
     },
 }

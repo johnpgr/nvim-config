@@ -7,7 +7,7 @@ vim.opt.diffopt:append("linematch:60")
 vim.o.clipboard = "unnamedplus"
 vim.o.completeopt = "menu,menuone,popup,noinsert,noselect"
 vim.o.confirm = true
-vim.o.cursorline = true
+vim.o.cursorline = false
 vim.o.expandtab = true
 vim.o.wrap = false
 if vim.fn.executable("rg") ~= 0 then
@@ -26,7 +26,7 @@ vim.o.relativenumber = false
 vim.o.shiftround = true
 vim.o.shiftwidth = 4
 vim.o.tabstop = 4
-vim.o.showmode = true
+vim.o.showmode = false
 vim.o.signcolumn = "yes"
 vim.o.smartcase = true
 vim.o.breakindent = true
@@ -38,7 +38,7 @@ vim.o.undolevels = 10000
 vim.o.updatetime = 250
 vim.o.timeoutlen = 500
 vim.g.editorconfig = true
-vim.opt.swapfile = true
+vim.opt.swapfile = false
 vim.g.markdown_recommended_style = 0
 vim.opt.showcmd = false
 vim.o.cmdheight = 1
@@ -64,8 +64,12 @@ local is_neovide = vim.g.neovide ~= nil
 
 if is_neovide then
     vim.cmd("cd ~")
-    vim.o.guifont = "FiraMono Nerd Font:h13"
-    vim.g.neovide_scale_factor = 1
+    vim.o.guifont = "FiraMono Nerd Font:h11"
+    vim.g.neovide_cursor_animation_length = 0
+    vim.g.neovide_scroll_animation_length = 0.15
+    vim.g.neovide_text_gamma = 0.8
+    vim.g.neovide_text_contrast = 0.1
+    vim.g.neovide_scale_factor = 1.0
 
     vim.keymap.set("n", "<C-=>", function()
         vim.g.neovide_scale_factor = vim.g.neovide_scale_factor * 1.1
@@ -74,4 +78,17 @@ if is_neovide then
     vim.keymap.set("n", "<C-->", function()
         vim.g.neovide_scale_factor = vim.g.neovide_scale_factor / 1.1
     end, { desc = "Decrease Neovide scale factor" })
+
+    if vim.g.neovide then
+        vim.keymap.set("v", "<C-S-c>", '"+y') -- Copy
+        vim.keymap.set("n", "<C-S-v>", '"+P') -- Paste normal mode
+        vim.keymap.set("v", "<C-S-v>", '"+P') -- Paste visual mode
+        vim.keymap.set("c", "<C-S-v>", "<C-R>+") -- Paste command mode
+        vim.keymap.set("i", "<C-S-v>", '<ESC>l"+Pli') -- Paste insert mode
+    end
+
+    vim.api.nvim_set_keymap("", "<C-S-v>", "+p<CR>", { noremap = true, silent = true })
+    vim.api.nvim_set_keymap("!", "<C-S-v>", "<C-R>+", { noremap = true, silent = true })
+    vim.api.nvim_set_keymap("t", "<C-S-v>", "<C-R>+", { noremap = true, silent = true })
+    vim.api.nvim_set_keymap("v", "<C-S-v>", "<C-R>+", { noremap = true, silent = true })
 end

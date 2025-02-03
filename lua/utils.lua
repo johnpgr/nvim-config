@@ -1,5 +1,6 @@
 local M = {}
 
+M.nerd_icons = true
 M.is_neovide = vim.g.neovide ~= nil
 M.is_windows = vim.fn.has("win32") == 1
 
@@ -231,6 +232,123 @@ function M.smart_hover()
             show_window(contents, highlights)
         end
     end)
+end
+
+function M.up_jump_to_error_loc()
+    local line = vim.fn.getline(".")
+    local file, lnum, col = string.match(line, "([^:]+):(%d+):(%d+):")
+
+    if not (file and lnum and col) then
+        vim.notify("No file:line:column pattern found in current line", vim.log.levels.WARN)
+        return
+    end
+
+    if vim.fn.filereadable(file) ~= 1 then
+        vim.notify("File not found: " .. file, vim.log.levels.ERROR)
+        return
+    end
+
+    lnum = tonumber(lnum)
+    col = tonumber(col)
+
+    -- Find if the file is already open in a buffer
+    local bufnr = vim.fn.bufnr(vim.fn.fnamemodify(file, ":p"))
+    local win_id = nil
+
+    -- Check if buffer is visible in any window
+    if bufnr ~= -1 then
+        local wins = vim.fn.getbufinfo(bufnr)[1].windows
+        if #wins > 0 then
+            win_id = wins[1]
+        end
+    end
+
+    if win_id then
+        -- If buffer is visible, switch to its window
+        vim.fn.win_gotoid(win_id)
+    else
+        -- Check for window above current window
+        local window_above = vim.fn.winnr("#")
+
+        if window_above ~= 0 then
+            -- Go to window above
+            vim.cmd("wincmd k")
+            -- Open file in this window
+            vim.cmd("edit " .. file)
+        else
+            -- If no window above, create new split
+            vim.cmd("topleft split " .. file)
+        end
+    end
+
+    -- Move cursor to error position
+    vim.api.nvim_win_set_cursor(0, { lnum, col - 1 })
+
+    -- Center the screen on the error
+    vim.cmd("normal! zz")
+end
+
+function M.left_jump_to_error_loc()
+    local line = vim.fn.getline(".")
+    -- First remove the Unicode symbol and any leading spaces
+    line = line:gsub("^[^./a-zA-Z0-9]+", "")
+    -- Remove any remaining leading whitespace
+    line = line:gsub("^%s+", "")
+
+    local file, lnum, col = string.match(line, "([^:]+):(%d+):(%d+)")
+
+    if not (file and lnum and col) then
+        vim.notify("No file:line:column pattern found in current line", vim.log.levels.WARN)
+        return
+    end
+
+    if vim.fn.filereadable(file) ~= 1 then
+        vim.notify("File not found: " .. file, vim.log.levels.ERROR)
+        return
+    end
+
+    lnum = tonumber(lnum)
+    col = tonumber(col)
+
+    -- Find if the file is already open in a buffer
+    local bufnr = vim.fn.bufnr(vim.fn.fnamemodify(file, ":p"))
+    local win_id = nil
+
+    -- Check if buffer is visible in any window
+    if bufnr ~= -1 then
+        local wins = vim.fn.getbufinfo(bufnr)[1].windows
+        if #wins > 0 then
+            win_id = wins[1]
+        end
+    end
+
+    if win_id then
+        -- If buffer is visible, switch to its window
+        vim.fn.win_gotoid(win_id)
+    else
+        -- Check for window to the left of current window
+        local current_winnr = vim.fn.winnr()
+        vim.cmd("wincmd h")
+        local window_left = vim.fn.winnr()
+        -- Go back to original window
+        vim.cmd(current_winnr .. "wincmd w")
+
+        if window_left ~= current_winnr then
+            -- Go to window on the left
+            vim.cmd("wincmd h")
+            -- Open file in this window
+            vim.cmd("edit " .. file)
+        else
+            -- If no window on the left, create new vsplit
+            vim.cmd("topleft vsplit " .. file)
+        end
+    end
+
+    -- Move cursor to error position
+    vim.api.nvim_win_set_cursor(0, { lnum, col - 1 })
+
+    -- Center the screen on the error
+    vim.cmd("normal! zz")
 end
 
 return M

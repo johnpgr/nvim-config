@@ -1,16 +1,28 @@
 return {
     "morhetz/gruvbox",
+    {
+        "kvrohit/rasmus.nvim",
+        init = function()
+            vim.g.rasmus_italic_comments = false
+            vim.g.rasmus_italic_keywords = false
+            vim.g.rasmus_italic_booleans = false
+            vim.g.rasmus_italic_functions = false
+            vim.g.rasmus_italic_variables = false
+            vim.g.rasmus_bold_comments = false
+            vim.g.rasmus_bold_keywords = false
+            vim.g.rasmus_bold_booleans = false
+            vim.g.rasmus_bold_functions = false
+            vim.g.rasmus_bold_variables = false
+        end,
+    },
     "sainnhe/gruvbox-material",
-    "aliqyan-21/darkvoid.nvim",
+    "RRethy/base16-nvim",
     {
         "rebelot/kanagawa.nvim",
         opts = { compile = true, commentStyle = { italic = false }, keywordStyle = { italic = false } },
     },
-    "water-sucks/darkrose.nvim",
     "folke/tokyonight.nvim",
     "catppuccin/nvim",
-    "miikanissi/modus-themes.nvim",
     "felipeagc/fleet-theme-nvim",
     "sainnhe/everforest",
-    "slugbyte/lackluster.nvim",
 }

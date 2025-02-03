@@ -1,6 +1,9 @@
+local utils = require("utils")
+
 ---@diagnostic disable: undefined-field, deprecated
 return {
     "nvim-lualine/lualine.nvim",
+    enabled = false,
     config = function()
         local function ignored_filetypes(current_filetype)
             local ignore = {
@@ -50,7 +53,7 @@ return {
             options = {
                 theme = "auto",
                 globalstatus = true,
-                icons_enabled = true,
+                icons_enabled = utils.nerd_icons,
                 component_separators = {
                     left = "",
                     right = "",
