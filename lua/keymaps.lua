@@ -1,14 +1,12 @@
 local utils = require("utils")
 local keymap = utils.keymap
 local feedkeys = utils.feedkeys
-local which_key = require("which-key")
 local telescope_builtin = require("telescope.builtin")
 local gitsigns = require("gitsigns")
 local tmux = require("tmux")
 local is_neovide = utils.is_neovide
 
 --#region Telescope
-which_key.add({ { "<leader>f", group = "Find" } })
 keymap("<leader>ff", telescope_builtin.find_files, "Find files")
 keymap("<C-p>", telescope_builtin.find_files, "Find files")
 keymap("<leader>fw", telescope_builtin.live_grep, "Find word")
@@ -21,14 +19,13 @@ keymap("<leader>fr", telescope_builtin.resume, "Resume last finder")
 keymap("<leader>fc", function()
     require("telescope.builtin").colorscheme({ enable_preview = true })
 end, "Find Colorscheme")
+
 if is_neovide then
-    keymap("<leader>fp", require("telescope").extensions.projects.projects, "Find Projects")
+    keymap("<A-s>", require("telescope").extensions.projects.projects, "Find Projects")
 end
 --#endregion
 
 --#region General
--- Compile the current file
-keymap("<leader>L", "<cmd>Lazy<cr>", "Lazy.nvim")
 keymap("<leader>ts", utils.toggle_spaces_width, "Toggle shift width")
 keymap("<leader>ti", utils.toggle_indent_mode, "Toggle indentation mode")
 keymap("<C-_>", "gcc", { remap = true, silent = true, desc = "Comment toggle" }, "n")
@@ -51,8 +48,6 @@ keymap("<leader>V", "<cmd>bo vsp<cr>", "New vertical split")
 keymap("<leader>h", "<cmd>sp<cr>", "New horizontal split")
 keymap("<leader>H", "<cmd>bo sp<cr>", "New horizontal split")
 keymap("<Esc>", "<cmd>noh<cr>", "Clear search highlights", "n")
--- keymap("<C-d>","<C-d>zz", "Better jump half page down", "n")
--- keymap("<C-u>","<C-u>zz", "Better jump half page up", "n")
 keymap("n", "nzz", "Better jump next", "n")
 keymap("]d", function()
     vim.diagnostic.goto_next()
@@ -77,12 +72,11 @@ end, "Toggle spellchecking")
 keymap("yig", ":%y<CR>", "Yank buffer", "n")
 keymap("vig", "ggVG", "Visual select buffer", "n")
 keymap("cig", ":%d<CR>i", "Change buffer", "n")
-keymap("<leader>o", "<cmd>Outline<CR>", "Toggle Outline")
+keymap("<leader>o", "<cmd>Outline<CR>", "Toggle Outline view")
+keymap("<leader>bd", "<cmd>bd<CR>", "Buffer delete")
 --#endregion
 
 --#region LSP
-which_key.add({ { "<leader>l", group = "LSP" } })
-
 local function format_buffer()
     require("conform").format({
         async = true,
@@ -113,6 +107,7 @@ keymap("<leader>ld", vim.diagnostic.setqflist, "LSP: Diagnostics List", "n")
 --#region Tabs/Terminal
 keymap("<leader>tt", "<cmd>tabnew<cr><cmd>term<cr>", "Open terminal in a new tab")
 keymap("<leader>tn", "<cmd>tabnew<cr>", "Open new tab")
+keymap("<leader>tc", "<cmd>tabclose<cr>", "Tab close")
 -- Open new tab in neovim config directory
 keymap("<leader>nc", function()
     vim.cmd("tabnew")
@@ -139,7 +134,6 @@ local function toggle_qf()
     end
 end
 
-which_key.add({ { "<leader>q", group = "Quickfix" } })
 keymap("<A-q>", toggle_qf, "Quickfixlist toggle")
 keymap("]q", function()
     local qf_list = vim.fn.getqflist()
@@ -175,7 +169,6 @@ end, "Quickfixlist previous")
 --#endregion
 
 --#region CopilotChat
-which_key.add({ { "<leader>c", group = "Copilot" } })
 local chat = require("CopilotChat")
 local chat_select = require("CopilotChat.select")
 local actions = require("telescope.actions")
@@ -196,12 +189,23 @@ local function find_chat_history()
         cwd = chat.config.history_path,
         hidden = true,
         follow = true,
+        layout_config = {
+            width = { padding = 35 },
+        },
+        find_command = { "rg", "--files", "--sortr=modified" },
         entry_maker = function(entry)
+            local full_path = chat.config.history_path .. "/" .. entry
+            local stat = vim.loop.fs_stat(full_path)
+            local mtime = stat and stat.mtime.sec or 0
+            vim.print("mtime: " .. mtime)
+            local display_time = stat and os.date("%d-%m-%Y %H:%M", mtime) or "Unknown"
+            local display_name = format_display_name(entry)
             return {
                 value = entry,
-                display = format_display_name(entry),
-                ordinal = entry,
+                display = string.format("%s | %s", display_time, display_name),
+                ordinal = display_name,
                 path = entry,
+                index = -mtime,
             }
         end,
         attach_mappings = function(prompt_bufnr, _)
@@ -212,12 +216,41 @@ local function find_chat_history()
                 local parsed = parse_history_path(path)
                 vim.g.chat_title = parsed
                 chat.load(parsed)
-                chat.toggle()
+                chat.open()
             end)
             return true
         end,
     })
 end
+
+-- local function find_chat_history()
+--     telescope_builtin.find_files({
+--         prompt_title = "Chat History",
+--         cwd = chat.config.history_path,
+--         hidden = true,
+--         follow = true,
+--         entry_maker = function(entry)
+--             return {
+--                 value = entry,
+--                 display = format_display_name(entry),
+--                 ordinal = entry,
+--                 path = entry,
+--             }
+--         end,
+--         attach_mappings = function(prompt_bufnr, _)
+--             actions.select_default:replace(function()
+--                 actions.close(prompt_bufnr)
+--                 local selection = action_state.get_selected_entry()
+--                 local path = selection.value
+--                 local parsed = parse_history_path(path)
+--                 vim.g.chat_title = parsed
+--                 chat.load(parsed)
+--                 chat.open()
+--             end)
+--             return true
+--         end,
+--     })
+-- end
 
 keymap("<leader>ch", find_chat_history, "CopilotChat History")
 keymap("<leader>cc", "<cmd>CopilotChatToggle<cr>", "CopilotChat Toggle")
@@ -282,23 +315,22 @@ keymap("[h", function()
         gitsigns.nav_hunk("prev")
     end
 end, "Goto prev hunk")
-keymap("<A-s>", gitsigns.stage_hunk, "Hunk Stage", { "n", "v" })
-keymap("<A-r>", gitsigns.reset_hunk, "Hunk Reset")
-keymap("<A-u>", gitsigns.undo_stage_hunk, "Hunk Undo Stage")
-keymap("<leader>tb", gitsigns.toggle_current_line_blame, "Toggle Blame inline")
-keymap("<A-p>", gitsigns.preview_hunk, "Hunk Preview")
-keymap("<A-d>", gitsigns.toggle_deleted, "Toggle Deleted")
-keymap("<A-w>", gitsigns.toggle_word_diff, "Toggle Word diff")
-keymap("<leader>dv", toggle_diffview, "Toggle DiffView")
+keymap("<leader>gs", gitsigns.stage_hunk, "Hunk Stage", { "n", "v" })
+keymap("<leader>gr", gitsigns.reset_hunk, "Hunk Reset")
+keymap("<leader>gu", gitsigns.undo_stage_hunk, "Hunk Undo Stage")
+keymap("<leader>gb", gitsigns.toggle_current_line_blame, "Toggle Blame inline")
+keymap("<leader>gp", gitsigns.preview_hunk, "Hunk Preview")
+keymap("<leader>gd", gitsigns.toggle_deleted, "Toggle Deleted")
+keymap("<leader>gw", gitsigns.toggle_word_diff, "Toggle Word diff")
+keymap("<leader>gD", toggle_diffview, "Toggle DiffView")
 keymap("ih", ":<C-U>Gitsigns select_hunk<CR>", { silent = true }, { "o", "x" })
 keymap("ah", ":<C-U>Gitsigns select_hunk<CR>", { silent = true }, { "o", "x" })
-keymap("<leader>ng", function()
+keymap("<leader>gg", function()
     require("neogit").open({ kind = "replace" })
 end, "Neogit")
 --#endregion
 
 --#region DAP
-which_key.add({ { "<leader>d", group = "Debug" } })
 keymap("<leader>dc", require("dap").continue, "Debug: Continue")
 keymap("<leader>do", require("dap").step_over, "Debug: Step over")
 keymap("<leader>di", require("dap").step_into, "Debug: Step into")
@@ -395,3 +427,4 @@ local function find_files()
 end
 
 keymap("<C-e>", find_files, "Find files")
+keymap("<A-x>", utils.show_keymaps, "Show keymaps")
