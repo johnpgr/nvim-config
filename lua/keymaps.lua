@@ -203,7 +203,7 @@ local function find_chat_history()
             return {
                 value = entry,
                 display = string.format("%s | %s", display_time, display_name),
-                ordinal = display_name,
+                ordinal = string.format("%s %s", display_time, display_name),
                 path = entry,
                 index = -mtime,
             }
