@@ -31,6 +31,8 @@ function M.lua_ls_on_init(client)
     })
 end
 
+M.keymap_registry = {}
+
 ---Utility for keymap creation.
 ---@param lhs string|string[]
 ---@param rhs string|function
@@ -40,12 +42,25 @@ function M.keymap(lhs, rhs, opts, mode)
     opts = type(opts) == "string" and { desc = opts }
         or vim.tbl_extend("error", opts --[[@as table]], { buffer = bufnr })
     mode = mode or { "n", "v" }
+
     if type(lhs) == "table" then
         for _, l in ipairs(lhs) do
             vim.keymap.set(mode, l, rhs, opts)
+            table.insert(M.keymap_registry, {
+                key = l,
+                rhs = rhs,
+                modes = mode,
+                description = opts.desc or "No description",
+            })
         end
     else
         vim.keymap.set(mode, lhs, rhs, opts)
+        table.insert(M.keymap_registry, {
+            key = lhs,
+            rhs = rhs,
+            modes = mode,
+            description = opts.desc or "No description",
+        })
     end
 end
 
@@ -53,6 +68,47 @@ end
 ---@param keys string
 function M.feedkeys(keys)
     vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(keys, true, false, true), "n", true)
+end
+
+function M.show_keymaps()
+    local pickers = require("telescope.pickers")
+    local finders = require("telescope.finders")
+    local conf = require("telescope.config").values
+    local actions = require("telescope.actions")
+    local action_state = require("telescope.actions.state")
+    local dropdown = require("telescope.themes").get_dropdown
+
+    pickers.new({}, dropdown({
+                prompt_title = "Keymaps",
+                finder = finders.new_table({
+                    results = M.keymap_registry,
+                    entry_maker = function(entry)
+                        local modes = type(entry.modes) == "table" and table.concat(entry.modes, ", ") or entry.modes
+
+                        return {
+                            value = entry,
+                            display = string.format("%s ➜ %s {%s}", entry.key, entry.description, modes),
+                            ordinal = entry.key .. entry.description,
+                        }
+                    end,
+                }),
+                sorter = conf.generic_sorter({}),
+                attach_mappings = function(bufnr, map)
+                    actions.select_default:replace(function()
+                        local selection = action_state.get_selected_entry()
+                        local value = selection.value
+
+                        actions.close(bufnr)
+
+                        if type(value.rhs) == "function" then
+                            value.rhs()
+                        else
+                            M.feedkeys(value.key)
+                        end
+                    end)
+                    return true
+                end,
+            })):find()
 end
 
 function M.toggle_spaces_width()
