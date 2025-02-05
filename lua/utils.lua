@@ -290,18 +290,18 @@ function M.smart_hover()
     end)
 end
 
+
 function M.up_jump_to_error_loc()
     local line = vim.fn.getline(".")
-    local file, lnum, col = string.match(line, "([^:]+):(%d+):(%d+):")
+    local file, lnum, col = string.match(line, "([^:]+):(%d+):(%d+)")
 
     if not (file and lnum and col) then
-        vim.notify("No file:line:column pattern found in current line", vim.log.levels.WARN)
-        return
+        return false
     end
 
     if vim.fn.filereadable(file) ~= 1 then
         vim.notify("File not found: " .. file, vim.log.levels.ERROR)
-        return
+        return false
     end
 
     lnum = tonumber(lnum)
@@ -342,7 +342,10 @@ function M.up_jump_to_error_loc()
 
     -- Center the screen on the error
     vim.cmd("normal! zz")
+
+    return true
 end
+
 
 function M.left_jump_to_error_loc()
     local line = vim.fn.getline(".")

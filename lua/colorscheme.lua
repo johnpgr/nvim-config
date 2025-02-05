@@ -1,1 +1,1 @@
-vim.cmd.colorscheme("rasmus")
+vim.cmd.colorscheme("gruvbox")

@@ -7,7 +7,7 @@ vim.opt.diffopt:append("linematch:60")
 vim.o.clipboard = "unnamedplus"
 vim.o.completeopt = "menu,menuone,popup,noinsert,noselect"
 vim.o.confirm = true
-vim.o.cursorline = false
+vim.o.cursorline = true
 vim.o.expandtab = true
 vim.o.wrap = false
 if vim.fn.executable("rg") ~= 0 then
@@ -20,7 +20,7 @@ vim.o.list = false
 vim.o.splitbelow = true
 vim.o.mouse = "nv"
 vim.o.pumheight = 10
-vim.o.number = false
+vim.o.number = true
 vim.o.numberwidth = 2
 vim.o.relativenumber = false
 vim.o.shiftround = true
@@ -48,6 +48,7 @@ vim.o.spelllang = "en_us"
 vim.o.backspace = "indent,eol,start"
 vim.g.copilot_enabled = true
 vim.g.chat_autosave = true
+
 -- UFO folding
 -- vim.o.foldcolumn = "1" -- '0' is not bad
 -- vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
@@ -56,15 +57,15 @@ vim.g.chat_autosave = true
 -- vim.o.foldenable = true
 -- vim.o.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]
 
-vim.diagnostic.config({
-    virtual_text = false,
-})
+-- vim.diagnostic.config({
+--     virtual_text = false,
+-- })
 
 local is_neovide = vim.g.neovide ~= nil
 
 if is_neovide then
     vim.cmd("cd ~")
-    vim.o.guifont = "FiraMono Nerd Font:h11"
+    vim.o.guifont = "D2CodingLigature Nerd Font:h14"
     vim.g.neovide_cursor_animation_length = 0
     vim.g.neovide_scroll_animation_length = 0.15
     vim.g.neovide_text_gamma = 0.8

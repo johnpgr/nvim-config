@@ -1,26 +1,36 @@
 return {
-    "morhetz/gruvbox",
     {
-        "kvrohit/rasmus.nvim",
-        init = function()
-            vim.g.rasmus_italic_comments = false
-            vim.g.rasmus_italic_keywords = false
-            vim.g.rasmus_italic_booleans = false
-            vim.g.rasmus_italic_functions = false
-            vim.g.rasmus_italic_variables = false
-            vim.g.rasmus_bold_comments = false
-            vim.g.rasmus_bold_keywords = false
-            vim.g.rasmus_bold_booleans = false
-            vim.g.rasmus_bold_functions = false
-            vim.g.rasmus_bold_variables = false
+        "ellisonleao/gruvbox.nvim",
+        config = function()
+            require("gruvbox").setup({
+                terminal_colors = true,
+                undercurl = true,
+                underline = true,
+                bold = false,
+                italic = {
+                    strings = false,
+                    emphasis = false,
+                    comments = false,
+                    operators = false,
+                    folds = false,
+                },
+                strikethrough = true,
+                invert_selection = true,
+                invert_signs = false,
+                invert_tabline = false,
+                invert_intend_guides = false,
+                inverse = true, -- invert background for search, diffs, statuslines and errors
+                contrast = "hard", -- can be "hard", "soft" or empty string
+                palette_overrides = {
+                    bright_orange = "#ebdbb2", -- Remove oranges
+                },
+                overrides = {},
+                dim_inactive = false,
+                transparent_mode = false,
+            })
         end,
     },
     "sainnhe/gruvbox-material",
-    "RRethy/base16-nvim",
-    {
-        "rebelot/kanagawa.nvim",
-        opts = { compile = true, commentStyle = { italic = false }, keywordStyle = { italic = false } },
-    },
     "folke/tokyonight.nvim",
     "catppuccin/nvim",
     "felipeagc/fleet-theme-nvim",

@@ -91,9 +91,14 @@ keymap("<space>x", function()
         require("workspace-diagnostics").populate_workspace_diagnostics(client, 0)
     end
 end, "LSP: Refresh diagnostics")
-
 keymap("K", utils.smart_hover, "LSP: Hover", "n")
-keymap("gd", vim.lsp.buf.definition, "LSP: Goto definition", "n")
+keymap("gd", function()
+    if utils.up_jump_to_error_loc() then
+        return
+    else
+        vim.lsp.buf.definition()
+    end
+end, "LSP: Goto definition", "n")
 keymap("gD", vim.lsp.buf.type_definition, "LSP: Goto type definition", "n")
 keymap("gr", vim.lsp.buf.references, "LSP: Goto references", "n")
 keymap({ "<F2>", "<leader>lr" }, vim.lsp.buf.rename, "LSP: Rename variable", "n")
@@ -322,7 +327,7 @@ keymap("<leader>gb", gitsigns.toggle_current_line_blame, "Toggle Blame inline")
 keymap("<leader>gp", gitsigns.preview_hunk, "Hunk Preview")
 keymap("<leader>gd", gitsigns.toggle_deleted, "Toggle Deleted")
 keymap("<leader>gw", gitsigns.toggle_word_diff, "Toggle Word diff")
-keymap("<leader>gD", toggle_diffview, "Toggle DiffView")
+keymap("<A-S-d>", toggle_diffview, "Toggle DiffView")
 keymap("ih", ":<C-U>Gitsigns select_hunk<CR>", { silent = true }, { "o", "x" })
 keymap("ah", ":<C-U>Gitsigns select_hunk<CR>", { silent = true }, { "o", "x" })
 keymap("<leader>gg", function()
@@ -378,11 +383,9 @@ keymap("<F21>", function()
 end, "Conditional Breakpoint")
 
 --#region Overseer
-keymap("<C-b>", "<cmd>OverseerToggle<cr>", "Task view")
-keymap("<C-F5>", "<cmd>OverseerRun<cr>", "Task Run")
+keymap("<S-A-t>", "<cmd>OverseerToggle<cr>", "Task view")
+keymap("<S-A-r>", "<cmd>OverseerRun<cr>", "Task Run")
 keymap("<A-r>", "<cmd>OverseerQuickAction restart<cr>", "Task Restart")
-keymap("gl", utils.left_jump_to_error_loc, "Jump to error location")
-keymap("gL", utils.up_jump_to_error_loc, "Jump to error location")
 --#endregion
 
 string.remove_start = function(str, substr)

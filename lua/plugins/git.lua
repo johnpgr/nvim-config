@@ -1,3 +1,6 @@
+local term = os.getenv("TERM")
+local kitty = term == "xterm-kitty"
+
 return {
     "NeogitOrg/neogit",
     dependencies = {
@@ -5,7 +8,7 @@ return {
     },
     cmd = "Neogit",
     opts = {
-        graph_style = "ascii",
+        graph_style = kitty and "kitty" or "ascii",
         commit_editor = {
             kind = "vsplit",
             show_staged_diff = false,

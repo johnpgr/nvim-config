@@ -72,16 +72,13 @@ return {
             },
         },
     },
-
     {
-        -- Markdown preview in browser
-        "iamcco/markdown-preview.nvim",
-        cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
-        build = "cd app && npm install",
-        init = function()
-            vim.g.mkdp_filetypes = { "markdown" }
-        end,
-        ft = { "markdown" },
+        "OXY2DEV/markview.nvim",
+        lazy = false,
+    },
+    {
+        "OXY2DEV/helpview.nvim",
+        lazy = false,
     },
     {
         -- V programming language support
@@ -176,6 +173,20 @@ return {
         enabled = utils.is_neovide,
         config = function()
             require("project_nvim").setup({})
+        end,
+    },
+    {
+        "luukvbaal/statuscol.nvim",
+        config = function()
+            local builtin = require("statuscol.builtin")
+            require("statuscol").setup({
+                relculright = true,
+                segments = {
+                    { text = { "%s" }, click = "v:lua.ScSa" },
+                    { text = { builtin.lnumfunc, " " }, click = "v:lua.ScLa" },
+                    { text = { builtin.foldfunc, " " }, click = "v:lua.ScFa" },
+                },
+            })
         end,
     },
 }

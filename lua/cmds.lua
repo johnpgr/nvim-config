@@ -30,15 +30,13 @@ vim.api.nvim_create_autocmd("LspAttach", {
         if client then
             client.server_capabilities.semanticTokensProvider = nil
         end
-        vim.cmd([[
-            highlight DiagnosticUnderlineError gui=undercurl
-            highlight DiagnosticUnderlineHint gui=undercurl
-            highlight DiagnosticUnderlineInfo gui=undercurl
-            highlight DiagnosticUnderlineOk gui=undercurl
-            highlight DiagnosticUnderlineWarn gui=undercurl
-        ]])
     end,
 })
+
+-- vim.api.nvim_create_autocmd({ "BufEnter", "BufRead" }, {
+--     pattern = "copilot-chat",
+--     command = "set nocursorline",
+-- })
 
 -- Function to align text based on a given token
 local function align_text(token, lines)
@@ -98,9 +96,9 @@ vim.api.nvim_create_autocmd({ "DirChanged", "VimEnter" }, {
     end,
 })
 
-vim.api.nvim_create_user_command("QueryReplace", function (opts)
+vim.api.nvim_create_user_command("QueryReplace", function(opts)
     local query = ""
-    vim.ui.input({prompt = "Query: "}, function (input)
+    vim.ui.input({ prompt = "Query: " }, function(input)
         query = input
     end)
 
@@ -108,7 +106,7 @@ vim.api.nvim_create_user_command("QueryReplace", function (opts)
         return
     end
 
-    vim.ui.input({prompt = "Replace " .. query .. " with: "}, function (replace)
+    vim.ui.input({ prompt = "Replace " .. query .. " with: " }, function(replace)
         if replace == "" then
             return
         end

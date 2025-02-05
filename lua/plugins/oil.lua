@@ -107,6 +107,10 @@ return {
         },
         win_options = {
             winbar = "%!v:lua.get_oil_winbar()",
+            number = false,
+        },
+        confirmation = {
+            border = "none",
         },
         view_options = {
             is_hidden_file = function(name, bufnr)
