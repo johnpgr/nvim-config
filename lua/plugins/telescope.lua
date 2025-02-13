@@ -1,4 +1,4 @@
-local utils = require('utils')
+local utils = require("utils")
 local is_windows = utils.is_windows
 local is_neovide = utils.is_neovide
 
@@ -46,6 +46,7 @@ return {
             },
             extensions = is_windows and {} or {
                 fzf = {},
+                textcase = {},
             },
             pickers = {
                 buffers = {
@@ -62,7 +63,7 @@ return {
                 },
                 find_files = {
                     previewer = false,
-                    theme = "dropdown"
+                    theme = "dropdown",
                 },
                 oldfiles = {
                     previewer = false,
@@ -91,10 +92,11 @@ return {
         })
 
         if is_neovide then
-            telescope.load_extension('projects')
+            telescope.load_extension("projects")
         end
         if not is_windows then
             telescope.load_extension("fzf")
         end
+        telescope.load_extension("textcase")
     end,
 }

@@ -35,4 +35,5 @@ return {
     "catppuccin/nvim",
     "felipeagc/fleet-theme-nvim",
     "sainnhe/everforest",
+    "rjshkhr/shadow.nvim",
 }

@@ -23,10 +23,11 @@ vim.cmd([[
     hi GitGutterChange guibg=none
     hi GitGutterDelete guibg=none
     hi GitGutterChangeDelete guibg=none
-    hi link DiagnosticSignWarn GruvboxYellow
-    hi link DiagnosticSignError GruvboxRed
-    hi link DiagnosticSignOk GruvboxBlue
-    hi link DiagnosticSignHint GruvboxAqua
+    hi StatusLine guibg=#2c353a
+    " hi link DiagnosticSignWarn GruvboxYellow
+    " hi link DiagnosticSignError GruvboxRed
+    " hi link DiagnosticSignOk GruvboxBlue
+    " hi link DiagnosticSignHint GruvboxAqua
     " hi TelescopePromptPrefix guibg=none
     " hi TelescopePromptNormal guibg=#000000 
     " hi TelescopePromptBorder guibg=#000000 guifg=#000000

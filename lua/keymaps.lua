@@ -112,7 +112,7 @@ keymap("<leader>ld", vim.diagnostic.setqflist, "LSP: Diagnostics List", "n")
 --#region Tabs/Terminal
 keymap("<leader>tt", "<cmd>tabnew<cr><cmd>term<cr>", "Open terminal in a new tab")
 keymap("<leader>tn", "<cmd>tabnew<cr>", "Open new tab")
-keymap("<leader>tc", "<cmd>tabclose<cr>", "Tab close")
+keymap("<leader>q", "<cmd>tabclose<cr>", "Tab close")
 -- Open new tab in neovim config directory
 keymap("<leader>nc", function()
     vim.cmd("tabnew")
@@ -263,10 +263,6 @@ keymap("<leader>cp", function()
     local chat_actions = require("CopilotChat.actions")
     require("CopilotChat.integrations.telescope").pick(chat_actions.prompt_actions())
 end, "CopilotChat Prompts")
-keymap("<leader>tca", function()
-    vim.g.chat_autosave = not vim.g.chat_autosave
-    print("CopilotChat autosave is now " .. (vim.g.chat_autosave and "enabled" or "disabled"))
-end, "Toggle CopilotChat autosave")
 keymap("<leader>ca", function()
     local input = vim.fn.input("Ask Copilot: ")
     if input ~= "" then
@@ -277,11 +273,6 @@ keymap("<leader>cx", function()
     vim.g.chat_title = nil
     chat.reset()
 end, "CopilotChat Reset")
-keymap("<leader>tcc", function()
-    vim.g.copilot_enabled = not vim.g.copilot_enabled
-    require("copilot.command").toggle()
-    print("Copilot completion is now " .. (vim.g.copilot_enabled and "enabled" or "disabled"))
-end, "Toggle Copilot completion")
 --#endregion
 
 keymap("<leader>th", "<cmd>TSToggle highlight<cr>", "Toggle treesitter highlight")
@@ -431,3 +422,4 @@ end
 
 keymap("<C-e>", find_files, "Find files")
 keymap("<A-x>", utils.show_keymaps, "Show keymaps")
+keymap("<leader>tc", "<cmd>TextCaseOpenTelescope<cr>", "Textcase convert", { "n", "v" })

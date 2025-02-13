@@ -33,10 +33,10 @@ vim.api.nvim_create_autocmd("LspAttach", {
     end,
 })
 
--- vim.api.nvim_create_autocmd({ "BufEnter", "BufRead" }, {
---     pattern = "copilot-chat",
---     command = "set nocursorline",
--- })
+vim.api.nvim_create_autocmd({ "BufEnter", "BufRead" }, {
+    pattern = "copilot-chat",
+    command = "hi markdownError guibg=none",
+})
 
 -- Function to align text based on a given token
 local function align_text(token, lines)
@@ -115,3 +115,14 @@ vim.api.nvim_create_user_command("QueryReplace", function(opts)
 end, {
     nargs = 0,
 })
+
+vim.api.nvim_create_user_command("CopilotAutoSaveToggle", function()
+    vim.g.chat_autosave = not vim.g.chat_autosave
+    print("CopilotChat autosave is now " .. (vim.g.chat_autosave and "enabled" or "disabled"))
+end, { nargs = 0 })
+
+vim.api.nvim_create_user_command("CopilotCompleteToggle", function()
+    vim.g.copilot_enabled = not vim.g.copilot_enabled
+    require("copilot.command").toggle()
+    print("Copilot completion is now " .. (vim.g.copilot_enabled and "enabled" or "disabled"))
+end, { nargs = 0 })

@@ -31,7 +31,7 @@ return {
                     "kotlin",
                 },
                 auto_install = true,
-                highlight = { enable = true, disable = disable_large_files },
+                highlight = { enable = false, disable = disable_large_files },
                 indent = { enable = true },
                 incremental_selection = {
                     enable = true,
