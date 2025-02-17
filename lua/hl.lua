@@ -29,6 +29,11 @@ vim.cmd([[
     hi Operator guibg=none
     hi @property guibg=none
     hi NonText guibg=none
+    hi DapUIVariable guibg=none
+    hi DapUIValue guibg=none
+    hi DapUIFrameName guibg=none
+    hi! OverseerTaskBorder guibg=none
+    hi Special ctermfg=172 guifg=#cd950c
     " hi link DiagnosticSignWarn GruvboxYellow
     " hi link DiagnosticSignError GruvboxRed
     " hi link DiagnosticSignOk GruvboxBlue
