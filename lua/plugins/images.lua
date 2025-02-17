@@ -5,7 +5,7 @@ package.path = package.path .. ";" .. vim.fn.expand("$HOME") .. "/.luarocks/shar
 
 local is_neovide = vim.g.neovide ~= nil
 local term = os.getenv("TERM")
-local enable = term == "xterm-kitty" or term == "xterm-ghostty"
+local enable = term == "xterm-kitty" or term == "xterm-ghostty" or term == "wezterm"
 
 return {
     "3rd/image.nvim",

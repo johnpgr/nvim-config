@@ -35,10 +35,10 @@ return {
             },
             { "size", highlight = "Special" },
             { "mtime", highlight = "Number" },
-            {
-                "icon",
-                add_padding = false,
-            },
+            -- {
+            --     "icon",
+            --     add_padding = false,
+            -- },
         },
         skip_confirm_for_simple_edits = true,
         keymaps = {

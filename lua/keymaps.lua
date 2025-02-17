@@ -202,7 +202,6 @@ local function find_chat_history()
             local full_path = chat.config.history_path .. "/" .. entry
             local stat = vim.loop.fs_stat(full_path)
             local mtime = stat and stat.mtime.sec or 0
-            vim.print("mtime: " .. mtime)
             local display_time = stat and os.date("%d-%m-%Y %H:%M", mtime) or "Unknown"
             local display_name = format_display_name(entry)
             return {

@@ -36,4 +36,5 @@ return {
     "felipeagc/fleet-theme-nvim",
     "sainnhe/everforest",
     "rjshkhr/shadow.nvim",
+    "CreaturePhil/vim-handmade-hero",
 }

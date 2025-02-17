@@ -1,1 +1,1 @@
-vim.cmd.colorscheme("shadow")
+vim.cmd.colorscheme("handmade-hero")
