@@ -24,8 +24,10 @@ vim.cmd([[
     hi GitGutterChange guibg=none
     hi GitGutterDelete guibg=none
     hi GitGutterChangeDelete guibg=none
+    " Handmade hero colorscheme hl fixes
     hi CursorLine guibg=#17196d
     hi StatusLine guibg=#bebebe
+    hi Normal guibg=none
     hi Operator guibg=none
     hi @property guibg=none
     hi NonText guibg=none
