@@ -19,6 +19,7 @@ vim.cmd([[
     hi! link Pmenu NormalFloat
     hi OverseerTaskBorder guibg=none
     hi SignColumn guibg=none
+    hi FloatBorder guibg=none
     hi FoldColumn guibg=none
     hi GitGutterAdd guibg=none
     hi GitGutterChange guibg=none
@@ -34,8 +35,7 @@ vim.cmd([[
     hi DapUIVariable guibg=none
     hi DapUIValue guibg=none
     hi DapUIFrameName guibg=none
-    hi! OverseerTaskBorder guibg=none
-    hi Special ctermfg=172 guifg=#cd950c
+    " hi Special ctermfg=172 guifg=#cd950c
     " hi link DiagnosticSignWarn GruvboxYellow
     " hi link DiagnosticSignError GruvboxRed
     " hi link DiagnosticSignOk GruvboxBlue

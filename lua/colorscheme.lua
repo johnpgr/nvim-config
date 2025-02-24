@@ -1,1 +1,1 @@
-vim.cmd.colorscheme("handmade-hero")
+vim.cmd.colorscheme("catppuccin")
