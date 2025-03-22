@@ -46,7 +46,7 @@ vim.opt.scrolloff = 5
 vim.o.spell = false
 vim.o.spelllang = "en_us"
 vim.o.backspace = "indent,eol,start"
-vim.g.copilot_enabled = true
+vim.g.copilot_enabled = false
 vim.g.chat_autosave = true
 
 -- UFO folding

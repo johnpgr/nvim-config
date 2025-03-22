@@ -122,7 +122,12 @@ vim.api.nvim_create_user_command("CopilotAutoSaveToggle", function()
 end, { nargs = 0 })
 
 vim.api.nvim_create_user_command("CopilotCompleteToggle", function()
+    local cmd = require("copilot.command")
     vim.g.copilot_enabled = not vim.g.copilot_enabled
-    require("copilot.command").toggle()
+    if vim.g.copilot_enabled then
+        cmd.enable()
+    else
+        cmd.disable()
+    end
     print("Copilot completion is now " .. (vim.g.copilot_enabled and "enabled" or "disabled"))
 end, { nargs = 0 })

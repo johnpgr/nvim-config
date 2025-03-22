@@ -40,7 +40,7 @@ return {
     {
         -- Indentation guides
         "nvimdev/indentmini.nvim",
-        enabled = false,
+        enabled = true,
         config = function()
             require("indentmini").setup()
         end,

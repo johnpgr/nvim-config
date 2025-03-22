@@ -1,3 +1,4 @@
+---@diagnostic disable: missing-return-value, missing-return
 local title_prompt = [[
 Generate chat title in filepath-friendly format for:
 
@@ -19,6 +20,10 @@ return {
                     auto_trigger = true,
                 },
             })
+
+            if not vim.g.copilot_enable then
+                require("copilot.command").disable()
+            end
         end,
     },
     {
@@ -31,13 +36,6 @@ return {
         },
         build = "make tiktoken",
         config = function()
-
-            -- Enable Treesitter highlighting for chat buffer
-            vim.api.nvim_create_autocmd({"BufEnter", "BufWinEnter"}, {
-                pattern = "copilot-chat",
-                command = "TSBufEnable highlight",
-            })
-
             local chat = require("CopilotChat")
             chat.setup({
                 callback = function(response)
@@ -50,15 +48,16 @@ return {
                         return
                     end
 
-                    chat.ask(vim.trim(title_prompt:format(response)), {
+                    chat.ask(title_prompt:format(response), {
                         headless = true,
+                        model = "claude-3.5-sonnet",
                         callback = function(gen_response)
                             vim.g.chat_title = vim.trim(gen_response)
                             chat.save(vim.g.chat_title)
                         end,
                     })
                 end,
-                model = "claude-3.5-sonnet",
+                model = "claude-3.7-sonnet",
                 chat_autocomplete = true,
                 mappings = {
                     complete = {

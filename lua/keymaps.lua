@@ -85,12 +85,6 @@ local function format_buffer()
     })
 end
 
-keymap("<space>x", function()
-    for _, client in ipairs(vim.lsp.buf_get_clients()) do
-        print("client: ", client.name)
-        require("workspace-diagnostics").populate_workspace_diagnostics(client, 0)
-    end
-end, "LSP: Refresh diagnostics")
 keymap("K", utils.smart_hover, "LSP: Hover", "n")
 keymap("gd", function()
     if utils.up_jump_to_error_loc() then
@@ -102,11 +96,17 @@ end, "LSP: Goto definition", "n")
 keymap("gD", vim.lsp.buf.type_definition, "LSP: Goto type definition", "n")
 keymap("gr", vim.lsp.buf.references, "LSP: Goto references", "n")
 keymap({ "<F2>", "<leader>lr" }, vim.lsp.buf.rename, "LSP: Rename variable", "n")
-keymap("<leader>la", vim.lsp.buf.code_action, "LSP: Code actions")
-keymap("<leader>ls", vim.lsp.buf.signature_help, "LSP: Signature help")
+keymap("<leader>ca", vim.lsp.buf.code_action, "LSP: Code actions")
+keymap("<leader>sh", vim.lsp.buf.signature_help, "LSP: Signature help")
 keymap("<C-s>", vim.lsp.buf.signature_help, "LSP: Signature help", "i")
 keymap({ "<A-F>", "<leader>lf" }, format_buffer, "LSP: Format buffer")
-keymap("<leader>ld", vim.diagnostic.setqflist, "LSP: Diagnostics List", "n")
+keymap("<leader>df", vim.diagnostic.open_float, "Diagnostics: Open Hover")
+keymap("<leader>dl", vim.diagnostic.setqflist, "Diagnostics: Set quickfix list", "n")
+keymap("<space>dr", function()
+    for _, client in ipairs(vim.lsp.get_clients()) do
+        require("workspace-diagnostics").populate_workspace_diagnostics(client, 0)
+    end
+end, "Diagnostics: Refresh")
 --#endregion
 
 --#region Tabs/Terminal
@@ -262,12 +262,6 @@ keymap("<leader>cp", function()
     local chat_actions = require("CopilotChat.actions")
     require("CopilotChat.integrations.telescope").pick(chat_actions.prompt_actions())
 end, "CopilotChat Prompts")
-keymap("<leader>ca", function()
-    local input = vim.fn.input("Ask Copilot: ")
-    if input ~= "" then
-        chat.ask(input, { selection = chat_select.visual })
-    end
-end, "CopilotChat Ask", { "n", "v" })
 keymap("<leader>cx", function()
     vim.g.chat_title = nil
     chat.reset()

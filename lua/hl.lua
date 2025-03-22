@@ -9,6 +9,8 @@ sethl("DapLogPoint", { fg = "#61AFEF" }) -- blue for logpoints
 sethl("DapStopped", { fg = "#61AFEF" }) -- blue for stopped threads
 
 vim.cmd([[
+    hi IndentLine guifg=#64594f
+    hi IndentLineCurrent guifg=#64594f
     hi DiagnosticUnderlineError gui=undercurl
     hi DiagnosticUnderlineHint gui=undercurl
     hi DiagnosticUnderlineInfo gui=undercurl
@@ -16,11 +18,12 @@ vim.cmd([[
     hi DiagnosticUnderlineWarn gui=undercurl
     hi WinBar guibg=none
     hi link NeogitWinSeparator WinSeparator
-    hi! link Pmenu NormalFloat
+    hi VertSplit guibg=none
     hi OverseerTaskBorder guibg=none
     hi SignColumn guibg=none
     hi FloatBorder guibg=none
     hi FoldColumn guibg=none
+<<<<<<< HEAD
     hi GitGutterAdd guibg=none
     hi GitGutterChange guibg=none
     hi GitGutterDelete guibg=none
@@ -29,6 +32,15 @@ vim.cmd([[
     hi CursorLine guibg=#17196d
     hi StatusLine guibg=#bebebe
     hi Normal guibg=none
+=======
+    hi CursorLine guibg=#00008b
+    " hi GitGutterAdd guibg=none
+    " hi GitGutterChange guibg=none
+    " hi GitGutterDelete guibg=none
+    " hi GitGutterChangeDelete guibg=none
+    " hi CursorLine guibg=#17196d
+    " hi StatusLine guibg=#bebebe
+>>>>>>> e1471df (Sync 22-03-25)
     hi Operator guibg=none
     hi @property guibg=none
     hi NonText guibg=none
