@@ -1,5 +1,6 @@
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
+
+if not (vim.uv or vim.loop).fs_stat(lazypath) then
     vim.fn.system({
         "git",
         "clone",
@@ -18,3 +19,7 @@ require("hl")
 require("keymaps")
 require("statusline")
 require("cmds")
+
+vim.keymap.set('n', '<leader>m', function()
+    vim.cmd('redir @a | silent messages | redir END | new | put a')
+end, { desc = 'Open messages in buffer' })

@@ -175,7 +175,6 @@ end, "Quickfixlist previous")
 
 --#region CopilotChat
 local chat = require("CopilotChat")
-local chat_select = require("CopilotChat.select")
 local actions = require("telescope.actions")
 local action_state = require("telescope.actions.state")
 
@@ -190,16 +189,18 @@ end
 
 local function find_chat_history()
     telescope_builtin.find_files({
-        prompt_title = "Chat History",
+        prompt_title = "CopilotChat History",
         cwd = chat.config.history_path,
         hidden = true,
         follow = true,
         layout_config = {
-            width = { padding = 35 },
+            width = 80,
+            height = 20,
         },
         find_command = { "rg", "--files", "--sortr=modified" },
         entry_maker = function(entry)
             local full_path = chat.config.history_path .. "/" .. entry
+            ---@diagnostic disable-next-line: undefined-field
             local stat = vim.loop.fs_stat(full_path)
             local mtime = stat and stat.mtime.sec or 0
             local display_time = stat and os.date("%d-%m-%Y %H:%M", mtime) or "Unknown"
@@ -212,7 +213,7 @@ local function find_chat_history()
                 index = -mtime,
             }
         end,
-        attach_mappings = function(prompt_bufnr, _)
+        attach_mappings = function(prompt_bufnr, map)
             actions.select_default:replace(function()
                 actions.close(prompt_bufnr)
                 local selection = action_state.get_selected_entry()
@@ -222,46 +223,37 @@ local function find_chat_history()
                 chat.load(parsed)
                 chat.open()
             end)
+
+            local function delete_history()
+                local selection = action_state.get_selected_entry()
+                if not selection then
+                    return
+                end
+
+                local full_path = chat.config.history_path .. "/" .. selection.value
+
+                -- Confirm deletion
+                vim.ui.select({ "Yes", "No" }, {
+                    prompt = "Delete chat history: " .. format_display_name(selection.value) .. "?",
+                    telescope = { layout_config = { width = 0.3, height = 0.3 } },
+                }, function(choice)
+                    if choice == "Yes" then
+                        vim.fn.delete(full_path)
+                        find_chat_history()
+                    end
+                end)
+            end
+
+            map("i", "<C-d>", delete_history)
+            map("n", "D", delete_history)
             return true
         end,
     })
 end
 
--- local function find_chat_history()
---     telescope_builtin.find_files({
---         prompt_title = "Chat History",
---         cwd = chat.config.history_path,
---         hidden = true,
---         follow = true,
---         entry_maker = function(entry)
---             return {
---                 value = entry,
---                 display = format_display_name(entry),
---                 ordinal = entry,
---                 path = entry,
---             }
---         end,
---         attach_mappings = function(prompt_bufnr, _)
---             actions.select_default:replace(function()
---                 actions.close(prompt_bufnr)
---                 local selection = action_state.get_selected_entry()
---                 local path = selection.value
---                 local parsed = parse_history_path(path)
---                 vim.g.chat_title = parsed
---                 chat.load(parsed)
---                 chat.open()
---             end)
---             return true
---         end,
---     })
--- end
-
 keymap("<leader>ch", find_chat_history, "CopilotChat History")
 keymap("<leader>cc", "<cmd>CopilotChatToggle<cr>", "CopilotChat Toggle")
-keymap("<leader>cp", function()
-    local chat_actions = require("CopilotChat.actions")
-    require("CopilotChat.integrations.telescope").pick(chat_actions.prompt_actions())
-end, "CopilotChat Prompts")
+keymap("<leader>cp", require("CopilotChat").select_prompt, "CopilotChat Prompts")
 keymap("<leader>cx", function()
     vim.g.chat_title = nil
     chat.reset()
@@ -416,3 +408,7 @@ end
 keymap("<C-e>", find_files, "Find files")
 keymap("<A-x>", utils.show_keymaps, "Show keymaps")
 keymap("<leader>tc", "<cmd>TextCaseOpenTelescope<cr>", "Textcase convert", { "n", "v" })
+
+keymap("<leader>m", function()
+    vim.cmd("redir @a | silent messages | redir END | new +setlocal\\ nobuflisted | put a")
+end, "Open messages in buffer")

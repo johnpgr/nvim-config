@@ -1,1 +1,1 @@
-vim.cmd.colorscheme("murphy")
+vim.cmd.colorscheme("fleet")

@@ -35,7 +35,12 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
 vim.api.nvim_create_autocmd({ "BufEnter", "BufRead" }, {
     pattern = "copilot-chat",
-    command = "hi markdownError guibg=none",
+    callback = function ()
+        vim.cmd("hi markdownError guibg=none")
+        vim.cmd("set filetype=markdown")
+        vim.treesitter.start(0, "markdown")
+        vim.opt_local.conceallevel = 2
+    end
 })
 
 -- Function to align text based on a given token
