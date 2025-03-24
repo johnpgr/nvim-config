@@ -38,11 +38,16 @@ return {
         end,
     },
     {
-        -- Indentation guides
-        "nvimdev/indentmini.nvim",
-        enabled = true,
+        "lukas-reineke/indent-blankline.nvim",
+        main = "ibl",
         config = function()
-            require("indentmini").setup()
+            require("ibl").setup({
+                indent = {
+                    char = "│",
+                },
+                enabled = false,
+                scope = { enabled = false },
+            })
         end,
     },
     {

@@ -412,3 +412,5 @@ keymap("<leader>tc", "<cmd>TextCaseOpenTelescope<cr>", "Textcase convert", { "n"
 keymap("<leader>m", function()
     vim.cmd("redir @a | silent messages | redir END | new +setlocal\\ nobuflisted | put a")
 end, "Open messages in buffer")
+
+keymap("<leader>ig", "<cmd>IBLToggle<cr>", "Indent Guides: Toggle")

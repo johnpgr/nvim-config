@@ -57,7 +57,7 @@ return {
                         end,
                     })
                 end,
-                model = "claude-3.7-sonnet",
+                model = "claude-3.5-sonnet",
                 chat_autocomplete = true,
                 mappings = {
                     complete = {

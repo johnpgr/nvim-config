@@ -19,17 +19,20 @@ return {
                 invert_signs = false,
                 invert_tabline = false,
                 invert_intend_guides = false,
-                inverse = true, -- invert background for search, diffs, statuslines and errors
-                contrast = "hard", -- can be "hard", "soft" or empty string
+                inverse = true,
+                contrast = "hard",
                 palette_overrides = {
                     bright_orange = "#ebdbb2", -- Remove oranges
                 },
-                overrides = {},
+                overrides = {
+                    SignColumn = { bg = "#1d2021" },
+                },
                 dim_inactive = false,
                 transparent_mode = false,
             })
         end,
     },
+    "vinitkumar/oscura-vim",
     "sainnhe/gruvbox-material",
     "folke/tokyonight.nvim",
     "catppuccin/nvim",

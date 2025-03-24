@@ -48,6 +48,7 @@ vim.o.spelllang = "en_us"
 vim.o.backspace = "indent,eol,start"
 vim.g.copilot_enabled = false
 vim.g.chat_autosave = true
+vim.g.indent_guides = false
 
 -- UFO folding
 -- vim.o.foldcolumn = "1" -- '0' is not bad
@@ -65,7 +66,7 @@ local is_neovide = vim.g.neovide ~= nil
 
 if is_neovide then
     vim.cmd("cd ~")
-    vim.o.guifont = "D2CodingLigature Nerd Font:h14"
+    vim.o.guifont = "BerkeleyMono Nerd Font:h16"
     vim.g.neovide_cursor_animation_length = 0
     vim.g.neovide_scroll_animation_length = 0.15
     vim.g.neovide_text_gamma = 0.8
