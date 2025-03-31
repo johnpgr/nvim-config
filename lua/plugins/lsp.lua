@@ -51,7 +51,7 @@ return {
             })
             local servers = {
                 tailwindcss = {
-                    filetypes = { "html", "typescriptreact", "javascriptreact", "css" },
+                    filetypes = { "html", "typescriptreact", "javascriptreact", "css", "astro" },
                     root_dir = root_pattern(
                         "tailwind.config.js",
                         "tailwind.config.ts",
@@ -205,7 +205,6 @@ return {
         lazy = false,
         dependencies = {
             "nvim-lua/plenary.nvim",
-            "stevearc/dressing.nvim",
         },
         config = function ()
             require("flutter-tools").setup({

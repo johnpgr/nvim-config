@@ -173,7 +173,7 @@ function M.smart_hover()
         end
     end
 
-    local hover_params = vim.lsp.util.make_position_params()
+    local hover_params = vim.lsp.util.make_position_params(0, 'utf-8')
     local row, col = unpack(vim.api.nvim_win_get_cursor(0))
     row = row - 1
 

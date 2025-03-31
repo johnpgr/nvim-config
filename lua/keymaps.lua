@@ -112,7 +112,7 @@ end, "Diagnostics: Refresh")
 --#region Tabs/Terminal
 keymap("<leader>tt", "<cmd>tabnew<cr><cmd>term<cr>", "Open terminal in a new tab")
 keymap("<leader>tn", "<cmd>tabnew<cr>", "Open new tab")
-keymap("<leader>q", "<cmd>tabclose<cr>", "Tab close")
+keymap("<leader>tc", "<cmd>tabclose<cr>", "Tab close")
 -- Open new tab in neovim config directory
 keymap("<leader>nc", function()
     vim.cmd("tabnew")
@@ -139,7 +139,7 @@ local function toggle_qf()
     end
 end
 
-keymap("<A-q>", toggle_qf, "Quickfixlist toggle")
+keymap("<leader>qf", toggle_qf, "Quickfixlist toggle")
 keymap("]q", function()
     local qf_list = vim.fn.getqflist()
     local qf_length = #qf_list
@@ -407,7 +407,6 @@ end
 
 keymap("<C-e>", find_files, "Find files")
 keymap("<A-x>", utils.show_keymaps, "Show keymaps")
-keymap("<leader>tc", "<cmd>TextCaseOpenTelescope<cr>", "Textcase convert", { "n", "v" })
 
 keymap("<leader>m", function()
     vim.cmd("redir @a | silent messages | redir END | new +setlocal\\ nobuflisted | put a")

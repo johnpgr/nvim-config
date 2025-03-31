@@ -21,9 +21,6 @@ return {
                 invert_intend_guides = false,
                 inverse = true,
                 contrast = "hard",
-                palette_overrides = {
-                    bright_orange = "#ebdbb2", -- Remove oranges
-                },
                 overrides = {
                     SignColumn = { bg = "#1d2021" },
                 },

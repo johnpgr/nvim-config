@@ -14,6 +14,7 @@ return {
     config = function()
         require("image").setup({
             backend = "kitty",
+            processor = "magick_cli",
             integrations = {
                 markdown = {
                     enabled = true,
