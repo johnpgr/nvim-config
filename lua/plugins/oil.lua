@@ -13,9 +13,9 @@ end
 
 local permission_hlgroups = {
     ["-"] = "NonText",
-    ["r"] = "DiagnosticWarn",
-    ["w"] = "DiagnosticError",
-    ["x"] = "DiagnosticOk",
+    ["r"] = "DiagnosticSignWarn",
+    ["w"] = "DiagnosticSignError",
+    ["x"] = "DiagnosticSignOk",
 }
 
 return {

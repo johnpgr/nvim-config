@@ -27,12 +27,6 @@ return {
                     },
                 },
             },
-            {
-                "xzbdmw/colorful-menu.nvim",
-                config = function()
-                    require("colorful-menu").setup({})
-                end,
-            },
         },
         config = function()
             local utils = require("utils")
@@ -151,18 +145,11 @@ return {
                     local lspkind_opts = {
                         preset = "codicons",
                         mode = "symbol",
-                        maxwidth = 50,
+                        maxwidth = 80,
                         ellipsis_char = "...",
                     }
 
                     local kind = require("lspkind").cmp_format(lspkind_opts)(entry, vim.deepcopy(vim_item))
-                    local highlights_info = require("colorful-menu").cmp_highlights(entry)
-
-                    if highlights_info ~= nil and highlights_info.text ~= nil then
-                        vim_item.abbr_hl_group = highlights_info.highlights
-                        vim_item.abbr = highlights_info.text
-                    end
-
                     local strings = vim.split(kind.kind, "%s", { trimempty = true })
                     vim_item.kind = strings[1] or ""
                     vim_item.menu = ""

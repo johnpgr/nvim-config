@@ -14,6 +14,7 @@ return {
                 return not is_windows and vim.fn.executable("make") == 1
             end,
         },
+        "nvim-telescope/telescope-ui-select.nvim",
     },
     config = function()
         local actions = require("telescope.actions")
@@ -47,6 +48,9 @@ return {
             extensions = is_windows and {} or {
                 fzf = {},
                 textcase = {},
+                ["ui-select"] = {
+                    require("telescope.themes").get_dropdown()
+                }
             },
             pickers = {
                 buffers = {
@@ -97,6 +101,8 @@ return {
         if not is_windows then
             telescope.load_extension("fzf")
         end
+
         telescope.load_extension("textcase")
+        telescope.load_extension("ui-select")
     end,
 }

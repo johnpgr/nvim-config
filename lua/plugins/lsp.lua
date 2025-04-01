@@ -52,16 +52,6 @@ return {
             local servers = {
                 tailwindcss = {
                     filetypes = { "html", "typescriptreact", "javascriptreact", "css", "astro" },
-                    root_dir = root_pattern(
-                        "tailwind.config.js",
-                        "tailwind.config.ts",
-                        "tailwind.config.mjs",
-                        "tailwind.config.cjs",
-                        "postcss.config.js",
-                        "postcss.config.ts",
-                        "postcss.config.mjs",
-                        "postcss.config.cjs"
-                    ),
                 },
                 denols = {
                     root_dir = root_pattern("deno.json", "deno.jsonc"),

@@ -44,7 +44,9 @@ return {
                     end
 
                     if vim.g.chat_title then
-                        chat.save(vim.g.chat_title)
+                        vim.defer_fn(function()
+                            chat.save(vim.g.chat_title)
+                        end, 100)
                         return
                     end
 
