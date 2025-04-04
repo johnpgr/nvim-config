@@ -78,7 +78,7 @@ return {
                 -- Manually trigger a completion from nvim-cmp.
                 --  Generally you don't need this, because nvim-cmp will display
                 --  completions whenever it has completion options available.
-                ["<C-Space>"] = cmp.mapping(function(_)
+                ["<C-m>"] = cmp.mapping(function(_)
                     if cmp.visible() then
                         cmp.close()
                     else

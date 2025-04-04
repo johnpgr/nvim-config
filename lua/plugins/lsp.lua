@@ -65,11 +65,11 @@ return {
                         require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
                     end,
                 },
-                -- gopls = {
-                --     on_attach = function(client, bufnr)
-                --         require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
-                --     end,
-                -- },
+                gopls = {
+                    on_attach = function(client, bufnr)
+                        require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
+                    end,
+                },
                 pyright = {
                     on_attach = function(client, bufnr)
                         require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)

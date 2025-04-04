@@ -58,9 +58,9 @@ vim.g.indent_guides = false
 -- vim.o.foldenable = true
 -- vim.o.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]
 
--- vim.diagnostic.config({
---     virtual_text = false,
--- })
+vim.diagnostic.config({
+    virtual_text = true,
+})
 
 local is_neovide = vim.g.neovide ~= nil
 
