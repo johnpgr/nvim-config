@@ -190,7 +190,7 @@ return {
     },
     {
         "luukvbaal/statuscol.nvim",
-        enabled = false,
+        enabled = true,
         config = function()
             local builtin = require("statuscol.builtin")
             require("statuscol").setup({

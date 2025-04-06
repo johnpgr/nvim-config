@@ -101,7 +101,7 @@ vim.api.nvim_create_autocmd({ "DirChanged", "VimEnter" }, {
     end,
 })
 
-vim.api.nvim_create_user_command("QueryReplace", function(opts)
+vim.api.nvim_create_user_command("QueryReplace", function()
     local query = ""
     vim.ui.input({ prompt = "Query: " }, function(input)
         query = input
@@ -136,3 +136,14 @@ vim.api.nvim_create_user_command("CopilotCompleteToggle", function()
     end
     print("Copilot completion is now " .. (vim.g.copilot_enabled and "enabled" or "disabled"))
 end, { nargs = 0 })
+
+vim.api.nvim_create_autocmd("UIEnter", {
+    callback = function()
+        vim.schedule(function()
+            local stats = require("lazy").stats()
+            local ms = math.floor(stats.startuptime * 100 + 0.5) / 100
+            vim.notify(string.format("⚡ Neovim loaded %d/%d plugins in %.2f ms", stats.loaded, stats.count, ms))
+        end)
+    end,
+    once = true,
+})

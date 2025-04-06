@@ -11,6 +11,7 @@ Output only the title and nothing else in your response. USE HYPHENS ONLY to sep
 
 return {
     {
+        -- Copilot autocomplete
         "zbirenbaum/copilot.lua",
         cmd = "Copilot",
         event = "InsertEnter",
@@ -27,9 +28,10 @@ return {
         end,
     },
     {
+        -- Copilot chat
         "CopilotC-Nvim/CopilotChat.nvim",
         branch = "main",
-        event = "BufReadPre",
+        event = "BufRead",
         dependencies = {
             { "zbirenbaum/copilot.lua" },
             { "nvim-lua/plenary.nvim" },

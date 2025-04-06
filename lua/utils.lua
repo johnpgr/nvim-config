@@ -39,8 +39,7 @@ M.keymap_registry = {}
 ---@param opts string|table
 ---@param mode? string|string[]
 function M.keymap(lhs, rhs, opts, mode)
-    opts = type(opts) == "string" and { desc = opts }
-        or vim.tbl_extend("error", opts --[[@as table]], { buffer = bufnr })
+    opts = type(opts) == "string" and { desc = opts } or vim.tbl_extend("error", opts --[[@as table]], { buffer = 0 })
     mode = mode or { "n", "v" }
 
     if type(lhs) == "table" then
@@ -78,7 +77,10 @@ function M.show_keymaps()
     local action_state = require("telescope.actions.state")
     local dropdown = require("telescope.themes").get_dropdown
 
-    pickers.new({}, dropdown({
+    pickers
+        .new(
+            {},
+            dropdown({
                 prompt_title = "Keymaps",
                 finder = finders.new_table({
                     results = M.keymap_registry,
@@ -93,7 +95,7 @@ function M.show_keymaps()
                     end,
                 }),
                 sorter = conf.generic_sorter({}),
-                attach_mappings = function(bufnr, map)
+                attach_mappings = function(bufnr, _)
                     actions.select_default:replace(function()
                         local selection = action_state.get_selected_entry()
                         local value = selection.value
@@ -108,14 +110,16 @@ function M.show_keymaps()
                     end)
                     return true
                 end,
-            })):find()
+            })
+        )
+        :find()
 end
 
 function M.toggle_spaces_width()
-    local currentWidth = vim.opt.shiftwidth:get()
-    local currentTabstop = vim.opt.tabstop:get()
+    local current_width = vim.opt.shiftwidth:get()
+    local current_tabstop = vim.opt.tabstop:get()
 
-    if currentWidth == 2 and currentTabstop == 2 then
+    if current_width == 2 and current_tabstop == 2 then
         vim.opt.shiftwidth = 4
         vim.opt.tabstop = 4
     else
@@ -127,9 +131,6 @@ function M.toggle_spaces_width()
 end
 
 function M.toggle_indent_mode()
-    -- Get the current buffer number
-    local bufnr = vim.fn.bufnr()
-
     -- Get the current value of 'expandtab' (whether spaces are being used)
     local expandtab = vim.bo.expandtab
 
@@ -140,10 +141,6 @@ function M.toggle_indent_mode()
         -- If tabs are being used, toggle to spaces
         vim.bo.expandtab = true
     end
-
-    -- Get the updated values of 'tabstop' and 'shiftwidth' after toggling
-    local tabstop = vim.bo.tabstop
-    local shiftwidth = vim.bo.shiftwidth
 
     -- Retab the buffer to apply the changes
     vim.fn.execute("retab!")
@@ -173,7 +170,7 @@ function M.smart_hover()
         end
     end
 
-    local hover_params = vim.lsp.util.make_position_params(0, 'utf-8')
+    local hover_params = vim.lsp.util.make_position_params(0, "utf-8")
     local row, col = unpack(vim.api.nvim_win_get_cursor(0))
     row = row - 1
 
@@ -182,6 +179,9 @@ function M.smart_hover()
             border = "none",
             focus = false,
         })
+
+        -- Create a namespace for highlights
+        local ns_id = vim.api.nvim_create_namespace("hover_diagnostics")
 
         -- Find where the diagnostic section starts
         local diagnostic_start = 0
@@ -200,15 +200,24 @@ function M.smart_hover()
             end
 
             if hl.prefix_length > 0 then
-                vim.api.nvim_buf_add_highlight(buf, -1, "NormalFloat", hl.line, 1, hl.prefix_length)
+                vim.api.nvim_buf_set_extmark(buf, ns_id, hl.line, 1, {
+                    end_col = hl.prefix_length,
+                    hl_group = "NormalFloat",
+                })
             end
 
             local message_start = hl.prefix_length
             local message_end = line_length - hl.suffix_length
-            vim.api.nvim_buf_add_highlight(buf, -1, hl.hlname, hl.line, message_start, message_end)
+            vim.api.nvim_buf_set_extmark(buf, ns_id, hl.line, message_start, {
+                end_col = message_end,
+                hl_group = hl.hlname,
+            })
 
             if hl.suffix_length > 0 then
-                vim.api.nvim_buf_add_highlight(buf, -1, "NormalFloat", hl.line, message_end, line_length)
+                vim.api.nvim_buf_set_extmark(buf, ns_id, hl.line, message_end, {
+                    end_col = line_length,
+                    hl_group = "NormalFloat",
+                })
             end
         end
 
@@ -280,16 +289,18 @@ function M.smart_hover()
         local diag_contents, diag_highlights = get_diagnostics_content()
         -- If we have either hover content or diagnostics, show the window
         if (#contents > 0 and result) or diag_contents then
-            local diagnostic_start = 0
             if diag_contents then
+                -- Add a blank line between LSP info and diagnostics
+                if #contents > 0 then
+                    table.insert(contents, " ")
+                end
                 vim.list_extend(contents, diag_contents)
-                vim.list_extend(highlights, diag_highlights)
+                vim.list_extend(highlights, diag_highlights or {})
             end
             show_window(contents, highlights)
         end
     end)
 end
-
 
 function M.up_jump_to_error_loc()
     local line = vim.fn.getline(".")
@@ -345,7 +356,6 @@ function M.up_jump_to_error_loc()
 
     return true
 end
-
 
 function M.left_jump_to_error_loc()
     local line = vim.fn.getline(".")

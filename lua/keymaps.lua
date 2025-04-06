@@ -174,7 +174,6 @@ end, "Quickfixlist previous")
 --#endregion
 
 --#region CopilotChat
-local chat = require("CopilotChat")
 local actions = require("telescope.actions")
 local action_state = require("telescope.actions.state")
 
@@ -188,6 +187,7 @@ local function format_display_name(filename)
 end
 
 local function find_chat_history()
+    local chat = require("CopilotChat")
     telescope_builtin.find_files({
         prompt_title = "CopilotChat History",
         cwd = chat.config.history_path,
@@ -253,10 +253,10 @@ end
 
 keymap("<leader>ch", find_chat_history, "CopilotChat History")
 keymap("<leader>cc", "<cmd>CopilotChatToggle<cr>", "CopilotChat Toggle")
-keymap("<leader>cp", require("CopilotChat").select_prompt, "CopilotChat Prompts")
+keymap("<leader>cp", "<cmd>CopilotChatPrompts<cr>", "CopilotChat Prompts")
 keymap("<leader>cx", function()
     vim.g.chat_title = nil
-    chat.reset()
+    require("CopilotChat").reset()
 end, "CopilotChat Reset")
 --#endregion
 

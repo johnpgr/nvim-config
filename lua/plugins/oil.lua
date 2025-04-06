@@ -108,12 +108,13 @@ return {
         win_options = {
             winbar = "%!v:lua.get_oil_winbar()",
             number = false,
+            relativenumber = false,
         },
         confirmation = {
             border = "none",
         },
         view_options = {
-            is_hidden_file = function(name, bufnr)
+            is_hidden_file = function(name, _)
                 local m = name:match("^%.")
                 return m ~= nil and name ~= ".."
             end,

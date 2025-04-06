@@ -19,7 +19,3 @@ require("hl")
 require("keymaps")
 require("statusline")
 require("cmds")
-
-vim.keymap.set('n', '<leader>m', function()
-    vim.cmd('redir @a | silent messages | redir END | new | put a')
-end, { desc = 'Open messages in buffer' })
