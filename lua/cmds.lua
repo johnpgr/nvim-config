@@ -36,10 +36,19 @@ vim.api.nvim_create_autocmd("LspAttach", {
 vim.api.nvim_create_autocmd({ "BufEnter", "BufRead" }, {
     pattern = "copilot-chat",
     callback = function()
+        -- Remove weird annoying syntax highlighting
         vim.cmd("hi markdownError guibg=none")
+
+        -- This is for in the case where I disabled treesitter highlighting globally
         vim.cmd("set filetype=markdown")
         vim.treesitter.start(0, "markdown")
+
+        -- Local window options
         vim.opt_local.conceallevel = 2
+        vim.opt_local.foldcolumn = "0"
+        vim.opt_local.signcolumn = "no"
+        vim.opt_local.number = false
+        vim.opt_local.relativenumber = false
     end,
 })
 
