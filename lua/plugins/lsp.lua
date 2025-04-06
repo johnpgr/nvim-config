@@ -1,63 +1,13 @@
 local util = require("utils")
 local keymap = util.keymap
 
-local formatters = { "prettierd", "prettier", "deno_fmt" }
-
 vim.g.zig_fmt_autosave = 0
 
--- Common on_attach function for workspace diagnostics
+local formatters = { "prettierd", "prettier", "deno_fmt" }
+
 local function common_on_attach(client, bufnr)
     require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
 end
-
-local servers = {
-    tailwindcss = {
-        filetypes = { "html", "typescriptreact", "javascriptreact", "css", "astro" },
-    },
-    denols = {
-        root_markers = {
-            "deno.json",
-            "deno.jsonc",
-        },
-    },
-    eslint = {},
-    gopls = {},
-    pyright = {},
-    rust_analyzer = {},
-    prismals = {},
-    sqlls = {
-        filetypes = { "sql", "mysql" },
-        cmd = { "sql-language-server", "up", "--method", "stdio" },
-    },
-    kotlin_language_server = {},
-    html = {
-        filetypes = { "html" },
-    },
-    jsonls = {},
-    lua_ls = {
-        settings = {
-            Lua = {
-                completion = {
-                    callSnippet = "Replace",
-                },
-                workspace = { checkThirdParty = false },
-                telemetry = { enable = false },
-                diagnostics = { disable = { "missing-fields" } },
-            },
-        },
-    },
-    zls = {},
-    clangd = {},
-}
-
-local tools = {
-    stylua = {},
-    ktlint = {},
-    prettierd = {},
-}
-
-local ensure_installed = vim.tbl_keys(servers or {})
-local ensure_installed_tools = vim.tbl_keys(tools or {})
 
 return {
     {
@@ -91,6 +41,55 @@ return {
             },
         },
         config = function()
+            local servers = {
+                tailwindcss = {
+                    filetypes = { "html", "typescriptreact", "javascriptreact", "css", "astro" },
+                },
+                denols = {
+                    root_dir = require("lspconfig.util").root_pattern({
+                        "deno.json",
+                        "deno.jsonc",
+                    }),
+                },
+                eslint = {},
+                gopls = {},
+                pyright = {},
+                rust_analyzer = {},
+                prismals = {},
+                sqlls = {
+                    filetypes = { "sql", "mysql" },
+                    cmd = { "sql-language-server", "up", "--method", "stdio" },
+                },
+                kotlin_language_server = {},
+                html = {
+                    filetypes = { "html" },
+                },
+                jsonls = {},
+                lua_ls = {
+                    settings = {
+                        Lua = {
+                            completion = {
+                                callSnippet = "Replace",
+                            },
+                            workspace = { checkThirdParty = false },
+                            telemetry = { enable = false },
+                            diagnostics = { disable = { "missing-fields" } },
+                        },
+                    },
+                },
+                zls = {},
+                clangd = {},
+            }
+
+            local tools = {
+                stylua = {},
+                ktlint = {},
+                prettierd = {},
+            }
+
+            local ensure_installed = vim.tbl_keys(servers or {})
+            local ensure_installed_tools = vim.tbl_keys(tools or {})
+
             vim.api.nvim_create_autocmd("LspAttach", {
                 group = vim.api.nvim_create_augroup("lsp-attach-group", { clear = true }),
                 callback = function(event)
@@ -133,7 +132,7 @@ return {
         },
         config = function()
             require("typescript-tools").setup({
-                root_markers = { "package.json", "tsconfig.json", "jsconfig.json" },
+                root_dir = require("lspconfig.util").root_pattern({ "package.json", "tsconfig.json", "jsconfig.json" }),
                 single_file_support = false,
                 on_attach = common_on_attach,
                 settings = {
