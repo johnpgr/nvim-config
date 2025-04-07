@@ -41,7 +41,7 @@ return {
         "navarasu/onedark.nvim",
         config = function()
             require("onedark").setup({
-                style = "dark",
+                style = "warm",
                 transparent = false,
                 term_colors = true,
                 ending_tildes = false,
