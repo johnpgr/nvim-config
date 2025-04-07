@@ -1,5 +1,6 @@
 {
   "CopilotChat.nvim": { "branch": "main", "commit": "e7cd79a2ac05a32a1ce0995a82bd630598619d0b" },
+  "bible.nvim": { "branch": "master", "commit": "6a6524e5864054fd9e11f706d34a8dce1fdceb68" },
   "blink.cmp": { "branch": "main", "commit": "cb5e346d9e0efa7a3eee7fd4da0b690c48d2a98e" },
   "conform.nvim": { "branch": "master", "commit": "eebc724d12c5579d733d1f801386e0ceb909d001" },
   "copilot.lua": { "branch": "master", "commit": "d521eaf2fab2bf2e49a4447235e82d8c74421c81" },
@@ -23,6 +24,7 @@
   "mini.comment": { "branch": "main", "commit": "fb867a9246f9b892cf51a8c84a3f8479cdf1558c" },
   "mise.nvim": { "branch": "master", "commit": "15a40b5dc04299ae30be60e89f19a25138a239e0" },
   "neogit": { "branch": "master", "commit": "0542ca3aa9bf0b67b7b7713e4d230f9c1fc2c631" },
+  "nui.nvim": { "branch": "main", "commit": "8d3bce9764e627b62b07424e0df77f680d47ffdb" },
   "nvim": { "branch": "main", "commit": "5b5e3aef9ad7af84f463d17b5479f06b87d5c429" },
   "nvim-dap": { "branch": "master", "commit": "7aade9e99bef5f0735cf966e715b3ce45515d786" },
   "nvim-dap-ui": { "branch": "master", "commit": "bc81f8d3440aede116f821114547a476b082b319" },

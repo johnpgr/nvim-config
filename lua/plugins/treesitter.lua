@@ -8,9 +8,9 @@ return {
         build = ":TSUpdate",
         event = "BufReadPre",
         config = function()
-            local function disable_large_files(lang, buf)
+            local function disable_large_files(_, buf)
                 local max_filesize = 1024 * 1024 -- 1MB in bytes
-                local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+                local ok, stats = pcall(vim.uv.fs_stat, vim.api.nvim_buf_get_name(buf))
                 if ok and stats and stats.size > max_filesize then
                     return true
                 end
