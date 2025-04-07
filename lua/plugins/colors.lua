@@ -37,4 +37,33 @@ return {
     "sainnhe/everforest",
     "rjshkhr/shadow.nvim",
     "CreaturePhil/vim-handmade-hero",
+    {
+        "navarasu/onedark.nvim",
+        config = function()
+            require("onedark").setup({
+                style = "dark",
+                transparent = false,
+                term_colors = true,
+                ending_tildes = false,
+                cmp_itemkind_reverse = false,
+                code_style = {
+                    comments = "none",
+                    keywords = "none",
+                    functions = "none",
+                    strings = "none",
+                    variables = "none",
+                },
+                lualine = {
+                    transparent = false,
+                },
+                colors = {},
+                highlights = {},
+                diagnostics = {
+                    darker = true,
+                    undercurl = true,
+                    background = true,
+                },
+            })
+        end,
+    },
 }
