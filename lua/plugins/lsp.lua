@@ -42,6 +42,7 @@ return {
         },
         config = function()
             local servers = {
+                vtsls = {},
                 tailwindcss = {
                     filetypes = { "html", "typescriptreact", "javascriptreact", "css", "astro" },
                 },
@@ -122,46 +123,6 @@ return {
                 },
             })
         end,
-    },
-    {
-        "pmizio/typescript-tools.nvim",
-        dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
-        ft = { "typescript", "typescriptreact", "javascript", "javascriptreact" },
-        keys = {
-            { "<leader>li", "<Cmd>TSToolsOrganizeImports<cr>", desc = "LSP: Organize imports" },
-        },
-        config = function()
-            require("typescript-tools").setup({
-                root_dir = require("lspconfig.util").root_pattern({ "package.json", "tsconfig.json", "jsconfig.json" }),
-                single_file_support = false,
-                on_attach = common_on_attach,
-                settings = {
-                    tsserver_file_preferences = {
-                        includeInlayParameterNameHints = "all",
-                        includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-                        includeInlayVariableTypeHintsWhenTypeMatchesName = true,
-                        includeInlayFunctionParameterTypeHints = true,
-                        includeInlayVariableTypeHints = true,
-                        includeInlayFunctionLikeReturnTypeHints = true,
-                        includeInlayPropertyDeclarationTypeHints = true,
-                        includeInlayEnumMemberValueHints = true,
-                    },
-                    jsx_close_tag = {
-                        enable = false,
-                        filetypes = { "javascriptreact", "typescriptreact" },
-                    },
-                },
-            })
-        end,
-    },
-    {
-        "dmmulroy/tsc.nvim",
-        cmd = "TSC",
-        ft = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
-        opts = {
-            enable_progress_notifications = true,
-            auto_open_qflist = true,
-        },
     },
     {
         "nvim-flutter/flutter-tools.nvim",
