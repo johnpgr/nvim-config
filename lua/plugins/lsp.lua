@@ -34,11 +34,6 @@ return {
             "williamboman/mason.nvim",
             "williamboman/mason-lspconfig.nvim",
             "WhoIsSethDaniel/mason-tool-installer.nvim",
-            {
-                "folke/lazydev.nvim",
-                ft = "lua",
-                opts = {},
-            },
         },
         config = function()
             local servers = {
@@ -66,18 +61,18 @@ return {
                     filetypes = { "html" },
                 },
                 jsonls = {},
-                lua_ls = {
-                    settings = {
-                        Lua = {
-                            completion = {
-                                callSnippet = "Replace",
-                            },
-                            workspace = { checkThirdParty = false },
-                            telemetry = { enable = false },
-                            diagnostics = { disable = { "missing-fields" } },
-                        },
-                    },
-                },
+                -- lua_ls = {
+                --     settings = {
+                --         Lua = {
+                --             completion = {
+                --                 callSnippet = "Replace",
+                --             },
+                --             workspace = { checkThirdParty = false },
+                --             telemetry = { enable = false },
+                --             diagnostics = { disable = { "missing-fields" } },
+                --         },
+                --     },
+                -- },
                 zls = {},
                 clangd = {},
             }
@@ -123,6 +118,17 @@ return {
                 },
             })
         end,
+    },
+    {
+        "folke/lazydev.nvim",
+        ft = "lua", -- only load on lua files
+        opts = {
+            library = {
+                -- See the configuration section for more details
+                -- Load luvit types when the `vim.uv` word is found
+                { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+            },
+        },
     },
     {
         "nvim-flutter/flutter-tools.nvim",

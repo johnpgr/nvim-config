@@ -11,7 +11,7 @@ vim.o.cursorline = true
 vim.o.expandtab = true
 vim.o.wrap = false
 if vim.fn.executable("rg") ~= 0 then
-    vim.o.grepprg = "rg --vimgrep"
+	vim.o.grepprg = "rg --vimgrep"
 end
 vim.o.inccommand = "split"
 vim.o.ignorecase = true
@@ -27,7 +27,7 @@ vim.o.shiftround = true
 vim.o.shiftwidth = 4
 vim.o.tabstop = 4
 vim.o.showmode = false
-vim.o.signcolumn = "yes"
+vim.o.signcolumn = "no"
 vim.o.smartcase = true
 vim.o.breakindent = true
 vim.o.smartindent = true
@@ -46,7 +46,7 @@ vim.opt.scrolloff = 5
 vim.o.spell = false
 vim.o.spelllang = "en_us"
 vim.o.backspace = "indent,eol,start"
-vim.g.copilot_enabled = false
+vim.g.copilot_enabled = true
 vim.g.chat_autosave = true
 vim.g.indent_guides = false
 
@@ -59,38 +59,39 @@ vim.g.indent_guides = false
 -- vim.o.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]
 
 vim.diagnostic.config({
-    virtual_text = true,
+	virtual_text = true,
 })
 
 local is_neovide = vim.g.neovide ~= nil
 
 if is_neovide then
-    vim.cmd("cd ~")
-    vim.o.guifont = "BerkeleyMono Nerd Font:h16"
-    vim.g.neovide_cursor_animation_length = 0
-    vim.g.neovide_scroll_animation_length = 0.15
-    vim.g.neovide_text_gamma = 0.8
-    vim.g.neovide_text_contrast = 0.1
-    vim.g.neovide_scale_factor = 1.0
+	vim.cmd("cd ~")
+	vim.o.guifont = "BerkeleyMono Nerd Font:h16"
+	vim.g.neovide_opacity = 1.0
+	vim.g.neovide_normal_opacity = 1.0
+	vim.g.neovide_text_gamma = 0.8
+	vim.g.neovide_text_contrast = 0.1
+	vim.g.neovide_cursor_animation_length = 0
+	vim.g.neovide_scroll_animation_length = 0.15
 
-    vim.keymap.set("n", "<C-=>", function()
-        vim.g.neovide_scale_factor = vim.g.neovide_scale_factor * 1.1
-    end, { desc = "Increase Neovide scale factor" })
+	vim.keymap.set("n", "<C-=>", function()
+		vim.g.neovide_scale_factor = vim.g.neovide_scale_factor * 1.1
+	end, { desc = "Increase Neovide scale factor" })
 
-    vim.keymap.set("n", "<C-->", function()
-        vim.g.neovide_scale_factor = vim.g.neovide_scale_factor / 1.1
-    end, { desc = "Decrease Neovide scale factor" })
+	vim.keymap.set("n", "<C-->", function()
+		vim.g.neovide_scale_factor = vim.g.neovide_scale_factor / 1.1
+	end, { desc = "Decrease Neovide scale factor" })
 
-    if vim.g.neovide then
-        vim.keymap.set("v", "<C-S-c>", '"+y') -- Copy
-        vim.keymap.set("n", "<C-S-v>", '"+P') -- Paste normal mode
-        vim.keymap.set("v", "<C-S-v>", '"+P') -- Paste visual mode
-        vim.keymap.set("c", "<C-S-v>", "<C-R>+") -- Paste command mode
-        vim.keymap.set("i", "<C-S-v>", '<ESC>l"+Pli') -- Paste insert mode
-    end
+	if vim.g.neovide then
+		vim.keymap.set("v", "<C-S-c>", '"+y') -- Copy
+		vim.keymap.set("n", "<C-S-v>", '"+P') -- Paste normal mode
+		vim.keymap.set("v", "<C-S-v>", '"+P') -- Paste visual mode
+		vim.keymap.set("c", "<C-S-v>", "<C-R>+") -- Paste command mode
+		vim.keymap.set("i", "<C-S-v>", '<ESC>l"+Pli') -- Paste insert mode
+	end
 
-    vim.api.nvim_set_keymap("", "<C-S-v>", "+p<CR>", { noremap = true, silent = true })
-    vim.api.nvim_set_keymap("!", "<C-S-v>", "<C-R>+", { noremap = true, silent = true })
-    vim.api.nvim_set_keymap("t", "<C-S-v>", "<C-R>+", { noremap = true, silent = true })
-    vim.api.nvim_set_keymap("v", "<C-S-v>", "<C-R>+", { noremap = true, silent = true })
+	vim.api.nvim_set_keymap("", "<C-S-v>", "+p<CR>", { noremap = true, silent = true })
+	vim.api.nvim_set_keymap("!", "<C-S-v>", "<C-R>+", { noremap = true, silent = true })
+	vim.api.nvim_set_keymap("t", "<C-S-v>", "<C-R>+", { noremap = true, silent = true })
+	vim.api.nvim_set_keymap("v", "<C-S-v>", "<C-R>+", { noremap = true, silent = true })
 end
