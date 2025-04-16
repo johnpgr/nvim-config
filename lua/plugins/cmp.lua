@@ -27,16 +27,26 @@ return {
 				return copilot.is_visible()
 			end
 
+			local has_words_before = function()
+				local col = vim.api.nvim_win_get_cursor(0)[2]
+				if col == 0 then
+					return false
+				end
+				local line = vim.api.nvim_get_current_line()
+				return line:sub(col, col):match("%s") == nil
+			end
+
 			local handle_tab = function(cmp)
 				if has_copilot_suggestion() then
 					-- Accept Copilot suggestion
 					require("copilot.suggestion").accept()
 				else
-					-- If completion menu is visible, accept selected item
-					if menu.win:is_open() then
+					if menu.win:is_open() then -- If completion menu is visible, accept selected item
 						cmp.select_and_accept()
+					elseif has_words_before() then
+						cmp.insert_next()
 					else
-                        -- Fallback to default behavior
+						-- Fallback to default behavior
 						vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Tab>", true, false, true), "n", false)
 					end
 				end
@@ -96,6 +106,14 @@ return {
 				-- elsewhere in your config, without redefining it, due to `opts_extend`
 				sources = {
 					default = { "lsp", "path", "snippets", "buffer" },
+					providers = {
+						cmdline = {
+							-- ignores cmdline completions when executing shell commands
+							enabled = function()
+								return vim.fn.getcmdtype() ~= ":" or not vim.fn.getcmdline():match("^[%%0-9,'<>%-]*!")
+							end,
+						},
+					},
 				},
 
 				-- (Default) Rust fuzzy matcher for typo resistance and significantly better performance

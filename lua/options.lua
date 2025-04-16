@@ -1,6 +1,3 @@
--- Workaround for neovim 0.10.3 bugged :Inspect
-vim.hl = vim.highlight
-
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 vim.opt.diffopt:append("linematch:60")

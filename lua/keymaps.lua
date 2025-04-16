@@ -26,10 +26,6 @@ end
 --#region General
 keymap("<leader>tS", utils.toggle_spaces_width, "Toggle shift width")
 keymap("<leader>ti", utils.toggle_indent_mode, "Toggle indentation mode")
-keymap("<C-_>", "gcc", { remap = true, silent = true, desc = "Comment toggle" }, "n")
-keymap("<C-_>", "gc", { remap = true, silent = true, desc = "Comment toggle" }, "v")
-keymap("<C-/>", "gcc", { remap = true, silent = true, desc = "Comment toggle" }, "n")
-keymap("<C-/>", "gc", { remap = true, silent = true, desc = "Comment toggle" }, "v")
 keymap("<leader>e", "<cmd>Oil<cr>", "Explorer")
 keymap("<leader>L", "<cmd>Lazy<cr>", "Lazy.nvim")
 keymap("<C-k>", tmux.move_top, "Focus top split")

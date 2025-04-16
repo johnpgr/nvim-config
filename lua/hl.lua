@@ -1,8 +1,4 @@
 vim.cmd([[
-    " Indentation colors
-    hi IndentLine guifg=#64594f
-    hi IndentLineCurrent guifg=#64594f
-
     " Force diagnostics to use undercurls
     hi DiagnosticUnderlineError gui=undercurl
     hi DiagnosticUnderlineHint gui=undercurl
@@ -23,12 +19,14 @@ vim.cmd([[
     hi OverseerTaskBorder guibg=none
 
     " Cursor color
-    hi Cursor guifg=bg guibg=#FFFFFF
-    set guicursor=n-v-c-sm:block-Cursor,i-ci-ve:ver25-Cursor,r-cr-o:hor20-Cursor
+    " hi Cursor guifg=bg guibg=#FFFFFF
+    " set guicursor=n-v-c-sm:block-Cursor,i-ci-ve:ver25-Cursor,r-cr-o:hor20-Cursor
 
     " Gruvbox specific overrides
     hi link DiagnosticSignWarn GruvboxYellow
     hi link DiagnosticSignError GruvboxRed
     hi link DiagnosticSignOk GruvboxGreen
     hi link DiagnosticSignHint GruvboxAqua
+
+    hi Comment guifg=#2ba146
 ]])

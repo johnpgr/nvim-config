@@ -47,6 +47,7 @@ return {
     },
     {
         "lukas-reineke/indent-blankline.nvim",
+        event = "BufRead",
         main = "ibl",
         config = function()
             require("ibl").setup({
@@ -61,7 +62,7 @@ return {
     {
         -- Code commenting plugin
         "echasnovski/mini.comment",
-        event = "VeryLazy",
+        event = "BufRead",
         dependencies = {
             {
                 -- Context-aware commenting for different languages
@@ -84,14 +85,6 @@ return {
                 comment_visual = "gc",
             },
         },
-    },
-    {
-        "OXY2DEV/markview.nvim",
-        lazy = false,
-    },
-    {
-        "OXY2DEV/helpview.nvim",
-        lazy = false,
     },
     {
         -- V programming language support
@@ -127,8 +120,6 @@ return {
             })
         end,
     },
-    -- Templ template language support
-    { "joerdav/templ.vim" },
     {
         -- Git integration showing changes in sign column
         "lewis6991/gitsigns.nvim",
@@ -149,6 +140,7 @@ return {
     {
         -- Task runner and job management
         "stevearc/overseer.nvim",
+        event = "VeryLazy",
         opts = {
             task_list = {
                 -- min_width = { 80, 0.25 },
@@ -168,6 +160,7 @@ return {
     {
         -- Symbols outline viewer
         "hedyhli/outline.nvim",
+        event = "BufRead",
         config = function()
             require("outline").setup({
                 outline_window = {
