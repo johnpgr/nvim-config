@@ -38,7 +38,7 @@ return {
             local servers = {
                 vtsls = {},
                 tailwindcss = {
-                    filetypes = { "html", "typescriptreact", "javascriptreact", "css", "astro" },
+                    filetypes = { "html", "htmldjango", "typescriptreact", "javascriptreact", "css", "astro" },
                 },
                 denols = {
                     root_dir = require("lspconfig.util").root_pattern({
@@ -57,7 +57,10 @@ return {
                 },
                 kotlin_language_server = {},
                 html = {
-                    filetypes = { "html" },
+                    filetypes = { "html", "htmldjango" },
+                },
+                htmx = {
+                    filetypes = { "html", "htmldjango" },
                 },
                 jsonls = {},
                 -- lua_ls = {

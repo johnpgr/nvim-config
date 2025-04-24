@@ -28,5 +28,5 @@ vim.cmd([[
     hi link DiagnosticSignOk GruvboxGreen
     hi link DiagnosticSignHint GruvboxAqua
 
-    hi Comment guifg=#2ba146
+    " hi Comment guifg=#2ba146
 ]])
