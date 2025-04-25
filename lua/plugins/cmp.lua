@@ -14,7 +14,7 @@ return {
 		config = function()
 			local menu = require("blink.cmp.completion.windows.menu")
 
-			local toggle_menu = function(cmp)
+			local function toggle_menu(cmp)
 				if not menu.win:is_open() then
 					cmp.show()
 				else
@@ -22,12 +22,12 @@ return {
 				end
 			end
 
-			local has_copilot_suggestion = function()
+			local function has_copilot_suggestion()
 				local copilot = require("copilot.suggestion")
 				return copilot.is_visible()
 			end
 
-			local has_words_before = function()
+			local function has_words_before()
 				local col = vim.api.nvim_win_get_cursor(0)[2]
 				if col == 0 then
 					return false
@@ -36,7 +36,7 @@ return {
 				return line:sub(col, col):match("%s") == nil
 			end
 
-			local handle_tab = function(cmp)
+			local function handle_tab(cmp)
 				if has_copilot_suggestion() then
 					-- Accept Copilot suggestion
 					require("copilot.suggestion").accept()
@@ -106,7 +106,11 @@ return {
 				-- elsewhere in your config, without redefining it, due to `opts_extend`
 				sources = {
 					default = { "lsp", "path", "snippets", "buffer" },
+					per_filetype = {
+						sql = { "snippets", "dadbod", "buffer" },
+					},
 					providers = {
+                        dadbod = { name = "Dadbod", module = "vim_dadbod_completion.blink" },
 						cmdline = {
 							-- ignores cmdline completions when executing shell commands
 							enabled = function()

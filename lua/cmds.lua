@@ -17,11 +17,6 @@ vim.cmd([[
     autocmd TermEnter * setlocal nospell
 ]])
 
--- Vim dadbod
-vim.cmd([[
-    autocmd FileType sql,mysql,plsql lua require('cmp').setup.buffer({ sources = {{ name = 'vim-dadbod-completion' }} })
-]])
-
 -- Make undercurls work properly
 vim.api.nvim_create_autocmd("LspAttach", {
 	callback = function(args)
