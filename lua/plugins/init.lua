@@ -56,7 +56,7 @@ return {
 					char = "│",
 					highlight = "IndentGuides",
 				},
-				enabled = true,
+				enabled = false,
 				scope = { enabled = false },
 			})
 		end,
