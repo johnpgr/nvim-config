@@ -50,11 +50,9 @@ return {
 		event = "BufRead",
 		main = "ibl",
 		config = function()
-			vim.api.nvim_set_hl(0, "IndentGuides", { fg = "#2f2d39" })
 			require("ibl").setup({
 				indent = {
 					char = "│",
-					highlight = "IndentGuides",
 				},
 				enabled = false,
 				scope = { enabled = false },
@@ -87,40 +85,6 @@ return {
 				comment_visual = "<C-_>",
 			},
 		},
-	},
-	{
-		-- V programming language support
-		"ollykel/v-vim",
-		init = function()
-			if utils.nerd_icons then
-				require("nvim-web-devicons").set_icon({
-					v = {
-						icon = "",
-						color = "#5d87bf",
-						cterm_color = "59",
-						name = "Vlang",
-					},
-					vsh = {
-						icon = "",
-						color = "#5d87bf",
-						cterm_color = "59",
-						name = "Vlang",
-					},
-				})
-			end
-
-			vim.filetype.add({
-				extension = {
-					v = "vlang",
-					vsh = "vlang",
-				},
-			})
-
-			require("lspconfig")["v_analyzer"].setup({
-				cmd = { "v-analyzer" },
-				filetypes = { "vlang", "v", "vsh" },
-			})
-		end,
 	},
 	{
 		-- Git integration showing changes in sign column

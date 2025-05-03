@@ -37,19 +37,18 @@ return {
 			end
 
 			local function handle_tab(cmp)
-				if has_copilot_suggestion() then
-					-- Accept Copilot suggestion
-					require("copilot.suggestion").accept()
-				else
-					if menu.win:is_open() then -- If completion menu is visible, accept selected item
-						cmp.select_and_accept()
-					elseif has_words_before() then
-						cmp.insert_next()
-					else
-						-- Fallback to default behavior
-						vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Tab>", true, false, true), "n", false)
-					end
-				end
+                -- If completion menu is visible, accept selected item
+                if menu.win:is_open() then
+                    cmp.select_and_accept()
+                -- Accept Copilot suggestion
+                elseif has_copilot_suggestion() then
+                    require("copilot.suggestion").accept()
+                elseif has_words_before() then
+                    cmp.insert_next()
+                -- Fallback to default behavior
+                else
+                    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Tab>", true, false, true), "n", false)
+                end
 			end
 
 			require("blink.cmp").setup({
@@ -105,12 +104,17 @@ return {
 				-- Default list of enabled providers defined so that you can extend it
 				-- elsewhere in your config, without redefining it, due to `opts_extend`
 				sources = {
-					default = { "lsp", "path", "snippets", "buffer" },
+					default = { "lazydev", "lsp", "path", "snippets", "buffer" },
 					per_filetype = {
 						sql = { "snippets", "dadbod", "buffer" },
 					},
 					providers = {
-                        dadbod = { name = "Dadbod", module = "vim_dadbod_completion.blink" },
+						lazydev = {
+							name = "LazyDev",
+							module = "lazydev.integrations.blink",
+							score_offset = 100,
+						},
+						dadbod = { name = "Dadbod", module = "vim_dadbod_completion.blink" },
 						cmdline = {
 							-- ignores cmdline completions when executing shell commands
 							enabled = function()

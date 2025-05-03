@@ -3,7 +3,7 @@ return {
 		"ellisonleao/gruvbox.nvim",
 		config = function()
 			require("gruvbox").setup({
-				terminal_colors = true,
+				terminal_colors = false,
 				undercurl = true,
 				underline = true,
 				bold = false,
@@ -25,7 +25,7 @@ return {
 					SignColumn = { bg = "#1d2021" },
 				},
 				dim_inactive = false,
-				transparent_mode = false,
+				transparent_mode = true,
 			})
 		end,
 	},

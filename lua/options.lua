@@ -1,7 +1,7 @@
-vim.g.mapleader = " "
-vim.g.maplocalleader = " "
+vim.g.mapleader = vim.keycode('<space>')
+vim.g.maplocalleader = vim.keycode('<space>')
 vim.opt.diffopt:append("linematch:60")
-vim.o.clipboard = "unnamedplus"
+-- vim.o.clipboard = "unnamedplus"
 vim.o.completeopt = "menu,menuone,popup,noinsert,noselect"
 vim.o.confirm = true
 vim.o.cursorline = true
@@ -29,7 +29,7 @@ vim.o.smartcase = true
 vim.o.breakindent = true
 vim.o.smartindent = true
 vim.o.autoindent = true
-vim.o.termguicolors = true
+vim.o.termguicolors = false
 vim.o.undofile = true
 vim.o.undolevels = 10000
 vim.o.updatetime = 250
@@ -46,6 +46,7 @@ vim.o.backspace = "indent,eol,start"
 vim.g.copilot_enabled = true
 vim.g.chat_autosave = true
 vim.g.indent_guides = false
+vim.g.zig_fmt_autosave = 0
 
 -- UFO folding
 -- vim.o.foldcolumn = "1" -- '0' is not bad
@@ -55,18 +56,16 @@ vim.g.indent_guides = false
 -- vim.o.foldenable = true
 -- vim.o.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]
 
-vim.diagnostic.config({
-	virtual_text = true,
-})
+vim.diagnostic.config({ virtual_text = true })
 
 local is_neovide = vim.g.neovide ~= nil
 
 if is_neovide then
 	vim.cmd("cd ~")
-	vim.o.guifont = "BerkeleyMono Nerd Font:h16"
+	vim.o.guifont = "FiraMono Nerd Font:h14"
 	vim.g.neovide_opacity = 1.0
 	vim.g.neovide_normal_opacity = 1.0
-	vim.g.neovide_text_gamma = 0.8
+	vim.g.neovide_text_gamma = 1.0
 	vim.g.neovide_text_contrast = 0.1
 	vim.g.neovide_cursor_animation_length = 0
 	vim.g.neovide_scroll_animation_length = 0.15

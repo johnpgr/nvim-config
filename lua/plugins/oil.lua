@@ -110,9 +110,9 @@ return {
             number = false,
             relativenumber = false,
         },
-        confirmation = {
-            border = "none",
-        },
+        -- confirmation = {
+        --     border = "none",
+        -- },
         view_options = {
             is_hidden_file = function(name, _)
                 local m = name:match("^%.")

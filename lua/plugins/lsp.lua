@@ -94,7 +94,7 @@ return {
 				callback = function(event)
 					local client = vim.lsp.get_client_by_id(event.data.client_id)
 					if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
-						keymap("<leader>lh", function()
+						keymap("<leader>li", function()
 							vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = event.buf }))
 						end, "LSP: Inlay hints toggle")
 					end
