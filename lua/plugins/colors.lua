@@ -3,7 +3,6 @@ return {
 		"ellisonleao/gruvbox.nvim",
 		config = function()
 			require("gruvbox").setup({
-				terminal_colors = false,
 				undercurl = true,
 				underline = true,
 				bold = false,
@@ -29,86 +28,19 @@ return {
 			})
 		end,
 	},
-	"vinitkumar/oscura-vim",
 	{
 		"sainnhe/gruvbox-material",
 		config = function()
 			vim.g.gruvbox_material_enable_italic = false
-			vim.g.gruvbox_material_background = "hard"
+			vim.g.gruvbox_material_background = "medium"
 			vim.g.gruvbox_material_better_performance = 1
 			vim.g.gruvbox_material_foreground = "material"
 		end,
 	},
 	"folke/tokyonight.nvim",
-	{
-		"catppuccin/nvim",
-		config = function()
-			require("catppuccin").setup({
-				no_italic = true,
-				no_bold = true,
-			})
-		end,
-	},
+	{ "catppuccin/nvim", name = "catppuccin" },
 	"felipeagc/fleet-theme-nvim",
 	"sainnhe/everforest",
 	"rjshkhr/shadow.nvim",
-	"CreaturePhil/vim-handmade-hero",
-	"AlexvZyl/nordic.nvim",
-	{
-		"navarasu/onedark.nvim",
-		config = function()
-			require("onedark").setup({
-				style = "warm",
-				transparent = false,
-				term_colors = true,
-				ending_tildes = false,
-				cmp_itemkind_reverse = false,
-				code_style = {
-					comments = "none",
-					keywords = "none",
-					functions = "none",
-					strings = "none",
-					variables = "none",
-				},
-				lualine = {
-					transparent = false,
-				},
-				colors = {},
-				highlights = {},
-				diagnostics = {
-					darker = true,
-					undercurl = true,
-					background = true,
-				},
-			})
-		end,
-	},
-	{
-		"Mofiqul/vscode.nvim",
-		config = function()
-			require("vscode").setup({
-				italic_comments = false,
-				terminal_colors = true,
-			})
-		end,
-	},
-	{
-		"rose-pine/neovim",
-		name = "rose-pine",
-		config = function()
-			require("rose-pine").setup({
-				dim_inactive_windows = true,
-				extend_background_behind_borders = false,
-				enable = {
-					terminal = true,
-					migrations = true, -- Handle deprecated options automatically
-				},
-				styles = {
-					bold = false,
-					italic = false,
-					transparency = true,
-				},
-			})
-		end,
-	},
+	{ "rose-pine/neovim", name = "rosepine" },
 }

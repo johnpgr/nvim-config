@@ -130,7 +130,7 @@ return {
 		config = function()
 			require("outline").setup({
 				outline_window = {
-					position = "left",
+					position = "right",
 				},
 			})
 		end,
