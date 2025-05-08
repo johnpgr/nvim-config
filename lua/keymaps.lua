@@ -75,15 +75,6 @@ keymap("vig", "ggVG", "Visual select buffer", "n")
 keymap("cig", ":%d<CR>i", "Change buffer", "n")
 keymap("<leader>o", "<cmd>Outline<CR>", "Toggle Outline view")
 keymap("<leader>bd", "<cmd>bd<CR>", "Buffer delete")
-
-local function format_buffer()
-	require("conform").format({
-		async = true,
-		stop_after_first = true,
-		lsp_format = "fallback",
-	})
-end
-
 keymap("K", utils.smart_hover, "LSP: Hover", "n")
 keymap("gd", function()
 	if utils.up_jump_to_error_loc() then
@@ -98,7 +89,13 @@ keymap({ "<F2>", "<leader>lr" }, vim.lsp.buf.rename, "LSP: Rename variable", "n"
 keymap("<leader>ca", vim.lsp.buf.code_action, "LSP: Code actions")
 keymap("<leader>gh", vim.lsp.buf.signature_help, "LSP: Signature help")
 keymap("<C-s>", vim.lsp.buf.signature_help, "LSP: Signature help", "i")
-keymap({ "<A-F>", "<leader>lf" }, format_buffer, "LSP: Format buffer")
+keymap({ "<A-F>", "<leader>lf" }, function()
+	require("conform").format({
+		async = true,
+		stop_after_first = true,
+		lsp_format = "fallback",
+	})
+end, "LSP: Format buffer")
 keymap("<leader>df", vim.diagnostic.open_float, "Diagnostics: Open Hover")
 keymap("<leader>dl", vim.diagnostic.setqflist, "Diagnostics: Set quickfix list", "n")
 keymap("<leader>dr", function()
@@ -168,7 +165,6 @@ keymap("[q", function()
 	vim.cmd("copen")
 end, "Quickfixlist previous")
 
-
 local function parse_history_path(file)
 	return vim.fn.fnamemodify(file, ":t:r")
 end
@@ -179,8 +175,8 @@ local function format_display_name(filename)
 end
 
 local function find_chat_history()
-    local actions = require("telescope.actions")
-    local action_state = require("telescope.actions.state")
+	local actions = require("telescope.actions")
+	local action_state = require("telescope.actions.state")
 	local chat = require("CopilotChat")
 	telescope_builtin.find_files({
 		prompt_title = "CopilotChat History",

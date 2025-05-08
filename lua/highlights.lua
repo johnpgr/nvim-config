@@ -18,11 +18,3 @@ hl("DapStopped", { fg = "#61AFEF" }) -- blue for stopped threads
 hl("WinBar", { bg="none" })
 hl("VertSplit", { bg="none" })
 hl("OverseerTaskBorder", { bg="none" })
-
-vim.cmd([[
-    " Gruvbox specific overrides
-    hi link DiagnosticSignWarn GruvboxYellow
-    hi link DiagnosticSignError GruvboxRed
-    hi link DiagnosticSignOk GruvboxGreen
-    hi link DiagnosticSignHint GruvboxAqua
-]])

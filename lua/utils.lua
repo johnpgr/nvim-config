@@ -3,34 +3,6 @@ local M = {}
 M.nerd_icons = true
 M.is_neovide = vim.g.neovide ~= nil
 M.is_windows = vim.fn.has("win32") == 1
-
-function M.lua_ls_on_init(client)
-	local path = vim.tbl_get(client, "workspace_folders", 1, "name")
-	if not path then
-		vim.print("no workspace")
-		return
-	end
-	client.settings = vim.tbl_deep_extend("force", client.settings, {
-		Lua = {
-			runtime = {
-				version = "LuaJIT",
-			},
-			-- Make the server aware of Neovim runtime files
-			workspace = {
-				checkThirdParty = false,
-				library = {
-					vim.env.VIMRUNTIME,
-					-- Depending on the usage, you might want to add additional paths here.
-					-- "${3rd}/luv/library"
-					-- "${3rd}/busted/library",
-				},
-				-- or pull in all of 'runtimepath'. NOTE: this is a lot slower
-				-- library = vim.api.nvim_get_runtime_file("", true)
-			},
-		},
-	})
-end
-
 M.keymap_registry = {}
 
 ---Utility for keymap creation.
@@ -439,6 +411,22 @@ function M.load_colorscheme()
 
 	-- Fallback to default if anything fails
 	vim.cmd.colorscheme(default_scheme)
+end
+
+function M.insert_package_json(config_files, field, fname)
+	local path = vim.fn.fnamemodify(fname, ':h')
+	local root_with_package = vim.fs.find({ 'package.json', 'package.json5' }, { path = path, upward = true })[1]
+
+	if root_with_package then
+		-- only add package.json if it contains field parameter
+		for line in io.lines(root_with_package) do
+			if line:find(field) then
+				config_files[#config_files + 1] = vim.fs.basename(root_with_package)
+				break
+			end
+		end
+	end
+	return config_files
 end
 
 return M
