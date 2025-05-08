@@ -38,6 +38,8 @@ return {
 	},
 	config = function()
 		local telescope = require("telescope")
+		local builtin = require("telescope.builtin")
+		local themes = require("telescope.themes")
 		local extensions = {
 			fzf = {},
 			textcase = {},
@@ -53,6 +55,102 @@ return {
 				height = 0.3,
 			},
 		}
+
+		local function grep_current_buffer()
+			-- Capture the original window before opening telescope
+			local original_win = vim.api.nvim_get_current_win()
+			local original_bufnr = vim.api.nvim_get_current_buf()
+
+			local action_state = require("telescope.actions.state")
+			local actions = require("telescope.actions")
+
+			local opts = vim.tbl_extend("force", default_picker_config, {
+				fuzzy = false, -- Disable fuzzy matching
+				exact = true, -- Use exact matching
+				attach_mappings = function(prompt_bufnr, map)
+					-- Helper function to jump to current selection position
+					local function jump_to_selection()
+						local selection = action_state.get_selected_entry()
+						if selection and selection.lnum then
+							local line_count = vim.api.nvim_buf_line_count(original_bufnr)
+
+							-- Check if lnum is valid (within buffer bounds)
+							if selection.lnum > 0 and selection.lnum <= line_count then
+								-- Get line content to ensure column is valid
+								local line = vim.api.nvim_buf_get_lines(
+									original_bufnr,
+									selection.lnum - 1,
+									selection.lnum,
+									false
+								)[1] or ""
+								local col = math.min(selection.col or 0, #line)
+
+								-- Store current position in jump list
+								vim.cmd("normal! m'")
+								-- Move cursor to the selected line/column
+								vim.api.nvim_win_set_cursor(original_win, { selection.lnum, col })
+
+								-- Center the view on the cursor if the window is still valid
+								if vim.api.nvim_win_is_valid(original_win) then
+									vim.api.nvim_win_call(original_win, function()
+										vim.cmd("normal! zz")
+									end)
+								end
+							end
+						end
+					end
+
+					-- Override the default movement actions to also jump
+					actions.select_default:replace(function()
+						jump_to_selection()
+						actions.close(prompt_bufnr)
+					end)
+
+					-- Custom move with jump for insert mode
+					local move_selection_next = function()
+						actions.move_selection_next(prompt_bufnr)
+						jump_to_selection()
+					end
+
+					local move_selection_previous = function()
+						actions.move_selection_previous(prompt_bufnr)
+						jump_to_selection()
+					end
+
+					-- Map navigation keys in insert mode
+					map("i", "<Down>", move_selection_next)
+					map("i", "<C-n>", move_selection_next)
+					map("i", "<Up>", move_selection_previous)
+					map("i", "<C-p>", move_selection_previous)
+
+					-- Map navigation keys in normal mode
+					map("n", "j", move_selection_next)
+					map("n", "k", move_selection_previous)
+
+					-- Send to quickfix list
+					map("i", "<C-q>", function()
+						actions.send_to_qflist(prompt_bufnr)
+						vim.cmd("copen")
+					end)
+
+					map("n", "<C-q>", function()
+						actions.send_to_qflist(prompt_bufnr)
+						vim.cmd("copen")
+					end)
+
+					return true
+				end,
+				on_input_filter_cb = function(prompt)
+					-- Highlight matches in the buffer while typing
+					if prompt and #prompt > 0 then
+						vim.fn.setreg("/", prompt)
+						vim.cmd("let v:hlsearch=1")
+					end
+					return prompt
+				end,
+			})
+			builtin.current_buffer_fuzzy_find(themes.get_ivy(opts))
+		end
 
 		telescope.setup({
 			defaults = {
@@ -75,6 +173,7 @@ return {
 			extensions = is_windows and {} or extensions,
 			pickers = {
 				buffers = vim.tbl_extend("force", default_picker_config, {
+					initial_mode = "normal",
 					mappings = {
 						n = {
 							["<C-d>"] = require("telescope.actions").delete_buffer,
@@ -101,10 +200,12 @@ return {
 				}),
 				help_tags = default_picker_config,
 				commands = default_picker_config,
-                spell_suggest = default_picker_config,
-                reloader = default_picker_config,
+				spell_suggest = default_picker_config,
+				reloader = default_picker_config,
 			},
 		})
+
+		telescope.grep_current_buffer = grep_current_buffer
 
 		if is_neovide then
 			telescope.load_extension("projects")

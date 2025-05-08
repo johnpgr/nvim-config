@@ -1,6 +1,7 @@
 local utils = require("utils")
 local keymap = utils.keymap
 local feedkeys = utils.feedkeys
+local telescope = require("telescope")
 local telescope_builtin = require("telescope.builtin")
 local gitsigns = require("gitsigns")
 local tmux = require("tmux")
@@ -8,13 +9,9 @@ local is_neovide = utils.is_neovide
 
 keymap("<leader>ff", telescope_builtin.find_files, "Find files")
 keymap("<C-p>", telescope_builtin.find_files, "Find files")
-keymap("<leader>fw", telescope_builtin.live_grep, "Find word")
-keymap("<C-f>", function()
-	telescope_builtin.live_grep({ grep_open_files = true })
-end, "Find word (open files)")
-keymap("<leader>/", function()
-	telescope_builtin.live_grep({ grep_open_files = true })
-end, "Find word (open files)")
+keymap("<leader>fw", telescope_builtin.live_grep, "Live grep")
+keymap("<C-f>", telescope.grep_current_buffer, "Find word (Current buffer)")
+keymap("<leader>/", telescope.grep_current_buffer, "Find word (Current buffer)")
 keymap("<leader>fo", telescope_builtin.oldfiles, "Find oldfiles")
 keymap("<C-e>", telescope_builtin.oldfiles, "Find oldfiles")
 keymap("<leader><space>", telescope_builtin.buffers, "Find open buffers")
