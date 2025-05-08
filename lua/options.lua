@@ -12,6 +12,7 @@ vim.o.ignorecase = true
 vim.o.smartcase = true
 vim.o.list = false
 vim.o.splitbelow = true
+vim.o.splitright = true
 vim.o.mouse = "nv"
 vim.o.pumheight = 15
 vim.o.number = true
