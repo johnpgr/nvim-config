@@ -81,8 +81,8 @@ return {
 				end,
 			},
 			mappings = {
-				comment_line = "<C-_>",
-				comment_visual = "<C-_>",
+				comment_line = "gcc",
+				comment_visual = "gc",
 			},
 		},
 	},
