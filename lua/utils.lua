@@ -414,8 +414,8 @@ function M.load_colorscheme()
 end
 
 function M.insert_package_json(config_files, field, fname)
-	local path = vim.fn.fnamemodify(fname, ':h')
-	local root_with_package = vim.fs.find({ 'package.json', 'package.json5' }, { path = path, upward = true })[1]
+	local path = vim.fn.fnamemodify(fname, ":h")
+	local root_with_package = vim.fs.find({ "package.json", "package.json5" }, { path = path, upward = true })[1]
 
 	if root_with_package then
 		-- only add package.json if it contains field parameter
