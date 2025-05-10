@@ -31,52 +31,74 @@ vim.api.nvim_create_autocmd("LspAttach", {
 vim.api.nvim_create_autocmd({ "BufEnter", "BufRead" }, {
 	pattern = "copilot-chat",
 	callback = function()
-		-- Remove weird annoying syntax highlighting
 		vim.cmd("hi markdownError guibg=none")
 
-		-- This is for in the case where I disabled treesitter highlighting globally
-		vim.cmd("set filetype=markdown")
-		vim.treesitter.start(0, "markdown")
-
-		-- Local window options
 		vim.opt_local.conceallevel = 2
 		vim.opt_local.foldcolumn = "0"
 		vim.opt_local.signcolumn = "no"
 		vim.opt_local.number = false
 		vim.opt_local.relativenumber = false
+
+		local function get_project_files()
+			local files = {}
+			local handle = io.popen("rg --files")
+			if handle then
+				for file in handle:lines() do
+					local trigger = vim.fn.fnamemodify(file, ":t:r")
+					files[#files + 1] = {
+						trigger = trigger,
+						path = "> #file:" .. file,
+					}
+				end
+				handle:close()
+			end
+			return files
+		end
+
+		local ls = require("luasnip")
+		local s = ls.snippet
+		local t = ls.text_node
+
+		local snippets = {}
+		for _, file_info in ipairs(get_project_files()) do
+			snippets[#snippets + 1] = s(file_info.trigger, { t(file_info.path) })
+		end
+
+        require("luasnip.session.snippet_collection").clear_snippets("copilot-chat")
+		ls.add_snippets("copilot-chat", snippets)
 	end,
 })
 
--- Function to align text based on a given token
-local function align_text(token, lines)
-	local max_pos = 0
-
-	-- Find the maximum position of the token in any line
-	for _, line in ipairs(lines) do
-		local pos = line:find(token)
-		if pos and pos > max_pos then
-			max_pos = pos
-		end
-	end
-
-	-- Align each line based on the token position
-	local aligned_lines = {}
-	for _, line in ipairs(lines) do
-		local pos = line:find(token)
-		if pos then
-			local spaces_to_add = max_pos - pos
-			local aligned_line = line:sub(1, pos - 1) .. string.rep(" ", spaces_to_add) .. line:sub(pos)
-			table.insert(aligned_lines, aligned_line)
-		else
-			table.insert(aligned_lines, line)
-		end
-	end
-
-	return aligned_lines
-end
-
 -- Create a Neovim command to call the align_text function
 vim.api.nvim_create_user_command("Align", function(opts)
+	-- Function to align text based on a given token
+	local function align_text(token, lines)
+		local max_pos = 0
+
+		-- Find the maximum position of the token in any line
+		for _, line in ipairs(lines) do
+			local pos = line:find(token)
+			if pos and pos > max_pos then
+				max_pos = pos
+			end
+		end
+
+		-- Align each line based on the token position
+		local aligned_lines = {}
+		for _, line in ipairs(lines) do
+			local pos = line:find(token)
+			if pos then
+				local spaces_to_add = max_pos - pos
+				local aligned_line = line:sub(1, pos - 1) .. string.rep(" ", spaces_to_add) .. line:sub(pos)
+				table.insert(aligned_lines, aligned_line)
+			else
+				table.insert(aligned_lines, line)
+			end
+		end
+
+		return aligned_lines
+	end
+
 	local token = opts.args
 	if #token ~= 1 then
 		print("Error: Token must be a single character.")
@@ -142,55 +164,51 @@ vim.api.nvim_create_user_command("CopilotCompleteToggle", function()
 end, { nargs = 0 })
 
 vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
-  once = true,
-  callback = function()
-    if vim.fn.has("win32") == 1 or vim.fn.has("wsl") == 1 then
+	once = true,
+	callback = function()
+		if vim.fn.has("win32") == 1 or vim.fn.has("wsl") == 1 then
+			vim.g.clipboard = {
+				copy = {
+					["+"] = "win32yank.exe -i --crlf",
+					["*"] = "win32yank.exe -i --crlf",
+				},
+				paste = {
+					["+"] = "win32yank.exe -o --lf",
+					["*"] = "win32yank.exe -o --lf",
+				},
+			}
+		elseif vim.fn.has("unix") == 1 then
+			if vim.fn.executable("xclip") == 1 then
+				vim.g.clipboard = {
+					copy = {
 
-      vim.g.clipboard = {
-        copy = {
-          ["+"] = "win32yank.exe -i --crlf",
-          ["*"] = "win32yank.exe -i --crlf",
-        },
-        paste = {
-          ["+"] = "win32yank.exe -o --lf",
-          ["*"] = "win32yank.exe -o --lf",
+						["+"] = "xclip -selection clipboard",
+						["*"] = "xclip -selection clipboard",
+					},
+					paste = {
+						["+"] = "xclip -selection clipboard -o",
+						["*"] = "xclip -selection clipboard -o",
+					},
+				}
+			elseif vim.fn.executable("xsel") == 1 then
+				vim.g.clipboard = {
+					copy = {
+						["+"] = "xsel --clipboard --input",
+						["*"] = "xsel --clipboard --input",
+					},
 
-        },
-      }
-    elseif vim.fn.has("unix") == 1 then
-      if vim.fn.executable("xclip") == 1 then
-        vim.g.clipboard = {
-          copy = {
+					paste = {
+						["+"] = "xsel --clipboard --output",
+						["*"] = "xsel --clipboard --output",
+					},
+				}
+			end
+		end
 
-            ["+"] = "xclip -selection clipboard",
-            ["*"] = "xclip -selection clipboard",
-          },
-          paste = {
-            ["+"] = "xclip -selection clipboard -o",
-            ["*"] = "xclip -selection clipboard -o",
-          },
-        }
-      elseif vim.fn.executable("xsel") == 1 then
-        vim.g.clipboard = {
-          copy = {
-            ["+"] = "xsel --clipboard --input",
-            ["*"] = "xsel --clipboard --input",
+		vim.opt.clipboard = "unnamedplus"
+	end,
 
-          },
-
-          paste = {
-            ["+"] = "xsel --clipboard --output",
-            ["*"] = "xsel --clipboard --output",
-          },
-        }
-      end
-
-    end
-
-    vim.opt.clipboard = "unnamedplus"
-  end,
-
-  desc = "Slow clipboard fix",
+	desc = "Slow clipboard fix",
 })
 
 vim.api.nvim_create_autocmd("UIEnter", {

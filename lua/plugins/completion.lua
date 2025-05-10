@@ -3,7 +3,12 @@ return {
 	{
 		"saghen/blink.cmp",
 		-- optional: provides snippets for the snippet source
-		dependencies = { "rafamadriz/friendly-snippets" },
+		dependencies = {
+			"L3MON4D3/LuaSnip",
+			version = "v2.*",
+			build = "make install_jsregexp",
+			dependencies = "rafamadriz/friendly-snippets",
+		},
 
 		-- use a release tag to download pre-built binaries
 		version = "1.*",
@@ -37,18 +42,18 @@ return {
 			end
 
 			local function handle_tab(cmp)
-                -- If completion menu is visible, accept selected item
-                if menu.win:is_open() then
-                    cmp.select_and_accept()
-                -- Accept Copilot suggestion
-                elseif has_copilot_suggestion() then
-                    require("copilot.suggestion").accept()
-                elseif has_words_before() then
-                    cmp.insert_next()
-                -- Fallback to default behavior
-                else
-                    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Tab>", true, false, true), "n", false)
-                end
+				-- If completion menu is visible, accept selected item
+				if menu.win:is_open() then
+					cmp.select_and_accept()
+				-- Accept Copilot suggestion
+				elseif has_copilot_suggestion() then
+					require("copilot.suggestion").accept()
+				elseif has_words_before() then
+					cmp.insert_next()
+				-- Fallback to default behavior
+				else
+					vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Tab>", true, false, true), "n", false)
+				end
 			end
 
 			require("blink.cmp").setup({
@@ -101,12 +106,16 @@ return {
 					documentation = { auto_show = true },
 				},
 
+				snippets = {
+					preset = "luasnip",
+				},
 				-- Default list of enabled providers defined so that you can extend it
 				-- elsewhere in your config, without redefining it, due to `opts_extend`
 				sources = {
 					default = { "lazydev", "lsp", "path", "snippets", "buffer" },
 					per_filetype = {
 						sql = { "snippets", "dadbod", "buffer" },
+                        ["copilot-chat"] = { "snippets" },
 					},
 					providers = {
 						lazydev = {
@@ -131,6 +140,8 @@ return {
 				-- See the fuzzy documentation for more information
 				fuzzy = { implementation = "prefer_rust_with_warning" },
 			})
+
+			require("luasnip.loaders.from_vscode").lazy_load()
 		end,
 	},
 }
