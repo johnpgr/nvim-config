@@ -1,4 +1,5 @@
 local utils = require("utils")
+
 -- Highlight on yank
 local highlight_group = vim.api.nvim_create_augroup("YankHighlight", { clear = true })
 vim.api.nvim_create_autocmd("TextYankPost", {
@@ -221,3 +222,14 @@ vim.api.nvim_create_autocmd("UIEnter", {
 	end,
 	once = true,
 })
+
+vim.api.nvim_create_user_command('Make', function()
+    -- Get current makeprg
+    local current_makeprg = vim.bo.makeprg
+    if current_makeprg == '' then
+        current_makeprg = vim.o.makeprg
+    end
+    -- Create a 25% split at the bottom
+    vim.cmd('botright new | resize ' .. math.floor(vim.o.lines * 0.25))
+    vim.cmd('term ' .. current_makeprg)
+end, {})

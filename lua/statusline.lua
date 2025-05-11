@@ -7,7 +7,7 @@ local function lsp_status()
     -- Filter out copilot and get client names
     local names = vim.iter(attached_clients)
         :filter(function(client)
-            return client.name ~= "copilot"
+            return client.name ~= "copilot" and client.name ~= "htmx"
         end)
         :map(function(client)
             local name = client.name:gsub("language.server", "ls")
