@@ -30,10 +30,6 @@ return {
 	{
 		"folke/which-key.nvim",
 		event = "VeryLazy",
-		opts = {
-			preset = "helix",
-			win = { border = "none" },
-		},
 	},
 	{
 		-- Text case conversions (snake_case, camelCase, etc.)

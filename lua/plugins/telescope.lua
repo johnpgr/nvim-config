@@ -32,24 +32,52 @@ return {
 			end,
 		},
 		"nvim-telescope/telescope-ui-select.nvim",
+		"nvim-telescope/telescope-file-browser.nvim",
 	},
 	config = function()
-		local telescope = require("telescope")
-		local builtin = require("telescope.builtin")
-		local themes = require("telescope.themes")
-		local extensions = {
-			fzf = {},
-			textcase = {},
-			["ui-select"] = {
-				require("telescope.themes").get_dropdown(),
-			},
-		}
-
 		local default_picker_config = {
 			theme = "ivy",
 			previewer = false,
 			layout_config = {
 				height = 0.3,
+			},
+			results_title = false,
+		}
+
+		local telescope = require("telescope")
+		local builtin = require("telescope.builtin")
+		local themes = require("telescope.themes")
+		local extensions = {
+			file_browser = vim.tbl_extend("force", default_picker_config, {
+				prompt_path = true,
+				git_status = false,
+				hide_parent_dir = true,
+				grouped = true,
+                dir_icon = "",
+                dir_icon_hl = "OilDirIcon",
+				mappings = {
+					i = {
+						["<Tab>"] = function(bufnr)
+							local action_state = require("telescope.actions.state")
+							local fb_actions = require("telescope").extensions.file_browser.actions
+							local entry = action_state.get_selected_entry()
+							local entry_path = entry.Path
+
+							if entry_path:is_dir() then
+								fb_actions.open_dir(bufnr, nil, entry.path)
+							else
+								local actions = require("telescope.actions")
+								actions.close(bufnr)
+								vim.cmd.edit(entry.path)
+							end
+						end,
+					},
+				},
+			}),
+			fzf = {},
+			textcase = {},
+			["ui-select"] = {
+				require("telescope.themes").get_dropdown(),
 			},
 		}
 
@@ -138,7 +166,6 @@ return {
 
 		telescope.setup({
 			defaults = {
-				results_title = false,
 				path_display = {
 					filename_first = {
 						reverse_directories = false,
@@ -199,5 +226,6 @@ return {
 
 		telescope.load_extension("textcase")
 		telescope.load_extension("ui-select")
+		telescope.load_extension("file_browser")
 	end,
 }

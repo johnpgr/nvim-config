@@ -7,10 +7,10 @@ local gitsigns = require("gitsigns")
 local tmux = require("tmux")
 local is_neovide = utils.is_neovide
 
-keymap({"<leader>ff","<C-p>"}, telescope_builtin.find_files, "Find files")
-keymap({"<leader>fw","<C-f>"}, telescope_builtin.live_grep, "Live grep")
+keymap("<C-p>", telescope_builtin.find_files, "Find files")
+keymap({ "<leader>fw", "<C-f>" }, telescope_builtin.live_grep, "Live grep")
 keymap("/", telescope.grep_current_buffer, "Find word (Current buffer)")
-keymap({"<leader>fo","<C-e>"}, telescope_builtin.oldfiles, "Find oldfiles")
+keymap({ "<leader>fo", "<C-e>" }, telescope_builtin.oldfiles, "Find oldfiles")
 keymap("<leader><space>", telescope_builtin.buffers, "Find open buffers")
 keymap("<leader>fs", telescope_builtin.spell_suggest, "Find Spell suggestions")
 keymap("<leader>fh", telescope_builtin.help_tags, "Find help tags")
@@ -20,6 +20,7 @@ keymap("<leader>fc", function()
 end, "Find Colorscheme")
 keymap("<A-x>", telescope_builtin.commands, "Find Commands")
 keymap("<leader>fm", telescope_builtin.reloader, "Find modules")
+keymap("<leader>ff", telescope.extensions.file_browser.file_browser, "Find files in file browser")
 
 if is_neovide then
 	keymap("<A-s>", require("telescope").extensions.projects.projects, "Find Projects")
