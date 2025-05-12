@@ -157,7 +157,6 @@ return {
 			extensions = is_windows and {} or extensions,
 			pickers = {
 				buffers = vim.tbl_extend("force", default_picker_config, {
-					initial_mode = "normal",
 					mappings = {
 						n = {
 							["<C-d>"] = require("telescope.actions").delete_buffer,
