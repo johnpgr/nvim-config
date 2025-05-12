@@ -53,8 +53,8 @@ return {
 				git_status = false,
 				hide_parent_dir = true,
 				grouped = true,
-                dir_icon = "",
-                dir_icon_hl = "OilDirIcon",
+				dir_icon = "",
+				dir_icon_hl = "OilDirIcon",
 				mappings = {
 					i = {
 						["<Tab>"] = function(bufnr)
@@ -66,9 +66,8 @@ return {
 							if entry_path:is_dir() then
 								fb_actions.open_dir(bufnr, nil, entry.path)
 							else
-								local actions = require("telescope.actions")
-								actions.close(bufnr)
-								vim.cmd.edit(entry.path)
+								local picker = action_state.get_current_picker(bufnr)
+								picker:set_prompt(entry.ordinal)
 							end
 						end,
 					},

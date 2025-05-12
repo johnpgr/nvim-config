@@ -109,13 +109,19 @@ return {
 				snippets = {
 					preset = "luasnip",
 				},
+				cmdline = {
+					keymap = {
+						preset = "cmdline",
+						["<Tab>"] = { handle_tab },
+					},
+				},
 				-- Default list of enabled providers defined so that you can extend it
 				-- elsewhere in your config, without redefining it, due to `opts_extend`
 				sources = {
 					default = { "lazydev", "lsp", "path", "snippets", "buffer" },
 					per_filetype = {
 						sql = { "snippets", "dadbod", "buffer" },
-                        ["copilot-chat"] = { "snippets" },
+						["copilot-chat"] = { "snippets", "path" },
 					},
 					providers = {
 						lazydev = {
@@ -127,7 +133,9 @@ return {
 						cmdline = {
 							-- ignores cmdline completions when executing shell commands
 							enabled = function()
-								return vim.fn.getcmdtype() ~= ":" or not vim.fn.getcmdline():match("^[%%0-9,'<>%-]*!")
+								local cmdline = vim.fn.getcmdline()
+								return vim.fn.getcmdtype() ~= ":"
+									or not (cmdline:match("^[%%0-9,'<>%-]*!") or cmdline:match("^%s*term%s*"))
 							end,
 						},
 					},
