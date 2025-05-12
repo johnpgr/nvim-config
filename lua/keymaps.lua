@@ -40,15 +40,6 @@ keymap("<A-j>", tmux.resize_bottom, "Focus bottom split")
 keymap("<A-h>", tmux.resize_left, "Focus left split")
 keymap("<A-=>", "<C-w>=", "Reset splits sizes")
 keymap("<leader>sv", "<cmd>vsp<cr><C-w>l", "New vertical split (relative)")
-keymap("<leader>sf", function()
-	require("telescope.builtin").find_files({
-		attach_mappings = function(_, map)
-			map("i", "<CR>", require("telescope.actions").select_vertical)
-			map("n", "<CR>", require("telescope.actions").select_vertical)
-			return true
-		end,
-	})
-end, "Find files in vertical split")
 keymap("<leader>sV", "<cmd>bo vsp<cr>", "New vertical split (absolute)")
 keymap("<leader>sh", "<cmd>sp<cr>", "New horizontal split (relative)")
 keymap("<leader>sH", "<cmd>bo sp<cr>", "New horizontal split (absolute)")

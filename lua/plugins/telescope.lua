@@ -194,6 +194,7 @@ return {
 				}),
 				find_files = default_picker_config,
 				live_grep = default_picker_config,
+                vim_options = default_picker_config,
 				oldfiles = vim.tbl_extend("force", default_picker_config, {
 					only_cwd = true,
 				}),
