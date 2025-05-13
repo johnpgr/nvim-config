@@ -15,6 +15,7 @@ vim.cmd([[
     autocmd TermOpen * startinsert
     autocmd TermOpen * setlocal nonumber norelativenumber
     autocmd TermEnter * setlocal signcolumn=no
+    autocmd TermEnter * setlocal foldcolumn=0
     autocmd TermEnter * setlocal nospell
 ]])
 
