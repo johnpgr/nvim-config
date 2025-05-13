@@ -3,7 +3,7 @@ local utils = require("utils")
 ---@diagnostic disable: undefined-field, deprecated
 return {
     "nvim-lualine/lualine.nvim",
-    enabled = false,
+    enabled = true,
     config = function()
         local function ignored_filetypes(current_filetype)
             local ignore = {
@@ -13,14 +13,17 @@ return {
                 "TelescopePrompt",
             }
 
-            if vim.tbl_contains(ignore, current_filetype) then return true end
+            if vim.tbl_contains(ignore, current_filetype) then
+                return true
+            end
 
             return false
         end
 
-
         local function current_indentation()
-            if ignored_filetypes(vim.bo.filetype) then return "" end
+            if ignored_filetypes(vim.bo.filetype) then
+                return ""
+            end
 
             local current_indent = vim.bo.expandtab and "spaces" or "tab size"
 
@@ -32,11 +35,13 @@ return {
                 indent_size = vim.bo.tabstop
             end
 
-            return current_indent .. ": " .. indent_size
+            return current_indent .. " " .. indent_size
         end
 
         local function fileformat()
-            if ignored_filetypes(vim.bo.filetype) then return "" end
+            if ignored_filetypes(vim.bo.filetype) then
+                return ""
+            end
 
             local format = vim.bo.fileformat
 
@@ -49,7 +54,7 @@ return {
             end
         end
 
-        require("lualine").setup {
+        require("lualine").setup({
             options = {
                 theme = "auto",
                 globalstatus = true,
@@ -64,10 +69,8 @@ return {
                 },
             },
             sections = {
-                lualine_a = {
-                    "mode",
-                },
-                lualine_b = { "branch", "diff", "diagnostics" },
+                lualine_a = { },
+                lualine_b = { "branch" },
                 lualine_c = {
                     {
                         "filename",
@@ -75,11 +78,13 @@ return {
                     },
                 },
                 lualine_x = {
-                    "filetype",
+                    "lsp_status",
+                    fileformat,
+                    current_indentation,
                 },
-                lualine_y = { "encoding", fileformat, current_indentation },
-                lualine_z = { "location" },
+                lualine_y = { "location", "progress" },
+                lualine_z = {},
             },
-        }
+        })
     end,
 }
