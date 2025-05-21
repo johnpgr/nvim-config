@@ -2,7 +2,7 @@ vim.g.mapleader = vim.keycode('<space>')
 vim.g.maplocalleader = vim.keycode('<space>')
 vim.opt.diffopt:append("linematch:60")
 -- vim.o.clipboard = "unnamedplus"
-vim.o.completeopt = "menu,menuone,popup,noinsert,noselect"
+vim.o.completeopt = "menu,menuone,popup,noinsert,noselect,preview"
 vim.o.confirm = true
 vim.o.cursorline = true
 vim.o.expandtab = true
@@ -53,8 +53,6 @@ vim.g.zig_fmt_autosave = 0
 -- vim.o.foldlevelstart = 99
 -- vim.o.foldenable = true
 -- vim.o.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]
-
-vim.diagnostic.config({ virtual_text = true })
 
 local is_neovide = vim.g.neovide ~= nil
 

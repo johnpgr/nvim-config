@@ -9,8 +9,6 @@ return {
 	"sindrets/diffview.nvim",
 	-- Undotree
 	"mbbill/undotree",
-	-- Workspace diagnostics
-	"artemave/workspace-diagnostics.nvim",
 	-- Transparent background
 	"xiyaowong/transparent.nvim",
 	{
@@ -156,6 +154,13 @@ return {
 					{ text = { builtin.foldfunc, " " }, click = "v:lua.ScFa" },
 				},
 			})
+		end,
+	},
+	"beyondmarc/hlsl.vim",
+	{
+		"speed2exe/zig-comp-diag.nvim",
+		config = function()
+			require("zig-comp-diag").setup()
 		end,
 	},
 }

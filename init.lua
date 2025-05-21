@@ -13,10 +13,13 @@ end
 vim.opt.runtimepath:prepend(lazypath)
 
 require("options")
-require("lazy").setup("plugins")
+require("lazy").setup({
+    rocks = {
+        hererocks = true,
+    },
+    spec = "plugins"
+})
 require("highlights")
 require("keymaps")
--- require("statusline")
 require("cmds")
-require("lsp")
 require("utils").load_colorscheme()

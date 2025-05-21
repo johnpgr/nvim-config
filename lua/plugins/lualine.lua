@@ -1,7 +1,6 @@
 local utils = require("utils")
 
 local disabled_filetypes = {
-	"oil",
 	"toggleterm",
 	"alpha",
 	"TelescopePrompt",
@@ -42,7 +41,7 @@ return {
 		require("lualine").setup({
 			options = {
 				theme = "auto",
-				globalstatus = true,
+				globalstatus = false,
 				icons_enabled = utils.nerd_icons,
 				disabled_filetypes = disabled_filetypes,
 				component_separators = {
