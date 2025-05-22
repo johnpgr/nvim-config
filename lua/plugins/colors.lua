@@ -24,7 +24,7 @@ return {
 					SignColumn = { bg = "#1d2021" },
 				},
 				dim_inactive = false,
-				transparent_mode = true,
+				transparent_mode = false,
 			})
 		end,
 	},
@@ -41,7 +41,6 @@ return {
 	{ "catppuccin/nvim", name = "catppuccin" },
 	"felipeagc/fleet-theme-nvim",
 	"sainnhe/everforest",
-	"rjshkhr/shadow.nvim",
 	{ "rose-pine/neovim", name = "rosepine" },
 	{
 		"NTBBloodbath/doom-one.nvim",
@@ -78,20 +77,17 @@ return {
 		end,
 	},
 	{
-		"datsfilipe/vesper.nvim",
-		config = function()
-			require("vesper").setup({
-				transparent = false, -- Boolean: Sets the background to transparent
-				italics = {
-					comments = false, -- Boolean: Italicizes comments
-					keywords = false, -- Boolean: Italicizes keywords
-					functions = false, -- Boolean: Italicizes functions
-					strings = false, -- Boolean: Italicizes strings
-					variables = false, -- Boolean: Italicizes variables
-				},
-				overrides = {}, -- A dictionary of group names, can be a function returning a dictionary or a table.
-				palette_overrides = {},
-			})
+		"armannikoyan/rusty",
+		lazy = false,
+		priority = 1000,
+		opts = {
+			transparent = false,
+			italic_comments = false,
+			underline_current_line = false,
+		},
+		config = function(_, opts)
+			require("rusty").setup(opts)
 		end,
 	},
+    'Yazeed1s/oh-lucy.nvim'
 }

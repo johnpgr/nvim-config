@@ -18,3 +18,12 @@ hl("DapStopped", { fg = "#61AFEF" }) -- blue for stopped threads
 hl("WinBar", { bg="none" })
 hl("VertSplit", { bg="none" })
 hl("OverseerTaskBorder", { bg="none" })
+
+vim.cmd [[
+    hi! link GruvboxRedSign GruvboxRed
+    hi! link GruvboxGreenSign GruvboxGreen
+    hi! link GruvboxYellowSign GruvboxYellow
+    hi! link GruvboxBlueSign GruvboxBlue
+    hi! link GruvboxAquaSign GruvboxAqua
+    hi! link GruvboxPurpleSign GruvboxPurple
+]]

@@ -81,8 +81,8 @@ end, "LSP: Goto definition", "n")
 keymap("gD", vim.lsp.buf.type_definition, "LSP: Goto type definition", "n")
 keymap("gr", vim.lsp.buf.references, "LSP: Goto references", "n")
 keymap({ "<F2>", "<leader>lr" }, vim.lsp.buf.rename, "LSP: Rename variable", "n")
-keymap("<leader>ca", vim.lsp.buf.code_action, "LSP: Code actions")
-keymap("<leader>gh", vim.lsp.buf.signature_help, "LSP: Signature help")
+keymap("<leader>lc", vim.lsp.buf.code_action, "LSP: Code actions")
+keymap("gs", vim.lsp.buf.signature_help, "LSP: Signature help")
 keymap("<C-s>", vim.lsp.buf.signature_help, "LSP: Signature help", "i")
 keymap({ "<A-F>", "<leader>lf" }, function()
 	require("conform").format({
@@ -242,6 +242,32 @@ keymap("<leader>cx", function()
 	vim.g.chat_title = nil
 	require("CopilotChat").reset()
 end, "CopilotChat Reset")
+keymap("<leader>ca", function()
+	vim.g.chat_autosave = false
+	local prompt = vim.fn.input("Ask Copilot: ")
+	if prompt == "" then
+		return
+	end
+
+	require("CopilotChat").ask(prompt, {
+		clear_chat_on_new_prompt = true,
+		window = {
+            border = "solid",
+            title = "",
+			layout = "float",
+			relative = "cursor",
+			width = 0.8,
+			height = 0.4,
+			row = 1,
+		},
+		selection = require("CopilotChat.select").visual,
+        context = "buffer",
+		callback = function()
+			---@diagnostic disable-next-line: missing-return
+			vim.g.chat_autosave = true
+		end,
+	})
+end, "CopilotChat Ask")
 
 keymap("<leader>th", "<cmd>TSToggle highlight<cr>", "Toggle treesitter highlight")
 
