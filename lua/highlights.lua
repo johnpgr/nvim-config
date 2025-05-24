@@ -18,6 +18,11 @@ hl("DapStopped", { fg = "#61AFEF" }) -- blue for stopped threads
 hl("WinBar", { bg="none" })
 hl("VertSplit", { bg="none" })
 hl("OverseerTaskBorder", { bg="none" })
+if vim.g.colors_name:match("base16%-.*%-metal") then
+    hl("TelescopePromptNormal", { bg="#000000" })
+    hl("TelescopePromptBorder", { bg="#000000" })
+    hl("TelescopePromptPrefix", { bg="#000000" })
+end
 
 vim.cmd [[
     hi! link GruvboxRedSign GruvboxRed

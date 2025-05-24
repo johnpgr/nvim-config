@@ -252,7 +252,7 @@ keymap("<leader>ca", function()
 	require("CopilotChat").ask(prompt, {
 		clear_chat_on_new_prompt = true,
 		window = {
-            border = "solid",
+            border = "rounded",
             title = "",
 			layout = "float",
 			relative = "cursor",
@@ -324,7 +324,7 @@ end, "Toggle DAP UI")
 keymap("<leader>dab", require("dap").list_breakpoints, "DAP Breakpoints")
 keymap("<leader>das", function()
 	local widgets = require("dap.ui.widgets")
-	local view = widgets.centered_float(widgets.scopes, { border = "none" })
+	local view = widgets.centered_float(widgets.scopes, { border = "rounded" })
 
 	vim.api.nvim_buf_set_keymap(view.buf, "n", "q", "<cmd>close<CR>", { noremap = true, silent = true })
 	vim.api.nvim_buf_set_keymap(view.buf, "n", "<Esc>", "<cmd>close<CR>", { noremap = true, silent = true })
@@ -332,7 +332,7 @@ keymap("<leader>das", function()
 end, "DAP Scopes")
 keymap("<F1>", function()
 	local widgets = require("dap.ui.widgets")
-	local view = widgets.hover(nil, { border = "none" })
+	local view = widgets.hover(nil, { border = "rounded" })
 
 	vim.api.nvim_buf_set_keymap(view.buf, "n", "q", "<cmd>close<CR>", { noremap = true, silent = true })
 	vim.api.nvim_buf_set_keymap(view.buf, "n", "<Esc>", "<cmd>close<CR>", { noremap = true, silent = true })

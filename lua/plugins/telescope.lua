@@ -80,7 +80,11 @@ return {
 			fzf = {},
 			textcase = {},
 			["ui-select"] = {
-				require("telescope.themes").get_dropdown(),
+				require("telescope.themes").get_ivy({
+                    layout_config = default_picker_config.layout_config,
+                    previewer = default_picker_config.previewer,
+                    results_title = default_picker_config.results_title,
+                }),
 			},
 		}
 
