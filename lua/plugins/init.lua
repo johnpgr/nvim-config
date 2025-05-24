@@ -4,7 +4,7 @@ return {
 	-- Remembers last cursor position when reopening files
 	"farmergreg/vim-lastplace",
 	-- Adds file icons to Neovim
-	{ "nvim-tree/nvim-web-devicons", enabled = utils.nerd_icons },
+	{ "nvim-tree/nvim-web-devicons", enabled = vim.g.nerdicons_enable },
 	-- Git diff viewer
 	"sindrets/diffview.nvim",
 	-- Undotree
@@ -28,6 +28,13 @@ return {
 	{
 		"folke/which-key.nvim",
 		event = "VeryLazy",
+        config = function ()
+            require("which-key").setup({
+                icons = {
+                    mappings = false,
+                }
+            })
+        end,
 	},
 	{
 		-- Text case conversions (snake_case, camelCase, etc.)

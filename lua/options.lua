@@ -27,7 +27,7 @@ vim.o.smartcase = true
 vim.o.breakindent = true
 vim.o.smartindent = true
 vim.o.autoindent = true
-vim.o.termguicolors = false
+vim.o.termguicolors = true
 vim.o.undofile = true
 vim.o.undolevels = 10000
 vim.o.updatetime = 250
@@ -39,11 +39,12 @@ vim.opt.showcmd = true
 vim.o.cmdheight = 1
 vim.opt.scrolloff = 5
 vim.o.spell = false
-vim.o.spelllang = "en_us"
+vim.o.spelllang = "en_us,pt_br"
 vim.o.backspace = "indent,eol,start"
 vim.g.copilot_enabled = true
 vim.g.chat_autosave = true
 vim.g.indent_guides = false
+vim.g.nerdicons_enable = false
 vim.g.zig_fmt_autosave = 0
 
 -- UFO folding

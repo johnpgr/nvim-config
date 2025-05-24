@@ -1,6 +1,5 @@
 local M = {}
 
-M.nerd_icons = true
 M.is_neovide = vim.g.neovide ~= nil
 M.is_windows = vim.fn.has("win32") == 1
 

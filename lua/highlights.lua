@@ -26,4 +26,8 @@ vim.cmd [[
     hi! link GruvboxBlueSign GruvboxBlue
     hi! link GruvboxAquaSign GruvboxAqua
     hi! link GruvboxPurpleSign GruvboxPurple
+    hi! link LspReferenceRead MatchParen
+    hi! link LspReferenceWrite MatchParen
+    hi! link LspReferenceTarget MatchParen
+    hi! link LspReferenceText MatchParen
 ]]

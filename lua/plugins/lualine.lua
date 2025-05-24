@@ -40,9 +40,8 @@ return {
 
 		require("lualine").setup({
 			options = {
-				theme = "auto",
 				globalstatus = false,
-				icons_enabled = utils.nerd_icons,
+				icons_enabled = vim.g.nerdicons_enable,
 				disabled_filetypes = disabled_filetypes,
 				component_separators = {
 					left = "",
@@ -59,7 +58,7 @@ return {
 				lualine_c = {
 					{
 						"filename",
-						path = 3,
+						path = 4,
 					},
 				},
 				lualine_x = {

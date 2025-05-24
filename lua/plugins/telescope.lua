@@ -44,6 +44,10 @@ return {
 			results_title = false,
 		}
 
+		if not vim.g.nerdicons_enable then
+            default_picker_config.disable_devicons = true
+		end
+
 		local telescope = require("telescope")
 		local builtin = require("telescope.builtin")
 		local themes = require("telescope.themes")
@@ -53,7 +57,7 @@ return {
 				git_status = false,
 				hide_parent_dir = true,
 				grouped = true,
-				dir_icon = "",
+				dir_icon = vim.g.nerdicons_enable and "" or "",
 				dir_icon_hl = "OilDirIcon",
 				mappings = {
 					i = {
@@ -194,7 +198,7 @@ return {
 				}),
 				find_files = default_picker_config,
 				live_grep = default_picker_config,
-                vim_options = default_picker_config,
+				vim_options = default_picker_config,
 				oldfiles = vim.tbl_extend("force", default_picker_config, {
 					only_cwd = true,
 				}),

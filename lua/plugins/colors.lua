@@ -1,4 +1,5 @@
 return {
+	"RRethy/base16-nvim",
 	{
 		"ellisonleao/gruvbox.nvim",
 		config = function()
@@ -89,5 +90,5 @@ return {
 			require("rusty").setup(opts)
 		end,
 	},
-    'Yazeed1s/oh-lucy.nvim'
+	"Yazeed1s/oh-lucy.nvim",
 }
