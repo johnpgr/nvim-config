@@ -24,6 +24,11 @@ if vim.g.colors_name:match("base16%-.*%-metal") then
     hl("TelescopePromptPrefix", { bg="#000000" })
 end
 
+if vim.g.colors_name:match("NeoSolarized") then
+    hl("LineNr", { bg="none" })
+    hl("CursorLineNr", { bg="#063642" })
+end
+
 vim.cmd [[
     hi! link GruvboxRedSign GruvboxRed
     hi! link GruvboxGreenSign GruvboxGreen

@@ -90,5 +90,13 @@ return {
 			require("rusty").setup(opts)
 		end,
 	},
-	"Yazeed1s/oh-lucy.nvim",
+	{
+		"Tsuzat/NeoSolarized.nvim",
+		config = function()
+			require("NeoSolarized").setup({
+				transparent = false,
+				enable_italics = false,
+			})
+		end,
+	},
 }

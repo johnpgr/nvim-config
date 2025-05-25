@@ -40,6 +40,7 @@ return {
 
 		require("lualine").setup({
 			options = {
+                theme = "solarized",
 				globalstatus = false,
 				icons_enabled = vim.g.nerdicons_enable,
 				disabled_filetypes = disabled_filetypes,
@@ -70,6 +71,7 @@ return {
 						},
 						ignore_lsp = { "copilot", "eslint", "htmx" },
 					},
+                    "encoding",
 					fileformat,
 					current_indentation,
 				},
