@@ -40,7 +40,7 @@ return {
 
 		require("lualine").setup({
 			options = {
-                theme = "solarized",
+                theme = "auto",
 				globalstatus = false,
 				icons_enabled = vim.g.nerdicons_enable,
 				disabled_filetypes = disabled_filetypes,

@@ -12,9 +12,10 @@ if not vim.uv.fs_stat(lazypath) then
 end
 vim.opt.runtimepath:prepend(lazypath)
 
-require("options")
-require("lazy").setup("plugins")
-require("keymaps")
-require("cmds")
-require("utils").load_colorscheme()
-require("highlights")
+require "options"
+require "lazy".setup("plugins")
+require "keymaps"
+require "cmds"
+require "utils".load_colorscheme()
+require "highlights"
+require "snippets"
