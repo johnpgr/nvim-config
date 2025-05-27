@@ -15,21 +15,22 @@ hl("DapBreakpointCondition", { fg = "#FFB74C" }) -- orange for conditional break
 hl("DapBreakpointRejected", { fg = "#767676" }) -- gray for rejected/invalid breakpoints
 hl("DapLogPoint", { fg = "#61AFEF" }) -- blue for logpoints
 hl("DapStopped", { fg = "#61AFEF" }) -- blue for stopped threads
-hl("WinBar", { bg="none" })
-hl("VertSplit", { bg="none" })
-hl("OverseerTaskBorder", { bg="none" })
+hl("WinBar", { bg = "none" })
+hl("VertSplit", { bg = "none" })
+hl("OverseerTaskBorder", { bg = "none" })
 if vim.g.colors_name:match("base16%-.*%-metal") then
-    hl("TelescopePromptNormal", { bg="#000000" })
-    hl("TelescopePromptBorder", { bg="#000000" })
-    hl("TelescopePromptPrefix", { bg="#000000" })
+	hl("TelescopePromptNormal", { bg = "#000000" })
+	hl("TelescopePromptBorder", { bg = "#000000" })
+	hl("TelescopePromptPrefix", { bg = "#000000" })
 end
 
 if vim.g.colors_name:match("NeoSolarized") then
-    hl("LineNr", { bg="none" })
-    hl("CursorLineNr", { bg="#063642" })
+	hl("LineNr", { bg = "none" })
+	hl("CursorLineNr", { bg = "#063642" })
+	hl("MatchParen", { fg = "none", bg = "#005266" })
 end
 
-vim.cmd [[
+vim.cmd([[
     hi! link GruvboxRedSign GruvboxRed
     hi! link GruvboxGreenSign GruvboxGreen
     hi! link GruvboxYellowSign GruvboxYellow
@@ -40,4 +41,4 @@ vim.cmd [[
     hi! link LspReferenceWrite MatchParen
     hi! link LspReferenceTarget MatchParen
     hi! link LspReferenceText MatchParen
-]]
+]])

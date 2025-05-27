@@ -6,7 +6,7 @@ return {
 	-- Adds file icons to Neovim
 	{ "nvim-tree/nvim-web-devicons", enabled = vim.g.nerdicons_enable },
 	-- Git diff viewer
-	"sindrets/diffview.nvim",
+	{ "sindrets/diffview.nvim", opts = { use_icons = vim.g.nerdicons_enable } },
 	-- Undotree
 	"mbbill/undotree",
 	-- Transparent background
@@ -28,13 +28,13 @@ return {
 	{
 		"folke/which-key.nvim",
 		event = "VeryLazy",
-        config = function ()
-            require("which-key").setup({
-                icons = {
-                    mappings = false,
-                }
-            })
-        end,
+		config = function()
+			require("which-key").setup({
+				icons = {
+					mappings = false,
+				},
+			})
+		end,
 	},
 	{
 		-- Text case conversions (snake_case, camelCase, etc.)
@@ -50,6 +50,7 @@ return {
 		"lukas-reineke/indent-blankline.nvim",
 		event = "BufRead",
 		main = "ibl",
+		enabled = true,
 		config = function()
 			require("ibl").setup({
 				indent = {

@@ -96,6 +96,16 @@ return {
 			require("NeoSolarized").setup({
 				transparent = false,
 				enable_italics = false,
+				styles = {
+					-- Style to be applied to different syntax groups
+					comments = { italic = false },
+					keywords = { italic = false },
+					functions = { bold = false },
+					variables = {},
+					string = { italic = false },
+					underline = true, -- true/false; for global underline
+					undercurl = true, -- true/false; for global undercurl
+				},
 			})
 		end,
 	},
