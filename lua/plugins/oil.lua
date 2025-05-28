@@ -11,11 +11,16 @@ function _G.get_oil_winbar()
 	end
 end
 
+-- Create highlight groups for file permissions
+vim.api.nvim_set_hl(0, "OilPermissionRead", { fg = "#ffb74c" })
+vim.api.nvim_set_hl(0, "OilPermissionWrite", { fg = "#eb5f6a" })
+vim.api.nvim_set_hl(0, "OilPermissionExecute", { fg = "#78d0bd" })
+
 local permission_hlgroups = {
 	["-"] = "NonText",
-	["r"] = "DiagnosticSignWarn",
-	["w"] = "DiagnosticSignError",
-	["x"] = "DiagnosticSignOk",
+	["r"] = "OilPermissionRead",
+	["w"] = "OilPermissionWrite",
+	["x"] = "OilPermissionExecute",
 }
 
 return {

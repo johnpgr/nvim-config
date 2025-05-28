@@ -1,5 +1,4 @@
 return {
-	"RRethy/base16-nvim",
 	{
 		"ellisonleao/gruvbox.nvim",
 		config = function()

@@ -13,6 +13,7 @@ keymap("<leader>fr", telescope_builtin.oldfiles, "Find Recent Files")
 keymap("<leader><space>", telescope_builtin.buffers, "Find Open Buffers")
 keymap("<leader>fs", telescope_builtin.spell_suggest, "Find Spell Suggestions")
 keymap("<leader>fh", telescope_builtin.help_tags, "Find Help Tags")
+keymap("<leader>fH", telescope_builtin.highlights, "Find Highlights")
 keymap({ "<C-/>", "<C-_>" }, telescope_builtin.resume, "Previous Telescope Picker")
 keymap("<leader>fc", function()
 	require("telescope.builtin").colorscheme({ enable_preview = true })
@@ -26,6 +27,7 @@ if is_neovide then
 	keymap("<A-s>", require("telescope").extensions.projects.projects, "Find Projects")
 end
 
+keymap("<leader>b", ":Neotree<cr>", "Neotree toggle")
 keymap("<leader>tS", utils.toggle_spaces_width, "Toggle shift width")
 keymap("<leader>ti", utils.toggle_indent_mode, "Toggle indentation mode")
 keymap("<leader>e", "<cmd>Oil<cr>", "Explorer")
@@ -69,7 +71,6 @@ keymap("yig", ":%y<CR>", "Yank buffer", "n")
 keymap("vig", "ggVG", "Visual select buffer", "n")
 keymap("cig", ":%d<CR>i", "Change buffer", "n")
 keymap("<leader>o", "<cmd>Outline<CR>", "Toggle Outline view")
-keymap("<leader>bd", "<cmd>bd<CR>", "Buffer delete")
 keymap("K", utils.smart_hover, "LSP: Hover", "n")
 keymap("gd", function()
 	if utils.up_jump_to_error_loc() then
@@ -252,8 +253,8 @@ keymap("<leader>ca", function()
 	require("CopilotChat").ask(prompt, {
 		clear_chat_on_new_prompt = true,
 		window = {
-            border = "rounded",
-            title = "",
+			border = "rounded",
+			title = "",
 			layout = "float",
 			relative = "cursor",
 			width = 0.8,
@@ -261,7 +262,7 @@ keymap("<leader>ca", function()
 			row = 1,
 		},
 		selection = require("CopilotChat.select").visual,
-        context = "buffer",
+		context = "buffer",
 		callback = function()
 			---@diagnostic disable-next-line: missing-return
 			vim.g.chat_autosave = true

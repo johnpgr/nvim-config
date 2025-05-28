@@ -32,7 +32,7 @@ return {
 			end,
 		},
 		"nvim-telescope/telescope-ui-select.nvim",
-		"nvim-telescope/telescope-file-browser.nvim",
+		{ "johnpgr/telescope-file-browser.nvim", branch = "absolute-path-prompt-prefix" },
 	},
 	config = function()
 		local default_picker_config = {
@@ -45,7 +45,7 @@ return {
 		}
 
 		if not vim.g.nerdicons_enable then
-            default_picker_config.disable_devicons = true
+			default_picker_config.disable_devicons = true
 		end
 
 		local telescope = require("telescope")
@@ -53,6 +53,7 @@ return {
 		local themes = require("telescope.themes")
 		local extensions = {
 			file_browser = vim.tbl_extend("force", default_picker_config, {
+				path = "%:p:h",
 				prompt_path = true,
 				git_status = false,
 				hide_parent_dir = true,
@@ -81,10 +82,10 @@ return {
 			textcase = {},
 			["ui-select"] = {
 				require("telescope.themes").get_ivy({
-                    layout_config = default_picker_config.layout_config,
-                    previewer = default_picker_config.previewer,
-                    results_title = default_picker_config.results_title,
-                }),
+					layout_config = default_picker_config.layout_config,
+					previewer = default_picker_config.previewer,
+					results_title = default_picker_config.results_title,
+				}),
 			},
 		}
 
