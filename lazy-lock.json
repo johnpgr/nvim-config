@@ -46,6 +46,7 @@
   "quicker.nvim": { "branch": "master", "commit": "51d3926f183c2d98fbc237cc237ae0926839af3a" },
   "rosepine": { "branch": "main", "commit": "6b9840790cc7acdfadde07f308d34b62dd9cc675" },
   "rusty": { "branch": "main", "commit": "a9a993a8113a5cff60ab383dc41aa63680e21ca0" },
+  "seoul256.vim": { "branch": "master", "commit": "431d166ffe25402780a1efb79e649a28d728181a" },
   "statuscol.nvim": { "branch": "main", "commit": "a2580e009a3b4c51b5978768d907dafae2c919ac" },
   "telescope-file-browser.nvim": { "branch": "absolute-path-prompt-prefix", "commit": "97b7ebad2c63fc22265bde7c93f17692b2611129" },
   "telescope-fzf-native.nvim": { "branch": "main", "commit": "1f08ed60cafc8f6168b72b80be2b2ea149813e55" },

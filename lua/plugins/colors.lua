@@ -108,4 +108,5 @@ return {
 			})
 		end,
 	},
+    "junegunn/seoul256.vim"
 }

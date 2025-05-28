@@ -18,16 +18,23 @@ hl("DapStopped", { fg = "#61AFEF" }) -- blue for stopped threads
 hl("WinBar", { bg = "none" })
 hl("VertSplit", { bg = "none" })
 hl("OverseerTaskBorder", { bg = "none" })
+
+
 if vim.g.colors_name:match("base16%-.*%-metal") then
 	hl("TelescopePromptNormal", { bg = "#000000" })
 	hl("TelescopePromptBorder", { bg = "#000000" })
 	hl("TelescopePromptPrefix", { bg = "#000000" })
 end
 
-if vim.g.colors_name:match("NeoSolarized") then
+if vim.g.colors_name == "NeoSolarized" then
 	hl("LineNr", { bg = "none" })
 	hl("CursorLineNr", { bg = "#063642" })
 	hl("MatchParen", { fg = "none", bg = "#005266" })
+end
+
+if vim.g.colors_name == "seoul256-light" then
+	hl("LineNr", { bg = "#e1e1e1" })
+	hl("FoldColumn", { bg = "#e1e1e1" })
 end
 
 vim.cmd([[
