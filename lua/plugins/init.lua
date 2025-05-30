@@ -95,7 +95,7 @@ return {
 		opts = {
 			attach_to_untracked = true,
 			preview_config = {
-				border = "none",
+				border = "solid",
 			},
 		},
 	},

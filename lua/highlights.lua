@@ -37,6 +37,11 @@ if vim.g.colors_name == "seoul256-light" then
 	hl("FoldColumn", { bg = "#e1e1e1" })
 end
 
+if vim.g.colors_name == "seoul256" then
+	hl("LineNr", { bg = "#4b4b4b" })
+	hl("FoldColumn", { bg = "#4b4b4b" })
+end
+
 vim.cmd([[
     hi! link GruvboxRedSign GruvboxRed
     hi! link GruvboxGreenSign GruvboxGreen

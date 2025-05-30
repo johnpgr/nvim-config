@@ -88,7 +88,7 @@ function M.smart_hover()
 
 	local function show_window(contents, highlights)
 		local buf, win = vim.lsp.util.open_floating_preview(contents, "markdown", {
-			border = "rounded",
+			border = "solid",
 			focus = false,
 		})
 

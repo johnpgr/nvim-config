@@ -116,7 +116,7 @@ return {
 			relativenumber = false,
 		},
 		confirmation = {
-		    border = "rounded",
+		    border = "solid",
 		},
 		view_options = {
 			is_hidden_file = function(name, _)
