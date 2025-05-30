@@ -17,7 +17,6 @@ hl("DapLogPoint", { fg = "#61AFEF" }) -- blue for logpoints
 hl("DapStopped", { fg = "#61AFEF" }) -- blue for stopped threads
 hl("WinBar", { bg = "none" })
 hl("VertSplit", { bg = "none" })
-hl("OverseerTaskBorder", { bg = "none" })
 
 
 if vim.g.colors_name:match("base16%-.*%-metal") then

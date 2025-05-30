@@ -93,27 +93,11 @@ return {
 				preset = "luasnip",
 			},
 
-			cmdline = {
-				completion = {
-					menu = {
-						auto_show = true,
-						draw = {
-							columns = {
-								{ "label" },
-							},
-						},
-					},
-				},
-				keymap = {
-					preset = "cmdline",
-					["<Tab>"] = { handle_tab },
-				},
-			},
 			sources = {
 				default = { "lazydev", "lsp", "path", "snippets", "buffer" },
 				per_filetype = {
 					sql = { "snippets", "dadbod", "buffer" },
-					["copilot-chat"] = { "snippets", "path" },
+					["copilot-chat"] = { "snippets", "buffer", "path" },
 				},
 				providers = {
 					lazydev = {

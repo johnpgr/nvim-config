@@ -46,6 +46,7 @@ vim.g.chat_autosave = true
 vim.g.indent_guides = false
 vim.g.nerdicons_enable = true
 vim.g.zig_fmt_autosave = 0
+vim.g.current_tasks = {}
 
 -- UFO folding
 -- vim.o.foldcolumn = "1" -- '0' is not bad

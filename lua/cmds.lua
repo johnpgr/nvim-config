@@ -19,7 +19,6 @@ vim.cmd([[
     autocmd TermEnter * setlocal nospell
 ]])
 
--- Make undercurls work properly
 vim.api.nvim_create_autocmd("LspAttach", {
 	callback = function(args)
 		-- Disable LSP semantic tokens
@@ -66,7 +65,7 @@ vim.api.nvim_create_autocmd({ "BufEnter", "BufRead" }, {
 			snippets[#snippets + 1] = s(file_info.trigger, { t(file_info.path) })
 		end
 
-        require("luasnip.session.snippet_collection").clear_snippets("copilot-chat")
+		require("luasnip.session.snippet_collection").clear_snippets("copilot-chat")
 		ls.add_snippets("copilot-chat", snippets)
 	end,
 })
@@ -213,24 +212,20 @@ vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
 	desc = "Slow clipboard fix",
 })
 
-vim.api.nvim_create_autocmd("UIEnter", {
+vim.api.nvim_create_autocmd({ "VimEnter", "DirChanged" }, {
 	callback = function()
-		vim.schedule(function()
-			local stats = require("lazy").stats()
-			local ms = math.floor(stats.startuptime * 100 + 0.5) / 100
-			vim.notify(string.format("⚡ Neovim loaded %d/%d plugins in %.2f ms", stats.loaded, stats.count, ms))
+		require("overseer.template").list({ dir = vim.fn.getcwd() }, function(templates)
+			local tasks = {}
+			for _, template in ipairs(templates) do
+				if template.aliases ~= nil and vim.tbl_contains(template.tags, "BUILD") then
+					local task = {
+						name = template.name,
+						cmd = template.aliases[1]:gsub("shell: ", ""),
+					}
+					table.insert(tasks, task)
+				end
+			end
+			vim.g.current_tasks = tasks
 		end)
 	end,
-	once = true,
 })
-
-vim.api.nvim_create_user_command('Make', function()
-    -- Get current makeprg
-    local current_makeprg = vim.bo.makeprg
-    if current_makeprg == '' then
-        current_makeprg = vim.o.makeprg
-    end
-    -- Create a 25% split at the bottom
-    vim.cmd('botright new | resize ' .. math.floor(vim.o.lines * 0.25))
-    vim.cmd('term ' .. current_makeprg)
-end, {})

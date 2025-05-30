@@ -19,3 +19,9 @@ require "cmds"
 require "utils".load_colorscheme()
 require "highlights"
 require "snippets"
+
+vim.g["conjure#mapping#enable_defaults"] = false
+vim.g["conjure#mapping#eval_current_form"] = "E"
+vim.g["conjure#mapping#eval_visual"] = "E"
+vim.g["conjure#mapping#eval_buf"] = "!"
+vim.g["conjure#mapping#log_vsplit"] = "L"

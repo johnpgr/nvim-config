@@ -352,8 +352,61 @@ keymap({ "]o", "<F12>" }, "<CMD>DapStepOut<CR>", "Step Out")
 
 keymap("<leader>\\", "<cmd>OverseerToggle<cr>", "Task view")
 keymap("<leader>r", "<cmd>OverseerRun<cr>", "Task Run")
-keymap("<A-r>", "<cmd>OverseerQuickAction restart<cr>", "Task Restart")
+
+keymap("<A-r>", "<cmd>Recompile<cr>", "Recompile")
 
 keymap("<leader>ig", "<cmd>IBLToggle<cr>", "Indent Guides: Toggle")
 keymap("<leader>db", "<cmd>DBUIToggle<cr>", "DBUI Toggle")
 keymap("<leader>tc", "<cmd>CopilotCompleteToggle<cr>", "Github Copilot Toggle")
+
+keymap("<leader>C", function()
+	local compile = require("compile-mode")
+	local actions = require("telescope.actions")
+	local action_state = require("telescope.actions.state")
+	local pickers = require("telescope.pickers")
+	local finders = require("telescope.finders")
+	local conf = require("telescope.config").values
+	local ivy = require("telescope.themes").get_ivy
+
+	local tasks = vim.g.current_tasks or {}
+	if #tasks == 0 then
+		vim.notify("No tasks available", vim.log.levels.WARN)
+		return
+	end
+
+	pickers
+		.new(
+			ivy({
+				previewer = false,
+				layout_config = {
+					height = 0.3,
+				},
+				results_title = false,
+			}),
+			{
+				prompt_title = "Compile Tasks",
+				finder = finders.new_table({
+					results = tasks,
+					entry_maker = function(entry)
+						return {
+							value = entry,
+							display = entry.name,
+							ordinal = entry.name,
+						}
+					end,
+				}),
+				sorter = conf.generic_sorter({}),
+				attach_mappings = function(prompt_bufnr)
+					actions.select_default:replace(function()
+						actions.close(prompt_bufnr)
+						local selection = action_state.get_selected_entry()
+						if selection and selection.value.cmd then
+							compile.compile({ args = selection.value.cmd })
+						end
+					end)
+					return true
+				end,
+			}
+		)
+		:find()
+end, "Compile from tasks.json")

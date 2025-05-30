@@ -4,7 +4,6 @@ local disabled_filetypes = {
 	"toggleterm",
 	"alpha",
 	"TelescopePrompt",
-	"NeogitStatus",
 }
 
 ---@diagnostic disable: undefined-field, deprecated
