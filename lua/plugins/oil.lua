@@ -72,43 +72,77 @@ return {
 					return
 				end
 
-				vim.ui.input({ prompt = "Enter command: " }, function(cmd)
-					if cmd then
+				vim.ui.input(
+					{ prompt = "Enter command: " },
+					function(cmd)
+                        if not cmd then
+                            return
+                        end
+
 						local full_path = cwd .. entry.name
-						local res = vim.system({ cmd, full_path }, { text = true }):wait()
 
-						-- Create a new scratch buffer in a new window
-						vim.cmd("botright new")
-						local buf = vim.api.nvim_get_current_buf()
+						local function show_output_buffer(res)
+							vim.cmd("botright new")
+							local buf = vim.api.nvim_get_current_buf()
 
-						-- Set buffer options
-						vim.bo[buf].buftype = "nofile"
-						vim.bo[buf].bufhidden = "wipe"
-						vim.bo[buf].swapfile = false
+							vim.bo[buf].buftype = "nofile"
+							vim.bo[buf].bufhidden = "wipe"
+							vim.bo[buf].swapfile = false
 
-						local opts = { buffer = buf, noremap = true, silent = true }
-						vim.keymap.set("n", "q", ":close<CR>", opts)
-						vim.keymap.set("n", "<C-c>", ":close<CR>", opts)
-						vim.keymap.set("n", "<ESC>", ":close<CR>", opts)
+							local opts = { buffer = buf, noremap = true, silent = true }
+							vim.keymap.set("n", "q", ":close<CR>", opts)
+							vim.keymap.set("n", "<C-c>", ":close<CR>", opts)
+							vim.keymap.set("n", "<ESC>", ":close<CR>", opts)
 
-						-- Add the output to the buffer
-						if res.stderr and res.stderr ~= "" then
-							vim.api.nvim_buf_set_lines(buf, 0, -1, false, vim.split(res.stderr, "\n"))
+							if res.stderr and res.stderr ~= "" then
+								vim.api.nvim_buf_set_lines(buf, 0, -1, false, vim.split(res.stderr, "\n"))
+							end
+							if res.stdout and res.stdout ~= "" then
+								vim.api.nvim_buf_set_lines(buf, -1, -1, false, vim.split(res.stdout, "\n"))
+							end
 						end
-						if res.stdout and res.stdout ~= "" then
-							vim.api.nvim_buf_set_lines(buf, -1, -1, false, vim.split(res.stdout, "\n"))
+
+						local function execute_file(path)
+							local res = vim.system({ path }, { text = true }):wait()
+							show_output_buffer(res)
+						end
+
+						if cmd and cmd ~= "" then
+							local command_string = cmd .. " " .. vim.fn.shellescape(full_path)
+							local res = vim.system({ "sh", "-c", command_string }, { text = true }):wait()
+							show_output_buffer(res)
+						else
+							local stat = vim.uv.fs_stat(full_path)
+							if stat and stat.type == "file" then
+								if bit.band(stat.mode, tonumber("100", 8)) > 0 then
+									execute_file(full_path)
+								else
+									vim.ui.select({ "Yes", "No" }, {
+										prompt = "File is not executable. Make it executable and run?",
+									}, function(choice)
+										if choice == "Yes" then
+											local chmod_res = vim.system({ "chmod", "+x", full_path }):wait()
+											if chmod_res.code == 0 then
+												vim.notify("Made file executable: " .. entry.name)
+												execute_file(full_path)
+											else
+												vim.notify(
+													"Failed to make file executable: " .. entry.name,
+													vim.log.levels.ERROR
+												)
+											end
+										else
+											vim.notify("Aborted execution of: " .. entry.name)
+										end
+									end)
+								end
+							else
+								vim.notify("Not a valid file: " .. entry.name, vim.log.levels.WARN)
+							end
 						end
 					end
-				end)
+				)
 			end,
-			["<backspace>"] = "actions.parent",
-			["_"] = "actions.open_cwd",
-			["`"] = "actions.cd",
-			["~"] = { "actions.cd", opts = { scope = "tab" }, desc = ":tcd to the current oil directory" },
-			["gs"] = "actions.change_sort",
-			["<leader>x"] = "actions.open_external",
-			["H"] = "actions.toggle_hidden",
-			["g\\"] = "actions.toggle_trash",
 		},
 		win_options = {
 			winbar = "%!v:lua.get_oil_winbar()",
@@ -116,7 +150,7 @@ return {
 			relativenumber = false,
 		},
 		confirmation = {
-		    border = "solid",
+			border = "solid",
 		},
 		view_options = {
 			is_hidden_file = function(name, _)

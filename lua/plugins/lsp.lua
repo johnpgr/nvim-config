@@ -3,6 +3,7 @@ local keymap = require("utils").keymap
 return {
 	-- Main LSP Configuration
 	"neovim/nvim-lspconfig",
+    event = { "BufReadPre", "BufNewFile" }, -- Load on file read or new file
 	dependencies = {
 		-- Automatically install LSPs and related tools to stdpath for Neovim
 		-- Mason must be loaded before its dependents so we need to set it up here.

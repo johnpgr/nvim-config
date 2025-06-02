@@ -44,7 +44,7 @@ vim.o.backspace = "indent,eol,start"
 vim.g.copilot_enabled = true
 vim.g.chat_autosave = true
 vim.g.indent_guides = false
-vim.g.nerdicons_enable = true
+vim.g.nerdicons_enable = false
 vim.g.zig_fmt_autosave = 0
 vim.g.current_tasks = {}
 
