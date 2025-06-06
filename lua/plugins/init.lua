@@ -50,7 +50,7 @@ return {
 		"lukas-reineke/indent-blankline.nvim",
 		event = "BufRead",
 		main = "ibl",
-		enabled = true,
+		enabled = false,
 		config = function()
 			require("ibl").setup({
 				indent = {

@@ -110,7 +110,7 @@ return {
 						enabled = function()
 							local cmdline = vim.fn.getcmdline()
 							return vim.fn.getcmdtype() ~= ":"
-								or not (cmdline:match("^[%%0-9,'<>%-]*!") or cmdline:match("^%s*term%s*"))
+								or not (cmdline:match("^[%%0-9,'<>%-]*!") or cmdline:match("^%s*term%s*") or cmdline:match("^%s*Compile%s*"))
 						end,
 					},
 				},
