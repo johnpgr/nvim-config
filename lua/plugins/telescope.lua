@@ -174,11 +174,6 @@ return {
 
 		telescope.setup({
 			defaults = {
-				path_display = {
-					filename_first = {
-						reverse_directories = false,
-					},
-				},
 				mappings = {
 					i = {
 						["<C-u>"] = false,

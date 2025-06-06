@@ -63,6 +63,8 @@ return {
 			},
 			["<leader>p"] = "actions.preview",
 			["<F5>"] = "actions.refresh",
+            ["H"] = "actions.toggle_hidden",
+            ["~"] = { "actions.cd", opts = { scope = "tab" }, mode = "n" },
 			["<F1>"] = function()
 				local oil = require("oil")
 				local entry = oil.get_cursor_entry()
