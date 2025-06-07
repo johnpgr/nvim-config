@@ -61,6 +61,10 @@ return {
 				opts = { horizontal = true },
 				desc = "Open the entry in a horizontal split",
 			},
+            ["H"] = {
+                "actions.toggle_hidden",
+            },
+            ["~"] = { "actions.cd", opts = { scope = "tab" }, mode = "n" },
 			["<leader>p"] = "actions.preview",
 			["<F5>"] = "actions.refresh",
             ["H"] = "actions.toggle_hidden",
@@ -83,41 +87,29 @@ return {
 
 						local full_path = cwd .. entry.name
 
-						local function show_output_buffer(res)
+						local function show_terminal(cmd_array)
 							vim.cmd("botright new")
 							local buf = vim.api.nvim_get_current_buf()
-
-							vim.bo[buf].buftype = "nofile"
-							vim.bo[buf].bufhidden = "wipe"
-							vim.bo[buf].swapfile = false
-
-							local opts = { buffer = buf, noremap = true, silent = true }
-							vim.keymap.set("n", "q", ":close<CR>", opts)
-							vim.keymap.set("n", "<C-c>", ":close<CR>", opts)
-							vim.keymap.set("n", "<ESC>", ":close<CR>", opts)
-
-							if res.stderr and res.stderr ~= "" then
-								vim.api.nvim_buf_set_lines(buf, 0, -1, false, vim.split(res.stderr, "\n"))
-							end
-							if res.stdout and res.stdout ~= "" then
-								vim.api.nvim_buf_set_lines(buf, -1, -1, false, vim.split(res.stdout, "\n"))
-							end
+							vim.fn.jobstart(cmd_array, {
+								on_exit = function(_, code)
+									if code ~= 0 then
+										vim.notify("Command exited with code: " .. code, vim.log.levels.WARN)
+									end
+								end,
+                                term = true,
+							})
+							vim.cmd("startinsert")
 						end
 
-						local function execute_file(path)
-							local res = vim.system({ path }, { text = true }):wait()
-							show_output_buffer(res)
-						end
 
 						if cmd and cmd ~= "" then
 							local command_string = cmd .. " " .. vim.fn.shellescape(full_path)
-							local res = vim.system({ "sh", "-c", command_string }, { text = true }):wait()
-							show_output_buffer(res)
+							show_terminal({ "sh", "-c", command_string })
 						else
 							local stat = vim.uv.fs_stat(full_path)
 							if stat and stat.type == "file" then
 								if bit.band(stat.mode, tonumber("100", 8)) > 0 then
-									execute_file(full_path)
+									show_terminal({ full_path })
 								else
 									vim.ui.select({ "Yes", "No" }, {
 										prompt = "File is not executable. Make it executable and run?",
@@ -126,7 +118,7 @@ return {
 											local chmod_res = vim.system({ "chmod", "+x", full_path }):wait()
 											if chmod_res.code == 0 then
 												vim.notify("Made file executable: " .. entry.name)
-												execute_file(full_path)
+												show_terminal({ full_path })
 											else
 												vim.notify(
 													"Failed to make file executable: " .. entry.name,
