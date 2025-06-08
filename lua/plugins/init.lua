@@ -6,9 +6,16 @@ return {
 	-- Adds file icons to Neovim
 	{ "nvim-tree/nvim-web-devicons", enabled = vim.g.nerdicons_enable },
 	-- Git diff viewer
-	{ "sindrets/diffview.nvim", opts = { use_icons = vim.g.nerdicons_enable } },
+	{
+		"sindrets/diffview.nvim",
+		cmd = { "DiffviewOpen", "DiffviewFileHistory" },
+		opts = { use_icons = vim.g.nerdicons_enable },
+	},
 	-- Undotree
-	"mbbill/undotree",
+	{
+		cmd = "UndotreeToggle",
+		"mbbill/undotree",
+	},
 	-- Transparent background
 	"xiyaowong/transparent.nvim",
 	{
@@ -39,6 +46,7 @@ return {
 	{
 		-- Text case conversions (snake_case, camelCase, etc.)
 		"johmsalas/text-case.nvim",
+		event = "BufRead",
 		config = function()
 			require("textcase").setup({
 				prefix = "tc",
@@ -91,7 +99,8 @@ return {
 	{
 		-- Git integration showing changes in sign column
 		"lewis6991/gitsigns.nvim",
-		event = "VeryLazy",
+		event = "BufRead",
+		cmd = { "Gitsigns" },
 		opts = {
 			attach_to_untracked = true,
 			preview_config = {
@@ -102,13 +111,13 @@ return {
 	{
 		-- Enhanced quickfix window navigation
 		"stevearc/quicker.nvim",
-		event = "FileType qf",
+		ft = "qf",
 		opts = {},
 	},
 	{
 		-- Task runner and job management
 		"stevearc/overseer.nvim",
-		event = "VeryLazy",
+		cmd = { "OverseerRun", "OverseerToggle", "OverseerOpen", "OverseerQuickAction" },
 		opts = {
 			task_list = {
 				-- min_width = { 80, 0.25 },
@@ -151,7 +160,7 @@ return {
 	},
 	{
 		"luukvbaal/statuscol.nvim",
-		enabled = true,
+		event = "BufRead",
 		config = function()
 			local builtin = require("statuscol.builtin")
 			require("statuscol").setup({
@@ -164,8 +173,9 @@ return {
 			})
 		end,
 	},
-	"beyondmarc/hlsl.vim",
+	{ "beyondmarc/hlsl.vim", ft = "hlsl" },
 	{
+		ft = "zig",
 		"speed2exe/zig-comp-diag.nvim",
 		config = function()
 			require("zig-comp-diag").setup()

@@ -353,32 +353,20 @@ function M.load_colorscheme()
 	vim.cmd.colorscheme(default_scheme)
 end
 
-function M.insert_package_json(config_files, field, fname)
-	local path = vim.fn.fnamemodify(fname, ":h")
-	local root_with_package = vim.fs.find({ "package.json", "package.json5" }, { path = path, upward = true })[1]
-
-	if root_with_package then
-		-- only add package.json if it contains field parameter
-		for line in io.lines(root_with_package) do
-			if line:find(field) then
-				config_files[#config_files + 1] = vim.fs.basename(root_with_package)
-				break
+function M.get_compile_tasks()
+    local tasks = {}
+	require("overseer.template").list({ dir = vim.fn.getcwd() }, function(templates)
+		for _, template in ipairs(templates) do
+			if template.aliases ~= nil and vim.tbl_contains(template.tags, "BUILD") then
+				local task = {
+					name = template.name,
+					cmd = template.aliases[1]:gsub("shell: ", ""),
+				}
+				table.insert(tasks, task)
 			end
 		end
-	end
-	return config_files
-end
-
-function M.get_typescript_server_path(root_dir)
-	local project_roots = vim.fs.find("node_modules", { path = root_dir, upward = true, limit = math.huge })
-	for _, project_root in ipairs(project_roots) do
-		local typescript_path = project_root .. "/typescript"
-		local stat = vim.loop.fs_stat(typescript_path)
-		if stat and stat.type == "directory" then
-			return typescript_path .. "/lib"
-		end
-	end
-	return ""
+	end)
+    return tasks
 end
 
 return M

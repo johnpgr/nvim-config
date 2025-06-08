@@ -211,21 +211,3 @@ vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
 
 	desc = "Slow clipboard fix",
 })
-
-vim.api.nvim_create_autocmd({ "VimEnter", "DirChanged" }, {
-	callback = function()
-		require("overseer.template").list({ dir = vim.fn.getcwd() }, function(templates)
-			local tasks = {}
-			for _, template in ipairs(templates) do
-				if template.aliases ~= nil and vim.tbl_contains(template.tags, "BUILD") then
-					local task = {
-						name = template.name,
-						cmd = template.aliases[1]:gsub("shell: ", ""),
-					}
-					table.insert(tasks, task)
-				end
-			end
-			vim.g.current_tasks = tasks
-		end)
-	end,
-})

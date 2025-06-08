@@ -1,5 +1,9 @@
 return {
 "johnpgr/bible-reader.nvim",
+    cmd = {
+        "BibleRead",
+        "BibleDownload",
+    },
     config = function()
         require("bible-reader").setup({
             translation = "pt_nvi",

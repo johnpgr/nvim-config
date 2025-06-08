@@ -1,37 +1,31 @@
 local utils = require("utils")
 local keymap = utils.keymap
 local feedkeys = utils.feedkeys
-local telescope = require("telescope")
-local telescope_builtin = require("telescope.builtin")
-local gitsigns = require("gitsigns")
-local tmux = require("tmux")
 local is_neovide = utils.is_neovide
 
-keymap("<leader>fw", telescope_builtin.live_grep, "Live grep")
-keymap("/", telescope.grep_current_buffer, "Find Word (Current buffer)")
-keymap("<leader>ff", telescope_builtin.find_files, "Find Files")
-keymap("<leader>fr", telescope_builtin.oldfiles, "Recent Files")
-keymap("<leader><space>", telescope_builtin.buffers, "Open Buffers")
-keymap("<leader>fs", telescope_builtin.spell_suggest, "Spell Suggestions")
-keymap("<leader>fh", telescope_builtin.help_tags, "Help Tags")
-keymap("<leader>fH", telescope_builtin.highlights, "Highlights")
-keymap({ "<C-/>", "<C-_>" }, telescope_builtin.resume, "Previous Picker")
-keymap("<leader>T", function()
-	require("telescope.builtin").colorscheme({ enable_preview = true })
-end, "Theme Picker")
-keymap("<A-x>", telescope_builtin.commands, "Commands")
-keymap("<leader>fm", telescope_builtin.reloader, "Modules")
-keymap("<leader>fo", telescope_builtin.vim_options, "Vim Options")
+keymap("<leader>fw", "<cmd>Telescope live_grep<cr>", "Live grep")
+keymap("<leader>/", "<cmd>Telescope current_buffer_fuzzy_find<cr>", "Find Word (Current buffer)")
+keymap("<leader>ff", "<cmd>Telescope find_files<cr>", "Find Files")
+keymap("<leader>fr", "<cmd>Telescope oldfiles<cr>", "Recent Files")
+keymap("<leader><space>", "<cmd>Telescope buffers<cr>", "Open Buffers")
+keymap("<leader>fs", "<cmd>Telescope spell_suggest<cr>", "Spell Suggestions")
+keymap("<leader>fh", "<cmd>Telescope help_tags<cr>", "Help Tags")
+keymap("<leader>fH", "<cmd>Telescope highlights<cr>", "Highlights")
+keymap({ "<C-/>", "<C-_>" }, "<cmd>Telescope resume<cr>", "Previous Picker")
+keymap("<leader>T", "<cmd>Telescope colorscheme<cr>", "Theme Picker")
+keymap("<A-x>", "<cmd>Telescope commands<cr>", "Commands")
+keymap("<leader>fm", "<cmd>Telescope reloader<cr>", "Modules")
+keymap("<leader>fo", "<cmd>Telescope vim_options<cr>", "Vim Options")
 keymap("<leader>fc", function()
-	telescope_builtin.find_files({
+	require("telescope.builtin").find_files({
 		prompt_title = "Find Config Files",
 		cwd = vim.fn.stdpath("config"),
 	})
 end, "Find Config Files")
-keymap("<leader>b", telescope.extensions.file_browser.file_browser, "Browse Files")
+keymap("<leader>b", "<cmd>Telescope file_browser<cr>", "Browse Files")
 
 if is_neovide then
-	keymap("<A-s>", require("telescope").extensions.projects.projects, "Find Projects")
+	keymap("<A-s>", "<cmd>Telescope projects<cr>", "Find Projects")
 end
 
 -- keymap("<leader>b", ":Neotree<cr>", "Neotree toggle")
@@ -39,14 +33,15 @@ keymap("<leader>tS", utils.toggle_spaces_width, "Toggle shift width")
 keymap("<leader>ti", utils.toggle_indent_mode, "Toggle indentation mode")
 keymap("<leader>e", "<cmd>Oil<cr>", "Explorer")
 keymap("<leader>L", "<cmd>Lazy<cr>", "Lazy.nvim")
-keymap("<C-k>", tmux.move_top, "Focus top split")
-keymap("<C-l>", tmux.move_right, "Focus right split")
-keymap("<C-j>", tmux.move_bottom, "Focus bottom split")
-keymap("<C-h>", tmux.move_left, "Focus left split")
-keymap("<A-k>", tmux.resize_top, "Focus top split")
-keymap("<A-l>", tmux.resize_right, "Focus right split")
-keymap("<A-j>", tmux.resize_bottom, "Focus bottom split")
-keymap("<A-h>", tmux.resize_left, "Focus left split")
+keymap("<leader>u", "<cmd>UndotreeToggle<cr>", "UndoTree")
+keymap("<C-k>", require("tmux").move_top, "Focus top split")
+keymap("<C-l>", require("tmux").move_right, "Focus right split")
+keymap("<C-j>", require("tmux").move_bottom, "Focus bottom split")
+keymap("<C-h>", require("tmux").move_left, "Focus left split")
+keymap("<A-k>", require("tmux").resize_top, "Focus top split")
+keymap("<A-l>", require("tmux").resize_right, "Focus right split")
+keymap("<A-j>", require("tmux").resize_bottom, "Focus bottom split")
+keymap("<A-h>", require("tmux").resize_left, "Focus left split")
 keymap("<A-=>", "<C-w>=", "Reset splits sizes")
 keymap("<leader>sv", "<cmd>vsp<cr><C-w>l", "New vertical split (relative)")
 keymap("<leader>sV", "<cmd>bo vsp<cr>", "New vertical split (absolute)")
@@ -112,8 +107,7 @@ keymap("<leader>tn", "<cmd>tabnew<cr>", "Open new tab")
 keymap("<Esc>", "<C-\\><C-n>", "Terminal mode easy exit", "t")
 keymap("]t", "<cmd>tabnext<cr>", "Tab next")
 keymap("[t", "<cmd>tabprevious<cr>", "Tab previous")
-
-local function toggle_qf()
+keymap("<leader>qf", function()
 	local qf_exists = false
 	for _, win in pairs(vim.fn.getwininfo()) do
 		if win.quickfix == 1 then
@@ -125,9 +119,7 @@ local function toggle_qf()
 	else
 		vim.cmd.copen()
 	end
-end
-
-keymap("<leader>qf", toggle_qf, "Quickfixlist toggle")
+end, "Quickfixlist toggle")
 keymap("]q", function()
 	local qf_list = vim.fn.getqflist()
 	local qf_length = #qf_list
@@ -173,7 +165,7 @@ local function find_chat_history()
 	local actions = require("telescope.actions")
 	local action_state = require("telescope.actions.state")
 	local chat = require("CopilotChat")
-	telescope_builtin.find_files({
+	require("telescope.builtin").find_files({
 		prompt_title = "CopilotChat History",
 		cwd = chat.config.history_path,
 		hidden = true,
@@ -271,7 +263,31 @@ end, "CopilotChat Ask")
 
 keymap("<leader>th", "<cmd>TSToggle highlight<cr>", "Toggle treesitter highlight")
 
-local function toggle_diffview()
+keymap("]h", function()
+	if vim.wo.diff then
+		vim.cmd.normal({ "]c", bang = true })
+	else
+		vim.cmd("Gitsigns next_hunk")
+	end
+end, "Goto next hunk")
+keymap("[h", function()
+	if vim.wo.diff then
+		vim.cmd.normal({ "[c", bang = true })
+	else
+		vim.cmd("Gitsigns prev_hunk")
+	end
+end, "Goto prev hunk")
+keymap("<leader>hs", "<cmd>Gitsigns stage_hunk<cr>", "Hunk Stage", { "n", "v" })
+keymap("<leader>hs", "<cmd>Gitsigns stage_hunk<cr>", "Hunk Stage", { "n", "v" })
+keymap("<leader>hr", "<cmd>Gitsigns reset_hunk<cr>", "Hunk Reset")
+keymap("<leader>hu", "<cmd>Gitsigns undo_stage_hunk<cr>", "Hunk Undo Stage")
+keymap("<leader>gb", "<cmd>Gitsigns blame<cr>", "Git Blame")
+keymap("<leader>gd", "<cmd>Gitsigns diffthis<cr>", "Git Diff")
+keymap("<leader>gB", "<cmd>Gitsigns toggle_current_line_blame<cr>", "Git Blame inline")
+keymap("<leader>hp", "<cmd>Gitsigns preview_hunk<cr>", "Hunk Preview")
+keymap("<leader>hi", "<cmd>Gitsigns preview_hunk_inline<cr>", "Toggle Deleted")
+keymap("<leader>hd", "<cmd>Gitsigns toggle_word_diff<cr>", "Toggle Word diff")
+keymap("<leader>dv", function()
 	local diffview = require("diffview")
 	local diffview_tab_exists = false
 	for _, win in ipairs(vim.api.nvim_list_wins()) do
@@ -284,38 +300,14 @@ local function toggle_diffview()
 	end
 
 	if diffview_tab_exists then
-		diffview.close()
+		diffview.close({})
 	else
 		diffview.open({})
 	end
-end
+end, "Diffview Toggle")
 
-keymap("]h", function()
-	if vim.wo.diff then
-		vim.cmd.normal({ "]c", bang = true })
-	else
-		gitsigns.nav_hunk("next")
-	end
-end, "Goto next hunk")
-keymap("[h", function()
-	if vim.wo.diff then
-		vim.cmd.normal({ "[c", bang = true })
-	else
-		gitsigns.nav_hunk("prev")
-	end
-end, "Goto prev hunk")
-keymap("<leader>hs", gitsigns.stage_hunk, "Hunk Stage", { "n", "v" })
-keymap("<leader>hr", gitsigns.reset_hunk, "Hunk Reset")
-keymap("<leader>hu", gitsigns.stage_hunk, "Hunk Undo Stage")
-keymap("<leader>gb", gitsigns.blame, "Git Blame")
-keymap("<leader>gd", gitsigns.diffthis, "Git Diff")
-keymap("<leader>gB", gitsigns.toggle_current_line_blame, "Git Blame inline")
-keymap("<leader>hp", gitsigns.preview_hunk, "Hunk Preview")
-keymap("<leader>hi", gitsigns.preview_hunk_inline, "Toggle Deleted")
-keymap("<leader>hd", gitsigns.toggle_word_diff, "Toggle Word diff")
-keymap("<leader>dv", toggle_diffview, "Toggle DiffView")
-keymap("ih", ":<C-U>Gitsigns select_hunk<CR>", { silent = true }, { "o", "x" })
-keymap("ah", ":<C-U>Gitsigns select_hunk<CR>", { silent = true }, { "o", "x" })
+keymap("vah", "<cmd>Gitsigns select_hunk<CR>", { silent = true }, "n")
+keymap("ah", "<cmd>Gitsigns select_hunk<CR>", { silent = true }, "v")
 keymap({ "<leader>gg", "<M-g>" }, function()
 	require("neogit").open({ kind = "replace" })
 end, "Neogit")
@@ -323,7 +315,9 @@ end, "Neogit")
 keymap("<leader>dau", function()
 	require("dapui").toggle({ reset = true })
 end, "Toggle DAP UI")
-keymap("<leader>dab", require("dap").list_breakpoints, "DAP Breakpoints")
+keymap("<leader>dab", function()
+	require("dap").list_breakpoints()
+end, "DAP Breakpoints")
 keymap("<leader>das", function()
 	local widgets = require("dap.ui.widgets")
 	local view = widgets.centered_float(widgets.scopes, { border = "solid" })
@@ -368,7 +362,7 @@ keymap("<leader>C", function()
 	local conf = require("telescope.config").values
 	local ivy = require("telescope.themes").get_ivy
 
-	local tasks = vim.g.current_tasks or {}
+	local tasks = utils.get_compile_tasks()
 	if #tasks == 0 then
 		vim.notify("No tasks available", vim.log.levels.WARN)
 		return

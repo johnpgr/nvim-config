@@ -1,6 +1,7 @@
 return {
 	"ej-shafran/compile-mode.nvim",
 	version = "^5.0.0",
+    cmd = { "Compile" },
 	branch = "nightly",
 	dependencies = {
 		"nvim-lua/plenary.nvim",

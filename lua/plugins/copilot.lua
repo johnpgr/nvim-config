@@ -32,7 +32,7 @@ return {
 		-- Copilot chat
 		"CopilotC-Nvim/CopilotChat.nvim",
 		branch = "main",
-		event = "VeryLazy",
+        cmd = {"CopilotChat", "CopilotChatToggle", "CopilotChatPrompts" },
 		dependencies = {
 			{ "zbirenbaum/copilot.lua" },
 			{ "nvim-lua/plenary.nvim" },
