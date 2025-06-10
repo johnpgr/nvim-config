@@ -39,7 +39,7 @@ return {
 
 		require("lualine").setup({
 			options = {
-                theme = "auto",
+				theme = "auto",
 				globalstatus = false,
 				icons_enabled = vim.g.nerdicons_enable,
 				disabled_filetypes = disabled_filetypes,
@@ -54,7 +54,7 @@ return {
 			},
 			sections = {
 				lualine_a = {},
-				lualine_b = { "branch" },
+				lualine_b = {},
 				lualine_c = {
 					{
 						"filename",
@@ -70,11 +70,14 @@ return {
 						},
 						ignore_lsp = { "copilot", "eslint", "htmx" },
 					},
-                    "encoding",
+                    {"branch", icon = ""},
+					"encoding",
 					fileformat,
 					current_indentation,
+					"location",
+					"progress",
 				},
-				lualine_y = { "location", "progress" },
+				lualine_y = {},
 				lualine_z = {},
 			},
 		})
