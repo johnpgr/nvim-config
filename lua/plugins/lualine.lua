@@ -53,8 +53,8 @@ return {
 				},
 			},
 			sections = {
-				lualine_a = {},
-				lualine_b = {},
+				lualine_a = { "mode" },
+				lualine_b = { "branch", "diff", "diagnostics" },
 				lualine_c = {
 					{
 						"filename",
@@ -70,15 +70,16 @@ return {
 						},
 						ignore_lsp = { "copilot", "eslint", "htmx" },
 					},
-                    {"branch", icon = ""},
+				},
+				lualine_y = {
 					"encoding",
 					fileformat,
 					current_indentation,
+				},
+				lualine_z = {
 					"location",
 					"progress",
 				},
-				lualine_y = {},
-				lualine_z = {},
 			},
 		})
 	end,

@@ -98,6 +98,25 @@ return {
 							require("telescope.actions").send_to_qflist(bufnr)
 							vim.cmd("copen")
 						end,
+                        ["<C-l>"] = function(bufnr)
+                            local actions = require("telescope.actions")
+                            local action_state = require("telescope.actions.state")
+                            local entry = action_state.get_selected_entry()
+                            if entry then
+                                actions.close(bufnr)
+                                vim.cmd("vsplit " .. entry.path or entry.filename or entry.value)
+                            end
+                        end,
+
+                        ["<C-h>"] = function(bufnr)
+                            local actions = require("telescope.actions")
+                            local action_state = require("telescope.actions.state")
+                            local entry = action_state.get_selected_entry()
+                            if entry then
+                                actions.close(bufnr)
+                                vim.cmd("leftabove vsplit " .. (entry.path or entry.filename or entry.value))
+                            end
+                        end
 					},
 				},
 			},
