@@ -42,5 +42,26 @@ return {
 	"felipeagc/fleet-theme-nvim",
 	"sainnhe/everforest",
 	"junegunn/seoul256.vim",
-    "Mofiqul/dracula.nvim"
+	"Mofiqul/dracula.nvim",
+	"sainnhe/sonokai",
+	"shaunsingh/nord.nvim",
+	{
+		"blazkowolf/gruber-darker.nvim",
+		opts = {
+			bold = false,
+			invert = {
+				signs = false,
+				tabline = false,
+				visual = false,
+			},
+			italic = {
+				strings = false,
+				comments = false,
+				operators = false,
+				folds = false,
+			},
+			undercurl = true,
+			underline = true,
+		},
+	},
 }

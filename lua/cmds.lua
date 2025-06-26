@@ -211,3 +211,11 @@ vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
 
 	desc = "Slow clipboard fix",
 })
+
+local ts_start = vim.treesitter.start
+
+---@diagnostic disable-next-line: duplicate-set-field
+vim.treesitter.start = function(bufnr, lang)
+    if lang ~= "markdown" then return end
+    ts_start(bufnr, lang)
+end

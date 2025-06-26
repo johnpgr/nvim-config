@@ -4,7 +4,7 @@ vim.opt.diffopt:append("linematch:60")
 -- vim.o.clipboard = "unnamedplus"
 vim.o.completeopt = "menu,menuone,popup,noinsert,noselect,preview"
 vim.o.confirm = true
-vim.o.cursorline = false
+vim.o.cursorline = true
 vim.o.expandtab = true
 vim.o.wrap = false
 vim.o.inccommand = "split"

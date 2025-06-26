@@ -111,7 +111,7 @@ return {
 			},
 			attach_to_untracked = true,
 			preview_config = {
-				border = "solid",
+				border = "rounded",
 			},
 		},
 	},
