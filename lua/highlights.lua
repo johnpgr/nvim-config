@@ -18,7 +18,6 @@ hl("DapStopped", { fg = "#61AFEF" }) -- blue for stopped threads
 hl("WinBar", { bg = "none" })
 hl("VertSplit", { bg = "none" })
 
-
 if vim.g.colors_name:match("base16%-.*%-metal") then
 	hl("TelescopePromptNormal", { bg = "#000000" })
 	hl("TelescopePromptBorder", { bg = "#000000" })
@@ -39,6 +38,14 @@ end
 if vim.g.colors_name == "seoul256" then
 	hl("LineNr", { bg = "#4b4b4b" })
 	hl("FoldColumn", { bg = "#4b4b4b" })
+end
+
+if vim.g.colors_name == "gruber-darker" then
+	hl("NormalFloat", { bg = "#181818" })
+    vim.cmd[[
+        hi link luaOperator GruberDarkerYellowBold
+        hi link luaSymbolOperator Operator
+    ]]
 end
 
 vim.cmd([[

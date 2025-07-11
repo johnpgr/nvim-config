@@ -46,21 +46,12 @@ vim.g.chat_autosave = true
 vim.g.indent_guides = false
 vim.g.nerdicons_enable = true
 vim.g.zig_fmt_autosave = 0
-vim.g.current_tasks = {}
-
--- UFO folding
--- vim.o.foldcolumn = "1" -- '0' is not bad
--- vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
--- vim.o.foldexpr = "v:lua.vim.treesitter.foldexpr()"
--- vim.o.foldlevelstart = 99
--- vim.o.foldenable = true
--- vim.o.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]
 
 local is_neovide = vim.g.neovide ~= nil
 
 if is_neovide then
 	vim.cmd("cd ~")
-	vim.o.guifont = "FiraMono Nerd Font:h14"
+	vim.o.guifont = "Iosevka Nerd Font:h14"
 	vim.g.neovide_opacity = 1.0
 	vim.g.neovide_normal_opacity = 1.0
 	vim.g.neovide_text_gamma = 1.0

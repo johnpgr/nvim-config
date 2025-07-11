@@ -1,8 +1,7 @@
 return {
 	"saghen/blink.cmp",
-    event = { "InsertEnter", "CmdlineEnter" },
-    version = "1.*",
-	-- optional: provides snippets for the snippet source
+	event = { "InsertEnter", "CmdlineEnter" },
+	version = "1.*",
 	dependencies = {
 		{ "xzbdmw/colorful-menu.nvim", enabled = vim.g.nerdicons_enabled, opts = {} },
 		{
@@ -13,10 +12,6 @@ return {
 		},
 	},
 
-	-- AND/OR build from source, requires nightly: https://rust-lang.github.io/rustup/concepts/channels.html#working-with-nightly-rust
-	-- build = 'cargo build --release',
-	-- If you use nix, you can build from source using latest nightly rust with:
-	-- build = 'nix run .#build-plugin',
 	config = function()
 		local blink = require("blink.cmp")
 		local copilot = require("copilot.suggestion")
@@ -29,22 +24,11 @@ return {
 			end
 		end
 
-		local function has_words_before()
-			local col = vim.api.nvim_win_get_cursor(0)[2]
-			if col == 0 then
-				return false
-			end
-			local line = vim.api.nvim_get_current_line()
-			return line:sub(col, col):match("%s") == nil
-		end
-
 		local function handle_tab(cmp)
 			if blink.is_visible() then
 				cmp.select_and_accept()
 			elseif copilot.is_visible() then
 				copilot.accept()
-			elseif has_words_before() then
-				cmp.insert_next()
 			else
 				vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Tab>", true, false, true), "n", false)
 			end
@@ -52,7 +36,10 @@ return {
 
 		local draw = vim.g.nerdicons_enable
 				and {
-					columns = { { "kind_icon" }, { "label" } },
+					columns = {
+						{ "kind_icon", "label", gap = 1 },
+						{ "kind" },
+					},
 					components = {
 						label = {
 							text = function(ctx)
@@ -111,7 +98,11 @@ return {
 						enabled = function()
 							local cmdline = vim.fn.getcmdline()
 							return vim.fn.getcmdtype() ~= ":"
-								or not (cmdline:match("^[%%0-9,'<>%-]*!") or cmdline:match("^%s*term%s*") or cmdline:match("^%s*Compile%s*"))
+								or not (
+									cmdline:match("^[%%0-9,'<>%-]*!")
+									or cmdline:match("^%s*term%s*")
+									or cmdline:match("^%s*Compile%s*")
+								)
 						end,
 					},
 				},

@@ -3,7 +3,7 @@ local keymap = require("utils").keymap
 return {
 	-- Main LSP Configuration
 	"neovim/nvim-lspconfig",
-    event = { "BufReadPre", "BufNewFile" }, -- Load on file read or new file
+	event = { "BufReadPre", "BufNewFile" }, -- Load on file read or new file
 	dependencies = {
 		-- Automatically install LSPs and related tools to stdpath for Neovim
 		-- Mason must be loaded before its dependents so we need to set it up here.
@@ -199,6 +199,7 @@ return {
 		})
 		require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
+		---@diagnostic disable-next-line: missing-fields
 		require("mason-lspconfig").setup({
 			ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
 			automatic_installation = false,
