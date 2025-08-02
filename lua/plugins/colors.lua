@@ -64,4 +64,9 @@ return {
 			underline = true,
 		},
 	},
+	{ "RostislavArts/naysayer.nvim" },
+	{
+		"navarasu/onedark.nvim",
+		opts = { style = "dark" },
+	},
 }

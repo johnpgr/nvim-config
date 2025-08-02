@@ -61,14 +61,11 @@ return {
 				opts = { horizontal = true },
 				desc = "Open the entry in a horizontal split",
 			},
-            ["H"] = {
-                "actions.toggle_hidden",
-            },
-            ["~"] = { "actions.cd", opts = { scope = "tab" }, mode = "n" },
 			["<leader>p"] = "actions.preview",
 			["<F5>"] = "actions.refresh",
             ["H"] = "actions.toggle_hidden",
             ["~"] = { "actions.cd", opts = { scope = "tab" }, mode = "n" },
+            ["<Esc>"] = "actions.parent",
 			["<F1>"] = function()
 				local oil = require("oil")
 				local entry = oil.get_cursor_entry()

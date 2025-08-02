@@ -4,7 +4,7 @@ vim.opt.diffopt:append("linematch:60")
 -- vim.o.clipboard = "unnamedplus"
 vim.o.completeopt = "menu,menuone,popup,noinsert,noselect,preview"
 vim.o.confirm = true
-vim.o.cursorline = true
+vim.o.cursorline = false
 vim.o.expandtab = true
 vim.o.wrap = false
 vim.o.inccommand = "split"
@@ -51,13 +51,14 @@ local is_neovide = vim.g.neovide ~= nil
 
 if is_neovide then
 	vim.cmd("cd ~")
-	vim.o.guifont = "Iosevka Nerd Font:h14"
+	vim.o.guifont = "Iosevka Nerd Font:h16"
+    vim.g.neovide_refresh_rate = 165
 	vim.g.neovide_opacity = 1.0
 	vim.g.neovide_normal_opacity = 1.0
 	vim.g.neovide_text_gamma = 1.0
 	vim.g.neovide_text_contrast = 0.1
-	vim.g.neovide_cursor_animation_length = 0
-	vim.g.neovide_scroll_animation_length = 0.15
+	vim.g.neovide_cursor_animation_length = 0.0
+	vim.g.neovide_scroll_animation_length = 1.0
 
 	vim.keymap.set("n", "<C-=>", function()
 		vim.g.neovide_scale_factor = vim.g.neovide_scale_factor * 1.1

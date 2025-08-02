@@ -64,6 +64,20 @@ return {
 			},
 		}
 
+        dap.configurations.cpp = {
+            {
+                name = "Launch",
+                type = "codelldb",
+                request = "launch",
+                -- program = "${workspaceFolder}/out/${fileBasenameNoExtension}",
+                program = function()
+                    return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
+                end,
+                cwd = "${workspaceFolder}",
+                stopOnEntry = false,
+            },
+        }
+
 		dap.configurations.odin = {
 			{
 				name = "Launch",

@@ -18,6 +18,12 @@ hl("DapStopped", { fg = "#61AFEF" }) -- blue for stopped threads
 hl("WinBar", { bg = "none" })
 hl("VertSplit", { bg = "none" })
 
+if vim.g.colors_name == "vim" then
+    hl("Pmenu", { bg = "#1c1c1c", fg = "#d0d0d0" })
+    hl("PmenuSel", { bg = "#3a3a3a", fg = "#ffffff" })
+    hl("SignColumn", { bg = "none" })
+end
+
 if vim.g.colors_name:match("base16%-.*%-metal") then
 	hl("TelescopePromptNormal", { bg = "#000000" })
 	hl("TelescopePromptBorder", { bg = "#000000" })
@@ -59,4 +65,5 @@ vim.cmd([[
     hi! link LspReferenceWrite MatchParen
     hi! link LspReferenceTarget MatchParen
     hi! link LspReferenceText MatchParen
+    hi! link NormalFloat Normal
 ]])

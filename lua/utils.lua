@@ -201,20 +201,4 @@ function M.load_colorscheme()
 	vim.cmd.colorscheme(default_scheme)
 end
 
-function M.get_compile_tasks()
-	local tasks = {}
-	require("overseer.template").list({ dir = vim.fn.getcwd() }, function(templates)
-		for _, template in ipairs(templates) do
-			if template.aliases ~= nil and template.tags ~= nil and vim.tbl_contains(template.tags, "BUILD") then
-				local task = {
-					name = template.name,
-					cmd = template.aliases[1]:gsub("shell: ", ""),
-				}
-				table.insert(tasks, task)
-			end
-		end
-	end)
-	return tasks
-end
-
 return M

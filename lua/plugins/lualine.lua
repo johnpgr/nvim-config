@@ -4,6 +4,7 @@ local disabled_filetypes = {
 	"toggleterm",
 	"alpha",
 	"TelescopePrompt",
+    "neo-tree",
 }
 
 ---@diagnostic disable: undefined-field, deprecated
@@ -54,7 +55,7 @@ return {
 			},
 			sections = {
 				lualine_a = { "mode" },
-				lualine_b = { "branch", "diff", "diagnostics" },
+				lualine_b = { "branch" },
 				lualine_c = {
 					{
 						"filename",

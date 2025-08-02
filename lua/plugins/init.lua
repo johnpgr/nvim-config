@@ -4,7 +4,22 @@ return {
 	-- Remembers last cursor position when reopening files
 	"farmergreg/vim-lastplace",
 	-- Adds file icons to Neovim
-	{ "nvim-tree/nvim-web-devicons", enabled = vim.g.nerdicons_enable },
+	{
+		"nvim-tree/nvim-web-devicons",
+		enabled = vim.g.nerdicons_enable,
+		config = function()
+			require("nvim-web-devicons").setup({
+				override = {
+					-- Vlang
+					v = {
+						icon = "",
+						color = "#5d87bf",
+						name = "Vlang",
+					},
+				},
+			})
+		end,
+	},
 	-- Git diff viewer
 	{
 		"sindrets/diffview.nvim",
@@ -58,7 +73,7 @@ return {
 		"lukas-reineke/indent-blankline.nvim",
 		event = "BufRead",
 		main = "ibl",
-		enabled = false,
+		enabled = true,
 		config = function()
 			require("ibl").setup({
 				indent = {
@@ -188,4 +203,5 @@ return {
 			require("zig-comp-diag").setup()
 		end,
 	},
+	"ollykel/v-vim",
 }

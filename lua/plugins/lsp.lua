@@ -159,7 +159,7 @@ return {
 			eslint = {},
 			gopls = {},
 			html = {},
-			htmx = {},
+			-- htmx = {},
 			jsonls = {},
 			lua_ls = {
 				settings = {
